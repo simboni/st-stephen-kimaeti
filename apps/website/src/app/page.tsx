@@ -1,517 +1,560 @@
 import Link from "next/link";
-import Image from "next/image";
 import {
-  academics,
   announcement,
-  coreValues,
+  dayInTheLife,
   events,
   faqs,
+  fees,
   formatDate,
+  intro,
+  money,
   news,
+  payment,
+  pillars,
   school,
+  sections,
+  showTestimonials,
   stats,
   testimonials,
-  videos,
 } from "@/lib/site";
+import { Photo } from "@/components/photo";
+import { Crest } from "@/components/crest";
 import { ButtonLink, Section, SectionHeading } from "@/components/ui";
-import { Reveal } from "@/components/reveal";
 import { CountUp } from "@/components/count-up";
+import { Reveal } from "@/components/reveal";
 import { ValuesMarquee } from "@/components/values-marquee";
 import {
   ArrowRightIcon,
-  BookIcon,
   CalendarIcon,
-  CrossIcon,
-  EyeIcon,
-  HeartIcon,
-  LightbulbIcon,
-  ShieldIcon,
-  StarIcon,
-  TargetIcon,
+  CheckIcon,
+  MegaphoneIcon,
+  PhoneIcon,
 } from "@/components/icons";
-
-const valueTones: Record<string, string> = {
-  brand: "from-brand-500 to-brand-400",
-  leaf: "from-leaf-600 to-leaf-500",
-  sky: "from-sky-500 to-indigo-400",
-  sun: "from-sun-500 to-sun-400",
-};
-
-const valueIcons = [CrossIcon, ShieldIcon, StarIcon, HeartIcon];
 
 export default function HomePage() {
   return (
     <>
-      {/* ------------------------------------------------ Hero */}
-      <section className="relative flex min-h-[92svh] items-end overflow-hidden bg-navy-950">
-        <div className="absolute inset-0 overflow-hidden">
-          <Image
-            src="/campus-front.jpg"
-            alt="The Holy Cross school compound in Bulimbo"
-            fill
-            priority
-            className="kenburns object-cover"
-            sizes="100vw"
-          />
-        </div>
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/55 to-navy-950/25"
-          aria-hidden
+      {/* ------------------------------------------------------------ hero -- */}
+      <section className="relative isolate overflow-hidden bg-navy-900">
+        <Photo
+          src="learners-on-the-field"
+          sizes="100vw"
+          fill
+          priority
+          imgClassName="kenburns"
         />
         <div
-          className="absolute inset-0 bg-gradient-to-r from-navy-950/60 to-transparent"
+          className="absolute inset-0 bg-gradient-to-br from-navy-950/92 via-navy-900/78 to-brand-900/70"
           aria-hidden
         />
 
-        <div className="container-page relative pb-16 pt-36 md:pb-24">
+        <div className="container-page relative py-20 md:py-28 lg:py-32">
           <div className="hero-stagger max-w-3xl">
             {announcement.text && (
               <Link
                 href={announcement.href}
-                className="glass inline-flex items-center gap-2 rounded-full py-1.5 pl-2 pr-4 text-xs font-bold text-white transition-colors hover:bg-white/20"
+                className="glass inline-flex items-center gap-2 rounded-full py-1.5 pl-2 pr-4 text-sm font-semibold text-white transition-colors hover:bg-white/20"
               >
-                <span className="rounded-full bg-brand-500 px-2.5 py-0.5 text-[10px] uppercase tracking-wider">
+                <span className="rounded-full bg-maroon-500 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider">
                   New
                 </span>
                 {announcement.text}
-                <ArrowRightIcon className="h-3.5 w-3.5 text-brand-300" />
+                <ArrowRightIcon className="h-3.5 w-3.5" />
               </Link>
             )}
-            <h1 className="mt-6 font-display text-[2.6rem] font-extrabold leading-[1.04] tracking-tight text-white text-balance sm:text-6xl md:text-7xl">
-              Where bright futures{" "}
-              <span className="relative inline-block text-brand-400">
-                begin
-                <svg
-                  className="absolute -bottom-2 left-0 w-full text-brand-500"
-                  viewBox="0 0 120 10"
-                  fill="none"
-                  aria-hidden
-                >
-                  <path
-                    d="M2 7.5C25 3 60 2 118 6.5"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </span>
-            </h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/85 md:text-xl">
-              {school.name}, Bulimbo — quality education rooted in faith, discipline and
-              service. Every child known by name, every potential nurtured.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <ButtonLink href="/admissions/" className="!px-7 !py-3.5">
-                Join Our School <ArrowRightIcon className="h-4 w-4" />
-              </ButtonLink>
-              <ButtonLink href="/gallery/" variant="onDark" className="!px-7 !py-3.5">
-                Take a Look Around
-              </ButtonLink>
-            </div>
 
-            {/* Glass proof chips */}
-            <div className="mt-10 flex flex-wrap gap-3">
-              {[
-                { big: "340+", small: "learners" },
-                { big: "CBC", small: "aligned curriculum" },
-                { big: "PP1–G9", small: "infant to junior" },
-                { big: "Faith", small: "centred community" },
-              ].map((chip) => (
-                <div key={chip.small} className="glass rounded-2xl px-4 py-2.5 text-white">
-                  <span className="font-display text-base font-extrabold">{chip.big}</span>
-                  <span className="ml-2 text-xs text-white/75">{chip.small}</span>
-                </div>
-              ))}
+            <h1 className="mt-6 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-white text-balance sm:text-5xl lg:text-6xl">
+              Pray and Work.
+              <span className="block text-brand-300">Since 2006, at Kimaeti.</span>
+            </h1>
+
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/80">
+              St Stephen&rsquo;s is a mixed day and boarding school in Bungoma County
+              teaching 525 learners from Playgroup to Grade 9 — Early Years, Primary
+              and Junior — under the {school.sponsor}.
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <ButtonLink href="/admissions/" variant="onDark">
+                Apply for a place
+                <ArrowRightIcon className="h-4 w-4" />
+              </ButtonLink>
+              <a
+                href={`tel:${school.phoneHref}`}
+                className="glass inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-white/20"
+              >
+                <PhoneIcon className="h-4 w-4" />
+                {school.phone}
+              </a>
             </div>
           </div>
         </div>
 
-        <div
-          className="scroll-hint absolute bottom-5 left-1/2 hidden -translate-x-1/2 text-white/70 md:block"
-          aria-hidden
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-6 w-6">
-            <path d="M12 4v14m0 0-6-6m6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </div>
-      </section>
-
-      {/* ------------------------------------------------ Values marquee */}
-      <ValuesMarquee />
-
-      {/* ------------------------------------------------ Stats band */}
-      <div className="border-b border-paper-300 bg-paper-50">
-        <div className="container-page grid grid-cols-2 gap-8 py-12 md:grid-cols-4">
-          {stats.map((s, i) => (
-            <Reveal key={s.label} delay={i * 90} className="text-center">
-              <p className="font-display text-4xl font-extrabold text-brand-600 md:text-5xl">
-                <CountUp end={s.value} suffix={s.suffix} />
-              </p>
-              <p className="mt-2 text-sm font-semibold text-ink-700">{s.label}</p>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-
-      {/* ------------------------------------------------ Bento: who we are */}
-      <Section>
-        <SectionHeading
-          eyebrow="Who we are"
-          title="A school family built on four pillars"
-          intro="From 13 founding learners to a thriving community of over 340 — here's what holds it all together."
-          center
-        />
-        <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
-          {/* Big image + story card */}
-          <Reveal className="md:col-span-2 lg:row-span-2">
-            <div className="card card-hover relative h-full min-h-[24rem] overflow-hidden">
-              <Image
-                src="/campus-courtyard.jpg"
-                alt="Learners' courtyard at Holy Cross, Bulimbo"
-                fill
-                className="object-cover"
-                sizes="(min-width: 768px) 50vw, 100vw"
-              />
-              <div
-                className="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/30 to-transparent"
-                aria-hidden
-              />
-              <div className="absolute inset-x-0 bottom-0 p-7">
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-300">
-                  Our story
+        {/* Stat strip along the foot of the hero */}
+        <div className="relative border-t border-white/15 bg-navy-950/45 backdrop-blur-sm">
+          <div className="container-page grid grid-cols-2 divide-x divide-white/10 lg:grid-cols-4">
+            {stats.map((s) => (
+              <div key={s.label} className="px-1 py-5 text-center">
+                <p className="font-display text-2xl font-extrabold text-white md:text-3xl">
+                  <CountUp end={s.value} suffix={s.suffix} />
                 </p>
-                <h3 className="mt-2 font-display text-2xl font-extrabold text-white">
-                  From 13 learners to a thriving school family
-                </h3>
-                <p className="mt-2 max-w-md text-sm leading-relaxed text-white/80">
-                  Established to bring accessible, value-based education to the children of
-                  Bulimbo — and still growing.
+                <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-brand-300 md:text-xs">
+                  {s.label}
                 </p>
-                <Link
-                  href="/about/"
-                  className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-brand-300 hover:text-brand-200"
-                >
-                  Read our full story <ArrowRightIcon className="h-4 w-4" />
-                </Link>
               </div>
-            </div>
-          </Reveal>
-
-          {/* Mission */}
-          <Reveal delay={90}>
-            <div className="card card-hover h-full p-7">
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
-                <TargetIcon className="h-5 w-5" />
-              </span>
-              <h3 className="mt-4 font-display text-lg font-extrabold text-ink-900">Mission</h3>
-              <p className="mt-2 text-sm leading-relaxed">{school.mission}</p>
-            </div>
-          </Reveal>
-
-          {/* Vision */}
-          <Reveal delay={140}>
-            <div className="card card-hover h-full p-7">
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
-                <EyeIcon className="h-5 w-5" />
-              </span>
-              <h3 className="mt-4 font-display text-lg font-extrabold text-ink-900">Vision</h3>
-              <p className="mt-2 text-sm leading-relaxed">{school.vision}</p>
-            </div>
-          </Reveal>
-
-          {/* Motto — brand card */}
-          <Reveal delay={190}>
-            <div className="card-hover relative h-full overflow-hidden rounded-2xl bg-gradient-to-br from-brand-600 to-brand-400 p-7 text-white">
-              <span className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-white/15" aria-hidden />
-              <LightbulbIcon className="h-6 w-6 text-white/90" />
-              <h3 className="mt-4 font-display text-lg font-extrabold">Our Motto</h3>
-              <p className="mt-2 font-display text-xl font-extrabold leading-snug">{school.motto}.</p>
-            </div>
-          </Reveal>
-
-          {/* Quick facts card */}
-          <Reveal delay={240}>
-            <div className="card-hover h-full rounded-2xl border border-navy-700 bg-navy-900 p-7">
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-300">
-                At a glance
-              </p>
-              <ul className="mt-4 space-y-2.5 text-sm text-white/85">
-                <li>Day &amp; boarding school</li>
-                <li>CBC — Playgroup to Grade 9</li>
-                <li>Music, games &amp; clubs</li>
-                <li>Bulimbo, Kakamega County</li>
-              </ul>
-            </div>
-          </Reveal>
-        </div>
-      </Section>
-
-      {/* ------------------------------------------------ Core values */}
-      <Section tinted className="bg-dots">
-        <SectionHeading
-          eyebrow="Our core values"
-          title="The values that define who we are"
-          intro="Woven into assemblies, classrooms, games and everything in between."
-          center
-        />
-        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {coreValues.map((v, i) => {
-            const Icon = valueIcons[i % valueIcons.length];
-            return (
-              <Reveal key={v.title} delay={i * 100}>
-                <div
-                  className={`card-hover relative h-full overflow-hidden rounded-2xl bg-gradient-to-br p-7 text-white ${valueTones[v.tone]}`}
-                >
-                  <span className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-white/10" aria-hidden />
-                  <Icon className="h-8 w-8 text-white/90" />
-                  <h3 className="mt-4 font-display text-lg font-extrabold">{v.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/90">{v.text}</p>
-                </div>
-              </Reveal>
-            );
-          })}
-        </div>
-      </Section>
-
-      {/* ------------------------------------------------ Academics */}
-      <Section>
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <SectionHeading
-            eyebrow="Learning at Holy Cross"
-            title="One school, every step of the journey"
-            intro="From a child's very first day of playgroup to junior school, learning here follows Kenya's Competency-Based Curriculum."
-          />
-          <ButtonLink href="/admissions/" variant="secondary" className="shrink-0">
-            How to join <ArrowRightIcon className="h-4 w-4" />
-          </ButtonLink>
-        </div>
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {academics.map((a, i) => (
-            <Reveal key={a.title} delay={i * 110}>
-              <div className="card card-hover group relative h-full overflow-hidden p-8">
-                <span
-                  className="absolute -right-4 -top-6 font-display text-[7rem] font-extrabold leading-none text-paper-200 transition-colors group-hover:text-brand-100"
-                  aria-hidden
-                >
-                  {i + 1}
-                </span>
-                <span className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
-                  <BookIcon className="h-6 w-6" />
-                </span>
-                <h3 className="relative mt-5 font-display text-lg font-extrabold text-ink-900">
-                  {a.title}
-                </h3>
-                <p className="relative mt-1 text-sm font-bold text-brand-600">{a.levels}</p>
-                <p className="relative mt-3 text-sm leading-relaxed">{a.text}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </Section>
-
-      {/* ------------------------------------------------ Students in action */}
-      <section className="bg-navy-900 py-16 md:py-24">
-        <div className="container-page">
-          <SectionHeading
-            eyebrow="Students in action"
-            title="Watch our learners shine"
-            intro="Music, movement and performance are a proud part of everyday life at Holy Cross."
-            center
-            dark
-          />
-          <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
-            {videos.map((v, i) => (
-              <Reveal key={v.id} delay={i * 110}>
-                <div className="overflow-hidden rounded-2xl shadow-2xl">
-                  <iframe
-                    src={`https://www.youtube-nocookie.com/embed/${v.id}`}
-                    title={v.title}
-                    loading="lazy"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                    className="aspect-video w-full"
-                  />
-                </div>
-              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ------------------------------------------------ Testimonials */}
+      {/* -------------------------------------------------------- welcome -- */}
       <Section>
-        <SectionHeading
-          eyebrow="What parents say"
-          title="Trusted by the families of Bulimbo"
-          center
-        />
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <Reveal>
+            <SectionHeading eyebrow="Welcome" title={school.welcome} intro={intro[0]} />
+            <p className="mt-4 text-lg leading-relaxed">{intro[1]}</p>
+
+            <dl className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <div className="rounded-2xl border border-paper-300 bg-paper-50 p-5">
+                <dt className="kicker">Our vision</dt>
+                <dd className="mt-3 font-display text-lg font-bold leading-snug text-ink-900">
+                  {school.vision}
+                </dd>
+              </div>
+              <div className="rounded-2xl border border-paper-300 bg-paper-50 p-5">
+                <dt className="kicker">Our mission</dt>
+                <dd className="mt-3 font-display text-lg font-bold leading-snug text-ink-900">
+                  {school.mission}
+                </dd>
+              </div>
+            </dl>
+
+            <ul className="mt-6 flex flex-wrap gap-2">
+              {school.values.map((v) => (
+                <li
+                  key={v}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3.5 py-1.5 text-sm font-semibold text-brand-700"
+                >
+                  <CheckIcon className="h-3.5 w-3.5" />
+                  {v}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+
+          <Reveal delay={120}>
+            {/* A small collage rather than one flat photograph. */}
+            <div className="grid grid-cols-5 grid-rows-5 gap-3 lg:gap-4">
+              <Photo
+                src="staff-outside-block"
+                sizes="(min-width: 1024px) 34vw, 55vw"
+                ratio="4/3"
+                className="col-span-3 row-span-3 rounded-2xl shadow-[0_24px_60px_-30px_rgba(26,33,48,0.55)]"
+              />
+              <Photo
+                src="gases-balloons"
+                sizes="(min-width: 1024px) 20vw, 36vw"
+                ratio="3/4"
+                className="col-span-2 col-start-4 row-span-3 row-start-2 rounded-2xl shadow-[0_24px_60px_-30px_rgba(26,33,48,0.55)]"
+              />
+              <Photo
+                src="mass-outdoors"
+                sizes="(min-width: 1024px) 28vw, 45vw"
+                ratio="16/9"
+                className="col-span-3 col-start-1 row-span-2 row-start-4 rounded-2xl shadow-[0_24px_60px_-30px_rgba(26,33,48,0.55)]"
+              />
+            </div>
+          </Reveal>
+        </div>
+      </Section>
+
+      <ValuesMarquee />
+
+      {/* ------------------------------------------------------- sections -- */}
+      <Section tinted id="sections">
+        <Reveal>
+          <SectionHeading
+            center
+            eyebrow="Twelve classes"
+            title="Three sections, one school"
+            intro="A learner can arrive at three and leave at fifteen without ever changing school, teachers or friends. The numbers are from the Term II 2026 return."
+          />
+        </Reveal>
+
+        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+          {sections.map((s, i) => (
+            <Reveal key={s.slug} delay={i * 110}>
+              <article className="card card-hover h-full overflow-hidden">
+                <Photo src={s.photo} sizes="(min-width: 768px) 33vw, 100vw" ratio="4/3" />
+                <div className="p-6">
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-maroon-500">
+                    {s.levels}
+                  </p>
+                  <h3 className="mt-2 font-display text-xl font-extrabold text-ink-900">
+                    {s.title}
+                  </h3>
+                  <p className="mt-3 leading-relaxed">{s.text}</p>
+                  <p className="mt-5 inline-flex items-baseline gap-1.5 rounded-full bg-brand-50 px-3.5 py-1.5 text-sm text-brand-700">
+                    <b className="font-display text-base font-extrabold">{s.learners}</b>
+                    learners today
+                  </p>
+                </div>
+              </article>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      {/* -------------------------------------------------------- pillars -- */}
+      <Section>
+        <Reveal>
+          <SectionHeading
+            eyebrow="What we are like"
+            title="Four things you would notice on a Tuesday"
+            intro="Not a prospectus promise — these are photographs of an ordinary term."
+          />
+        </Reveal>
+
+        <div className="mt-12 space-y-14 md:space-y-20">
+          {pillars.map((p, i) => (
+            <Reveal key={p.title}>
+              <div
+                className={`grid grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-14 ${
+                  i % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""
+                }`}
+              >
+                <Photo
+                  src={p.photo}
+                  sizes="(min-width: 768px) 46vw, 100vw"
+                  ratio="16/10"
+                  className="rounded-3xl shadow-[0_30px_70px_-40px_rgba(26,33,48,0.6)]"
+                />
+                <div>
+                  <span className="font-display text-5xl font-extrabold text-paper-300">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="mt-2 font-display text-2xl font-extrabold tracking-tight text-ink-900 text-balance md:text-3xl">
+                    {p.title}
+                  </h3>
+                  <p className="mt-4 text-lg leading-relaxed">{p.text}</p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      {/* --------------------------------------------------- day in the life */}
+      <section className="bg-navy-900 py-16 md:py-24">
+        <div className="container-page">
+          <Reveal>
+            <SectionHeading
+              dark
+              center
+              eyebrow="7:30 to 19:00"
+              title="A day at St Stephen's"
+              intro="From the handwashing line at assembly to prep after supper."
+            />
+          </Reveal>
+        </div>
+
+        {/* Horizontal scroller on small screens, one row on large ones. */}
+        <div className="mt-12 overflow-x-auto pb-4">
+          <ol className="container-page flex w-max gap-4 lg:w-full lg:max-w-none">
+            {dayInTheLife.map((d, i) => (
+              <li key={d.label} className="w-56 shrink-0 lg:w-auto lg:flex-1">
+                <Reveal delay={i * 70}>
+                  <Photo
+                    src={d.photo}
+                    sizes="(min-width: 1024px) 16vw, 224px"
+                    ratio="3/4"
+                    className="rounded-2xl"
+                  />
+                  <p className="mt-3 font-display text-sm font-extrabold text-brand-300">
+                    {d.time}
+                  </p>
+                  <p className="text-sm font-semibold text-white">{d.label}</p>
+                </Reveal>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* ----------------------------------------------------------- fees -- */}
+      <Section tinted id="fees">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
+          <Reveal>
+            <SectionHeading
+              eyebrow={`${fees.year} fees`}
+              title="Published, so you can plan"
+              intro={fees.note}
+            />
+            <div className="mt-8 rounded-2xl border border-paper-300 bg-paper-50 p-6">
+              <p className="kicker">How to pay</p>
+              <p className="mt-3 leading-relaxed">
+                M-PESA to the {payment.mpesa.label} paybill{" "}
+                <b className="font-display text-ink-900">{payment.mpesa.paybill}</b>, with the
+                account number{" "}
+                <b className="font-display text-ink-900">{payment.accountFormat}</b> followed by
+                your child&rsquo;s name and no spaces —{" "}
+                <code className="rounded bg-paper-200 px-1.5 py-0.5 text-sm text-ink-900">
+                  {payment.accountExample}
+                </code>
+                .
+              </p>
+              <p className="mt-3 leading-relaxed">
+                Or pay into {payment.bank.name} account{" "}
+                <b className="font-display text-ink-900">{payment.bank.account}</b>, in the name
+                of {payment.bank.holder}. Bring the receipt to the office either way.
+              </p>
+            </div>
+            <div className="mt-6">
+              <ButtonLink href="/fees/" variant="secondary">
+                Full fee structure
+                <ArrowRightIcon className="h-4 w-4" />
+              </ButtonLink>
+            </div>
+          </Reveal>
+
+          <Reveal delay={120}>
+            <div className="card overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-navy-900 text-white">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-display text-xs font-bold uppercase tracking-wider">
+                        Level
+                      </th>
+                      <th className="px-3 py-3 text-right font-display text-xs font-bold uppercase tracking-wider">
+                        Term 1
+                      </th>
+                      <th className="px-3 py-3 text-right font-display text-xs font-bold uppercase tracking-wider">
+                        Term 2
+                      </th>
+                      <th className="px-3 py-3 text-right font-display text-xs font-bold uppercase tracking-wider">
+                        Term 3
+                      </th>
+                      <th className="px-4 py-3 text-right font-display text-xs font-bold uppercase tracking-wider">
+                        Year
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-paper-300">
+                    {fees.rows.map((r) => (
+                      <tr key={r.level}>
+                        <td className="px-4 py-3.5 font-semibold text-ink-900">{r.level}</td>
+                        <td className="px-3 py-3.5 text-right tabular-nums">
+                          {r.t1.toLocaleString("en-KE")}
+                        </td>
+                        <td className="px-3 py-3.5 text-right tabular-nums">
+                          {r.t2.toLocaleString("en-KE")}
+                        </td>
+                        <td className="px-3 py-3.5 text-right tabular-nums">
+                          {r.t3.toLocaleString("en-KE")}
+                        </td>
+                        <td className="px-4 py-3.5 text-right font-display font-extrabold tabular-nums text-ink-900">
+                          {r.total.toLocaleString("en-KE")}
+                        </td>
+                      </tr>
+                    ))}
+                    <tr className="bg-paper-100">
+                      <td colSpan={5} className="px-4 py-3.5 text-ink-400">
+                        {fees.missing} — please ask the office for the current sheet.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p className="border-t border-paper-300 px-4 py-3 text-xs text-ink-400">
+                All amounts in Kenya shillings. One-off on admission:{" "}
+                {fees.oneOff
+                  .map((o) => `${o.item.toLowerCase()} ${money(o.amount)}`)
+                  .join(", ")}
+                .
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </Section>
+
+      {/* -------------------------------------------------- testimonials ---
+          Hidden until the school gives us real quotes — see showTestimonials. */}
+      {showTestimonials && (
+      <Section>
+        <Reveal>
+          <SectionHeading center eyebrow="Parents and alumni" title="In their words" />
+        </Reveal>
         <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
           {testimonials.map((t, i) => (
-            <Reveal key={t.name} delay={i * 110}>
-              <figure className="card card-hover flex h-full flex-col p-8">
-                <span
-                  className="font-display text-6xl font-extrabold leading-none text-brand-200"
-                  aria-hidden
-                >
+            <Reveal key={t.quote} delay={i * 110}>
+              <figure className="card h-full p-7">
+                <span className="font-display text-5xl leading-none text-brand-200" aria-hidden>
                   &ldquo;
                 </span>
-                <blockquote className="mt-2 flex-1 text-[15px] leading-relaxed text-ink-700">
-                  {t.quote}
-                </blockquote>
-                <figcaption className="mt-6 flex items-center gap-3 border-t border-paper-200 pt-5">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-500 font-display text-sm font-extrabold text-white">
-                    {t.name.charAt(0)}
+                <blockquote className="mt-2 leading-relaxed text-ink-700">{t.quote}</blockquote>
+                <figcaption className="mt-5 border-t border-paper-300 pt-4">
+                  <span className="block font-display text-sm font-extrabold text-ink-900">
+                    {t.name}
                   </span>
-                  <span>
-                    <span className="block text-sm font-bold text-ink-900">{t.name}</span>
-                    <span className="block text-xs text-ink-400">{t.relation}</span>
-                  </span>
+                  <span className="block text-xs text-ink-400">{t.relation}</span>
                 </figcaption>
               </figure>
             </Reveal>
           ))}
         </div>
       </Section>
+      )}
 
-      {/* ------------------------------------------------ News + events preview */}
+      {/* ------------------------------------------------- news and events -- */}
       <Section tinted>
-        <div className="grid grid-cols-1 gap-14 lg:grid-cols-3">
-          <div className="lg:col-span-2">
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <SectionHeading eyebrow="News & updates" title="What's happening at school" />
-              <Link
-                href="/news/"
-                className="inline-flex items-center gap-1.5 text-sm font-bold text-brand-600 hover:text-brand-700"
-              >
-                All news <ArrowRightIcon className="h-4 w-4" />
-              </Link>
-            </div>
-            <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
-              {news.slice(0, 2).map((post, i) => (
-                <Reveal key={post.slug} delay={i * 100}>
-                  <Link href={`/news/${post.slug}/`} className="card card-hover block h-full overflow-hidden">
-                    {post.image && (
-                      <div className="overflow-hidden">
-                        <Image
-                          src={post.image}
-                          alt=""
-                          width={800}
-                          height={500}
-                          className="aspect-[8/5] w-full object-cover transition-transform duration-500 hover:scale-105"
-                        />
-                      </div>
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
+          <div>
+            <Reveal>
+              <SectionHeading eyebrow="From the school" title="News" />
+            </Reveal>
+            <div className="mt-8 space-y-5">
+              {news.slice(0, 3).map((n, i) => (
+                <Reveal key={n.slug} delay={i * 90}>
+                  <Link
+                    href={`/news/${n.slug}/`}
+                    className="card card-hover flex gap-4 overflow-hidden p-3 sm:gap-5"
+                  >
+                    {n.photo && (
+                      <Photo
+                        src={n.photo}
+                        sizes="180px"
+                        ratio="1/1"
+                        className="w-24 shrink-0 rounded-xl sm:w-32"
+                      />
                     )}
-                    <div className="p-6">
-                      <p className="text-xs font-bold uppercase tracking-wider text-brand-600">
-                        {formatDate(post.date)}
-                      </p>
-                      <h3 className="mt-2 font-display text-lg font-extrabold leading-snug text-ink-900">
-                        {post.title}
-                      </h3>
-                      <p className="mt-2 text-sm leading-relaxed">{post.excerpt}</p>
-                    </div>
+                    <span className="min-w-0 py-1 pr-2">
+                      <span className="block text-xs font-semibold uppercase tracking-wider text-ink-400">
+                        {formatDate(n.date)}
+                      </span>
+                      <span className="mt-1 block font-display text-base font-extrabold leading-snug text-ink-900 sm:text-lg">
+                        {n.title}
+                      </span>
+                      <span className="mt-1.5 line-clamp-2 block text-sm leading-relaxed">
+                        {n.excerpt}
+                      </span>
+                    </span>
                   </Link>
                 </Reveal>
               ))}
             </div>
-          </div>
-
-          <div>
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <SectionHeading eyebrow="Coming up" title="Events" />
-              <Link
-                href="/events/"
-                className="inline-flex items-center gap-1.5 text-sm font-bold text-brand-600 hover:text-brand-700"
-              >
-                All events <ArrowRightIcon className="h-4 w-4" />
-              </Link>
-            </div>
-            <ul className="mt-10 space-y-4">
-              {[...events]
-                .sort((a, b) => a.date.localeCompare(b.date))
-                .slice(0, 3)
-                .map((ev, i) => (
-                  <Reveal key={ev.title} delay={i * 90}>
-                    <li className="card card-hover flex items-center gap-4 p-4">
-                      <span className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-brand-500 text-white">
-                        <span className="font-display text-xl font-extrabold leading-none">
-                          {new Date(`${ev.date}T00:00:00`).getDate()}
-                        </span>
-                        <span className="text-[10px] font-bold uppercase">
-                          {new Date(`${ev.date}T00:00:00`).toLocaleString("en-KE", { month: "short" })}
-                        </span>
-                      </span>
-                      <div className="min-w-0">
-                        <h3 className="truncate font-display text-sm font-extrabold text-ink-900">
-                          {ev.title}
-                        </h3>
-                        <p className="mt-0.5 flex items-center gap-1.5 text-xs text-ink-400">
-                          <CalendarIcon className="h-3.5 w-3.5" />
-                          {ev.venue}
-                        </p>
-                      </div>
-                    </li>
-                  </Reveal>
-                ))}
-            </ul>
-          </div>
-        </div>
-      </Section>
-
-      {/* ------------------------------------------------ FAQ */}
-      <Section>
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
-          <div className="lg:col-span-4">
-            <SectionHeading
-              eyebrow="Questions parents ask"
-              title="Everything you need to know"
-              intro="Can't find your answer? Call the office or chat with us on WhatsApp — we're happy to help."
-            />
-            <div className="mt-8">
-              <ButtonLink href="/contact/" variant="secondary">
-                Ask us directly <ArrowRightIcon className="h-4 w-4" />
+            <div className="mt-7">
+              <ButtonLink href="/news/" variant="secondary">
+                All news
+                <ArrowRightIcon className="h-4 w-4" />
               </ButtonLink>
             </div>
           </div>
-          <div className="lg:col-span-8">
-            <div className="space-y-3">
-              {faqs.map((f, i) => (
-                <Reveal key={f.q} delay={i * 60}>
-                  <details className="faq-item card p-5 sm:p-6" name="faq">
-                    <summary className="font-display text-base font-extrabold text-ink-900">
-                      {f.q}
-                    </summary>
-                    <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-500">{f.a}</p>
-                  </details>
+
+          <div>
+            <Reveal>
+              <SectionHeading eyebrow="Diary" title="Coming up" />
+            </Reveal>
+            <ul className="mt-8 space-y-4">
+              {events.slice(0, 3).map((e, i) => (
+                <Reveal key={e.title} delay={i * 90}>
+                  <li className="card flex gap-4 p-5">
+                    <span className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-brand-500 text-white">
+                      <span className="font-display text-lg font-extrabold leading-none">
+                        {new Date(`${e.date}T00:00:00`).getDate()}
+                      </span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider">
+                        {new Date(`${e.date}T00:00:00`).toLocaleDateString("en-KE", {
+                          month: "short",
+                        })}
+                      </span>
+                    </span>
+                    <span>
+                      <span className="block font-display text-base font-extrabold text-ink-900">
+                        {e.title}
+                      </span>
+                      <span className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-400">
+                        <span className="inline-flex items-center gap-1">
+                          <CalendarIcon className="h-3.5 w-3.5" />
+                          {e.time ?? "All day"}
+                        </span>
+                        <span>{e.venue}</span>
+                      </span>
+                    </span>
+                  </li>
                 </Reveal>
               ))}
+            </ul>
+            <div className="mt-7">
+              <ButtonLink href="/events/" variant="secondary">
+                Full calendar
+                <ArrowRightIcon className="h-4 w-4" />
+              </ButtonLink>
             </div>
           </div>
         </div>
       </Section>
 
-      {/* ------------------------------------------------ CTA band */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-brand-600 to-brand-500 py-16 md:py-20">
-        <span className="absolute -left-10 -top-16 h-56 w-56 rounded-full bg-white/10" aria-hidden />
-        <span className="absolute -bottom-20 right-10 h-64 w-64 rounded-full bg-white/10" aria-hidden />
-        <div className="container-page relative flex flex-col items-center gap-6 text-center">
-          <h2 className="max-w-2xl font-display text-3xl font-extrabold text-white text-balance md:text-4xl">
-            Give your child a foundation of faith, discipline and excellence
+      {/* ------------------------------------------------------------ faq -- */}
+      <Section>
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
+          <Reveal>
+            <SectionHeading
+              eyebrow="Questions"
+              title="The things parents ask first"
+              intro="If yours is not here, ring the office — somebody picks up."
+            />
+            <div className="mt-8">
+              <ButtonLink href="/contact/">
+                Ask us anything
+                <ArrowRightIcon className="h-4 w-4" />
+              </ButtonLink>
+            </div>
+          </Reveal>
+
+          <Reveal delay={120}>
+            <div className="space-y-3">
+              {faqs.map((f) => (
+                <details key={f.q} className="faq-item card p-5">
+                  <summary className="font-display text-base font-bold text-ink-900">
+                    {f.q}
+                  </summary>
+                  <p className="mt-3 leading-relaxed">{f.a}</p>
+                </details>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </Section>
+
+      {/* ------------------------------------------------------------ cta -- */}
+      <section className="relative isolate overflow-hidden">
+        <Photo
+          src="headteacher-and-pupils"
+          sizes="100vw"
+          fill
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-navy-950/94 via-navy-900/82 to-brand-800/60"
+          aria-hidden
+        />
+        <div className="container-page relative py-20 text-center md:py-28">
+          <Crest className="mx-auto h-16 w-16" />
+          <h2 className="mt-6 font-display text-3xl font-extrabold tracking-tight text-white text-balance md:text-4xl">
+            Come and see the school before you choose it
           </h2>
-          <p className="max-w-xl text-lg text-white/90">
-            Admissions are open from Playgroup to Grade 9. Visit us in Bulimbo or get in touch —
-            we&rsquo;d love to show you around.
+          <p className="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-white/80">
+            Visit on any working day. Walk the classrooms, the dormitories, the dining hall
+            and the shamba, and ask us anything you like.
           </p>
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
             <ButtonLink href="/admissions/" variant="onDark">
-              Start Admission <ArrowRightIcon className="h-4 w-4" />
+              How to apply
+              <ArrowRightIcon className="h-4 w-4" />
             </ButtonLink>
-            <ButtonLink
-              href="/contact/"
-              variant="secondary"
-              className="!border-white/40 !bg-transparent !text-white hover:!border-white"
-            >
-              Contact Us
+            <ButtonLink href="/contact/" variant="ghost" className="!text-white hover:!bg-white/10">
+              <MegaphoneIcon className="h-4 w-4" />
+              Contact the office
             </ButtonLink>
           </div>
         </div>

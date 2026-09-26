@@ -7,7 +7,7 @@ import { CheckIcon } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Make a Complaint",
-  description: `Raise a concern or complaint with the administration of ${school.name}, Bulimbo. Every complaint is handled seriously and confidentially.`,
+  description: `Raise a concern or complaint with the administration of ${school.shortName}. Every complaint is handled seriously and confidentially.`,
 };
 
 const COMPLAINT_SUBJECTS = [

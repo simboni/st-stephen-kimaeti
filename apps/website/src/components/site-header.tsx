@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { navLinks, school } from "@/lib/site";
+import { Crest } from "@/components/crest";
 import { CloseIcon, MailIcon, MenuIcon, PhoneIcon, UserIcon } from "@/components/icons";
 
 function isActive(pathname: string, href: string) {
@@ -53,20 +53,14 @@ export function SiteHeader() {
       <div className="border-b border-paper-300 bg-paper-50/95 backdrop-blur">
         <div className="container-page flex h-[4.5rem] items-center justify-between gap-4">
           <Link href="/" className="flex min-w-0 items-center gap-2.5 sm:gap-3">
-            <Image
-              src="/logo.png"
-              alt={`${school.name} logo`}
-              width={52}
-              height={52}
-              className="h-11 w-11 shrink-0 rounded-full bg-white object-contain sm:h-13 sm:w-13"
-              priority
-            />
+            <Crest className="h-11 w-11 shrink-0 sm:h-12 sm:w-12" />
             <span className="min-w-0">
               <span className="block font-display text-[13px] font-extrabold leading-[1.15] text-ink-900 sm:text-base">
-                Holy Cross Junior &amp; Infant Schools
+                St Stephen&rsquo;s, Kimaeti
               </span>
               <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-600 sm:text-[11px] sm:tracking-[0.18em]">
-                Bulimbo<span className="hidden sm:inline"> · {school.motto}</span>
+                Early Years · Primary · Junior
+                <span className="hidden sm:inline"> · {school.motto}</span>
               </span>
             </span>
           </Link>

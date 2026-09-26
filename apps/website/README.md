@@ -1,46 +1,46 @@
-# Holy Cross Junior & Infant Schools — Bulimbo
+# St Stephen's, Kimaeti — the public website
 
-The public website for **Holy Cross Junior and Infant Schools** (Bulimbo, Kakamega, Kenya) —
-phase one of a two-part platform. Phase two is a full **education management system** (EMS);
-the `/portal` page is its front door.
+The public site for **St Stephen Mixed Day and Boarding Primary School, Junior
+School & Early Years of Education Centre**, Kimaeti, Bungoma. Next.js 16 (App
+Router), React 19, TypeScript, Tailwind v4, exported as static HTML.
 
-Built with **Next.js 16 (App Router)**, **React 19**, **TypeScript** and **Tailwind CSS v4**,
-exported as a fast static site.
+Design notes, the photo pipeline and the pre-launch checklist are in
+[`../../docs/WEBSITE.md`](../../docs/WEBSITE.md). This file is the quick start.
 
 ## Pages
 
-| Route            | Purpose                                                              |
-| ---------------- | -------------------------------------------------------------------- |
-| `/`              | Home — hero, stats, about, mission/vision/motto, values, academics, videos, news & events preview |
-| `/about`         | The school's story, pillars, values and sections                     |
-| `/admissions`    | How to enrol, classes offered, office contacts                       |
-| `/news`          | News & updates listing                                               |
-| `/news/[slug]`   | Individual news article                                              |
-| `/events`        | Upcoming school events                                               |
-| `/gallery`       | Photo gallery + Students-in-Action videos                            |
-| `/contact`       | Contact info + enquiry form                                          |
-| `/complain`      | Complaints form (delivered confidentially to the administration)     |
-| `/portal`        | Portal login — links to the current system; becomes the EMS login    |
+| Route | What it is |
+|---|---|
+| `/` | Hero, stats, welcome, the three sections, four pillars, a day at the school, fees, testimonials, news, events, FAQ |
+| `/about` | The story, the school in figures, vision/mission/motto, the sections |
+| `/admissions` | Four steps, classes offered, what to bring and what it costs |
+| `/fees` | The 2026 fee structure by level and term, uniform, and how to pay |
+| `/news`, `/news/[slug]` | News listing and articles |
+| `/events` | The term calendar |
+| `/gallery` | 33 of the school's own photographs, grouped |
+| `/contact` | Office details and an enquiry form |
+| `/complain` | A complaints form, handled confidentially |
+| `/portal` | Front door to the EMS |
 
 Plus `sitemap.xml`, `robots.txt` and JSON-LD `School` schema.
 
-## Editing content — one file
+## Editing content
 
-**All content lives in [`src/lib/site.ts`](src/lib/site.ts).** School details, mission/vision,
-core values, academics, admission steps, news posts, events, gallery photos and videos are all
-plain typed data — edit that one file and every page updates. Items marked `SAMPLE — replace`
-are realistic placeholders awaiting real school content.
+**Every word is in [`src/lib/site.ts`](src/lib/site.ts).** School details, copy,
+fees, payment channels, admission steps, FAQs, news, events and testimonials are
+plain typed data; the pages are layout only. Anything marked `SAMPLE` is a
+placeholder the school must replace — see the checklist in `docs/WEBSITE.md`.
 
-To add a news post: drop an image in `public/` (optional) and add an entry to `news[]` —
-its card, article page and sitemap entry are generated automatically.
+Photographs are indexed in `src/lib/photos.ts`, which is **generated** — do not
+edit it by hand. Run `tools/photos/process.mjs` instead.
 
 ## Forms
 
-The contact and complaints forms post to [FormSubmit](https://formsubmit.co), which emails each
-message to `info@holycrossbulimbo.com` with no backend needed. The first submission triggers a
-one-time activation email to that inbox — click the link once and delivery is on for good.
-When the EMS backend lands, point the forms at its API instead
-(see `src/components/enquiry-form.tsx`).
+The contact and complaints forms post to [FormSubmit](https://formsubmit.co),
+which emails each message to the school with no backend. The first submission
+triggers a one-time activation email to that inbox. When the EMS is live, point
+the forms at its front-office API instead — see
+`src/components/enquiry-form.tsx`.
 
 ## Local development
 
@@ -52,15 +52,13 @@ npm run build    # static export → ./out
 
 ## Deployment
 
-Static export (`output: 'export'`), so it deploys to any static host — Vercel, Cloudflare
-Pages, Netlify, GitHub Pages or plain cPanel hosting (upload the contents of `out/`).
-Set the build command to `npm run build` and the output directory to `out`.
+`output: 'export'`, so `out/` deploys to any static host — Cloudflare Pages,
+Netlify, GitHub Pages, or Caddy on the same VPS as the EMS. Build command
+`npm run build`, output directory `out`.
 
-## Phase two — education management system
+Two build-time environment variables:
 
-The EMS (admissions, attendance, CBC assessments, fees & M-PESA, timetables, messaging) will be
-built as the platform's second part. The website is deliberately structured for it:
-
-- `/portal` is the login entry point — swap its link to the EMS URL when live.
-- Content in `src/lib/site.ts` (news, events) can later be fetched from the EMS API instead.
-- The design system in `src/app/globals.css` carries the school's brand into the EMS UI.
+| Variable | Effect |
+|---|---|
+| `PAGES_BASE_PATH` | Sets Next's `basePath` for hosting under a sub-path. Also inlined as `NEXT_PUBLIC_BASE_PATH` so `<Photo>` can prefix its own `src` attributes. |
+| `NEXT_PUBLIC_EMS_URL` | Where `/portal` and the footer send people to log in. The deploy script sets it from the server's `EMS_DOMAIN`. |

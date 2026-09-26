@@ -15,7 +15,7 @@ import {
 
 export const metadata: Metadata = {
   title: "Portal Login",
-  description: `Login portal for parents, teachers and staff of ${school.name} — school management system access.`,
+  description: `Portal login for parents, teachers and staff of ${school.shortName} — fee statements, attendance, assessments and announcements.`,
 };
 
 /**
@@ -46,6 +46,8 @@ const comingFeatures = [
   "Attendance registers",
   "CBC assessments & report cards",
   "Fee invoices & M-PESA payments",
+  "School bus routes & stages",
+  "Dormitory and bed allocation",
   "Timetables & class management",
   "SMS / email announcements",
 ];
@@ -56,7 +58,8 @@ export default function PortalPage() {
       <PageHero
         eyebrow="School portal"
         title="One login for the whole school community"
-        intro="Parents, teachers and staff access school records through the Holy Cross management system."
+        intro="Parents, teachers and staff reach school records through the St Stephen's management system."
+        photo="fair-stand"
       />
 
       <Section>
@@ -98,7 +101,7 @@ export default function PortalPage() {
                   <ChatIcon className="h-4 w-4 text-sun-500" /> A new system is on the way
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-ink-700">
-                  We are building a brand-new education management system for Holy Cross. When it
+                  We are building a new education management system for St Stephen&rsquo;s. When it
                   launches, this page becomes its front door — same address, much more power.
                 </p>
               </div>

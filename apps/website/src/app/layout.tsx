@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { school, site } from "@/lib/site";
+import { photo } from "@/lib/photos";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { WhatsAppButton } from "@/components/whatsapp-button";
@@ -14,6 +15,10 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 const siteUrl = `https://${site.domain}`;
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+/** The card people see when the site is shared on WhatsApp or Facebook. */
+const ogPhoto = photo("learners-on-the-field");
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -23,13 +28,13 @@ export const metadata: Metadata = {
   },
   description: site.description,
   keywords: [
-    "Holy Cross Bulimbo",
-    "Holy Cross Junior School",
-    "Holy Cross Infant School",
-    "schools in Kakamega",
+    "St Stephen's Kimaeti",
+    "St Stephen Primary School Kimaeti",
+    "schools in Bungoma",
+    "boarding school Bungoma",
+    "junior school Bungoma",
     "CBC school Kenya",
-    "private school Bulimbo",
-    "junior school Kakamega",
+    "Brothers of St Charles Lwanga school",
   ],
   openGraph: {
     type: "website",
@@ -38,7 +43,14 @@ export const metadata: Metadata = {
     siteName: school.name,
     title: site.title,
     description: site.description,
-    images: [{ url: "/campus-front.jpg", width: 1600, height: 1200, alt: school.name }],
+    images: [
+      {
+        url: `${basePath}/photos/${ogPhoto.slug}-${ogPhoto.widths[ogPhoto.widths.length - 1]}.webp`,
+        width: ogPhoto.width,
+        height: ogPhoto.height,
+        alt: ogPhoto.alt,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -56,14 +68,17 @@ const schoolSchema = {
   email: school.email,
   telephone: school.phoneHref,
   url: siteUrl,
+  foundingDate: String(school.founded),
   address: {
     "@type": "PostalAddress",
-    streetAddress: "P.O. Box 134",
-    postalCode: "50109",
-    addressLocality: "Bulimbo",
-    addressRegion: "Kakamega County",
+    streetAddress: "P.O. Box 93",
+    postalCode: "50200",
+    addressLocality: "Kimaeti, Bungoma",
+    addressRegion: "Bungoma County",
     addressCountry: "KE",
   },
+  numberOfStudents: 525,
+  parentOrganization: { "@type": "Organization", name: school.sponsor },
 };
 
 export default function RootLayout({

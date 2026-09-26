@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-const DEMO_PASSWORD = "holycross2026";
+const DEMO_PASSWORD = "ststephen2026";
 
 const users = [
   { username: "superadmin", name: "System Owner", role: "SUPER_ADMIN", email: "superadmin@ststephenkimaeti.ac.ke" },

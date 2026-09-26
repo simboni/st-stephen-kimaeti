@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { events, formatDate } from "@/lib/site";
+import { events, formatDate, school } from "@/lib/site";
 import { PageHero } from "@/components/page-hero";
 import { Section } from "@/components/ui";
 import { Reveal } from "@/components/reveal";
@@ -7,8 +7,7 @@ import { ClockIcon, PinIcon } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Events",
-  description:
-    "Upcoming events at Holy Cross Junior & Infant Schools, Bulimbo — opening days, academic days, feasts and parents' meetings.",
+  description: `The school calendar for ${school.shortName} — opening days, assessments, academic day and parents' consultation days.`,
 };
 
 export default function EventsPage() {
@@ -19,7 +18,8 @@ export default function EventsPage() {
       <PageHero
         eyebrow="School events"
         title="Mark your calendar"
-        intro="Opening days, celebrations and parents' meetings — everything happening at Holy Cross."
+        intro="Opening days, assessments, academic day and parents' consultations — the term as it stands."
+        photo="mass-lectern"
       />
       <Section>
         <ol className="mx-auto max-w-3xl space-y-6">

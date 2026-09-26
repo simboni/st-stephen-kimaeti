@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
-import { formatDate, news } from "@/lib/site";
+import { formatDate, news, school } from "@/lib/site";
 import { PageHero } from "@/components/page-hero";
+import { Photo } from "@/components/photo";
+import { Crest } from "@/components/crest";
 import { Section } from "@/components/ui";
 import { Reveal } from "@/components/reveal";
 import { ArrowRightIcon } from "@/components/icons";
 
 export const metadata: Metadata = {
-  title: "News & Updates",
-  description:
-    "The latest news and updates from Holy Cross Junior & Infant Schools, Bulimbo — achievements, projects and announcements.",
+  title: "News",
+  description: `News from ${school.shortName} — what the learners have been building, winning and celebrating this term.`,
 };
 
 export default function NewsPage() {
@@ -19,9 +19,10 @@ export default function NewsPage() {
   return (
     <>
       <PageHero
-        eyebrow="News & updates"
-        title="Stories from our school community"
-        intro="Achievements, projects and announcements from Holy Cross, Bulimbo."
+        eyebrow="News"
+        title="What has been happening"
+        intro="Projects, results and announcements from the school at Kimaeti."
+        photo="mass-outdoors"
       />
       <Section>
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -31,17 +32,15 @@ export default function NewsPage() {
                 href={`/news/${post.slug}/`}
                 className="card card-hover flex h-full flex-col overflow-hidden"
               >
-                {post.image ? (
-                  <Image
-                    src={post.image}
-                    alt=""
-                    width={800}
-                    height={500}
-                    className="aspect-[8/5] w-full object-cover"
+                {post.photo ? (
+                  <Photo
+                    src={post.photo}
+                    sizes="(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 100vw"
+                    ratio="8/5"
                   />
                 ) : (
                   <div className="flex aspect-[8/5] w-full items-center justify-center bg-gradient-to-br from-brand-500 to-brand-400">
-                    <Image src="/logo.png" alt="" width={96} height={96} className="h-24 w-24 rounded-full bg-white/95 object-contain p-1.5" />
+                    <Crest className="h-24 w-24" />
                   </div>
                 )}
                 <div className="flex flex-1 flex-col p-6">

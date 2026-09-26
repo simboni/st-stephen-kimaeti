@@ -6,7 +6,7 @@ Kimaeti, Bungoma — run by the Brothers of St Charles Lwanga.
 
 | App | Path | What it is |
 |-----|------|-----------|
-| **Website** | [`apps/website`](apps/website) | Public site — home, about, admissions, news, events, gallery, contact, complaints, portal entry |
+| **Website** | [`apps/website`](apps/website) | Public site — home, about, admissions, fees, news, events, gallery, contact, complaints, portal entry. Built on 33 of the school's own photographs. See [`docs/WEBSITE.md`](docs/WEBSITE.md). |
 | **EMS** | [`apps/ems`](apps/ems) | Management system — pupils, attendance, exams, fees, finance, staff, payroll, front office, reports |
 
 Built from the platform first delivered for Holy Cross Bulimbo. School identity

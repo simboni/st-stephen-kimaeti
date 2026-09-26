@@ -1,73 +1,113 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import { gallery, videos } from "@/lib/site";
+import { photos, photosIn, type PhotoCategory } from "@/lib/photos";
+import { school } from "@/lib/site";
 import { PageHero } from "@/components/page-hero";
+import { Photo } from "@/components/photo";
 import { Section, SectionHeading } from "@/components/ui";
 import { Reveal } from "@/components/reveal";
 
 export const metadata: Metadata = {
-  title: "Our Gallery",
-  description:
-    "Photos and videos of life at Holy Cross Junior & Infant Schools, Bulimbo — our compound, classrooms and learners in action.",
+  title: "Gallery",
+  description: `Photographs of life at ${school.shortName} — the science fair, the classrooms, the dormitories, the shamba, sport and the cultural troupe.`,
 };
+
+/** The order the gallery reads in, with a line of context for each group.
+ *  A group may draw on more than one category where neither alone fills a row. */
+const GROUPS: { cats: PhotoCategory[]; title: string; text: string }[] = [
+  {
+    cats: ["academics"],
+    title: "The science fair",
+    text: "Once a term the eucalyptus grove fills with desks, charts and apparatus, and every class defends a project it built itself.",
+  },
+  {
+    cats: ["earlyyears"],
+    title: "Early Years",
+    text: "Playgroup, PP1 and PP2 — 123 of the smallest learners in the school.",
+  },
+  {
+    cats: ["faith"],
+    title: "Prayer",
+    text: "Mass in the open air, the whole school standing round the lectern. The first half of the motto.",
+  },
+  {
+    cats: ["campus"],
+    title: "The compound",
+    text: "Classrooms, grounds and the works the school has built for itself.",
+  },
+  {
+    cats: ["boarding"],
+    title: "Boarding",
+    text: "157 learners sleep here. Three cooked meals a day and prep every evening.",
+  },
+  {
+    cats: ["sport", "culture"],
+    title: "Sport, music and dance",
+    text: "Football for the boys and the girls, games every afternoon, and a cultural troupe that travels.",
+  },
+  {
+    cats: ["community"],
+    title: "Work",
+    text: "The school shamba, dug and planted by the learners themselves — the second half of the motto.",
+  },
+  {
+    cats: ["staff"],
+    title: "Our staff",
+    text: "Twenty-six teachers, and the office that keeps it all running.",
+  },
+  {
+    cats: ["life"],
+    title: "Faces",
+    text: "Between lessons, on the field, at the end of the day.",
+  },
+];
 
 export default function GalleryPage() {
   return (
     <>
       <PageHero
-        eyebrow="Our gallery"
-        title="Life at Holy Cross, in pictures"
-        intro="A look around our compound, classrooms and the moments that make our school special."
+        eyebrow="Gallery"
+        title="An ordinary term at St Stephen's"
+        intro={`${photos.length} photographs from the school's own camera — no models, no stock, nothing staged for a brochure.`}
+        photo="cultural-troupe"
       />
 
-      <Section>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-          {gallery.map((item, i) => (
-            <Reveal key={item.src} delay={i * 100}>
-              <figure className="card card-hover overflow-hidden">
-                <Image
-                  src={item.src}
-                  alt={item.alt}
-                  width={1600}
-                  height={1200}
-                  className="aspect-[4/3] w-full object-cover"
-                />
-                <figcaption className="p-5 text-sm font-semibold text-ink-700">
-                  {item.caption}
-                </figcaption>
-              </figure>
+      {GROUPS.map((group, gi) => {
+        const items = group.cats.flatMap(photosIn);
+        if (items.length === 0) return null;
+        return (
+          <Section key={group.title} tinted={gi % 2 === 1}>
+            <Reveal>
+              <SectionHeading
+                eyebrow={`${items.length} photo${items.length === 1 ? "" : "s"}`}
+                title={group.title}
+                intro={group.text}
+              />
             </Reveal>
-          ))}
-        </div>
-        <p className="mt-10 text-center text-sm text-ink-400">
-          More photos coming soon — we&rsquo;re building our gallery term by term.
-        </p>
-      </Section>
-
-      <Section tinted>
-        <SectionHeading
-          eyebrow="Videos"
-          title="Our students in action"
-          intro="Performances and school moments captured on video."
-          center
-        />
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {videos.map((v, i) => (
-            <Reveal key={v.id} delay={i * 110}>
-              <div className="overflow-hidden rounded-2xl shadow-lg">
-                <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${v.id}`}
-                  title={v.title}
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                  className="aspect-video w-full"
-                />
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </Section>
+            {/* Always four columns wide, but a short group is capped so its
+                tiles stay the same size as everyone else's rather than
+                stretching across the page. */}
+            <div
+              className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"
+              style={items.length < 4 ? { maxWidth: `${items.length * 19.5}rem` } : undefined}
+            >
+              {items.map((p, i) => (
+                <Reveal key={p.slug} delay={(i % 4) * 70}>
+                  <figure className="card card-hover h-full overflow-hidden">
+                    <Photo
+                      src={p}
+                      sizes="(min-width: 1024px) 22vw, (min-width: 768px) 30vw, 46vw"
+                      ratio="4/5"
+                    />
+                    <figcaption className="p-3.5 text-xs font-semibold leading-snug text-ink-700 sm:text-sm">
+                      {p.caption}
+                    </figcaption>
+                  </figure>
+                </Reveal>
+              ))}
+            </div>
+          </Section>
+        );
+      })}
     </>
   );
 }

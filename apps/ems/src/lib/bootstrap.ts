@@ -22,7 +22,7 @@ import { db } from "@/lib/db";
  * can never come up holding real pupil records behind a publicly known
  * administrator password.
  */
-const DEMO_PASSWORD = "holycross2026";
+const DEMO_PASSWORD = "ststephen2026";
 
 function demoDataWanted(): boolean {
   const flag = process.env.SEED_DEMO;

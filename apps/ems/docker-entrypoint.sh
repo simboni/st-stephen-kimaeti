@@ -7,8 +7,8 @@
 # the code does not expect.
 set -e
 
-echo "[holycross] applying database migrations…"
+echo "[ststephen] applying database migrations…"
 npx prisma migrate deploy
 
-echo "[holycross] starting the EMS on port ${PORT:-3000}"
+echo "[ststephen] starting the EMS on port ${PORT:-3000}"
 exec node node_modules/next/dist/bin/next start

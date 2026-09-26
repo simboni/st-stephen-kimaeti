@@ -5,7 +5,7 @@ import { WhatsAppIcon } from "@/components/icons";
 export function WhatsAppButton() {
   return (
     <a
-      href={`https://wa.me/${whatsapp}?text=${encodeURIComponent("Hello Holy Cross! I'd like to ask about")}`}
+      href={`https://wa.me/${whatsapp}?text=${encodeURIComponent("Hello St Stephen's! I would like to ask about")}`}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with the school on WhatsApp"

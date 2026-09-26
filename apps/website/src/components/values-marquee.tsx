@@ -1,10 +1,13 @@
-const ITEMS = ["Faith", "Discipline", "Hard Work", "Social Transformation", "Learners Today, Leaders Tomorrow"];
+import { school } from "@/lib/site";
 
-/** Scrolling values band — a modern breather between sections. */
+/** Scrolling values band — a breather between sections, carrying the motto and
+ *  the six values the school itself listed on its requirements form. */
 export function ValuesMarquee() {
+  const items = [school.motto, ...school.values];
+
   const row = (ariaHidden: boolean) => (
     <div className="flex shrink-0 items-center" aria-hidden={ariaHidden || undefined}>
-      {ITEMS.map((item) => (
+      {items.map((item) => (
         <span key={item} className="flex items-center">
           <span className="px-6 font-display text-lg font-extrabold uppercase tracking-[0.14em] text-white md:text-xl">
             {item}

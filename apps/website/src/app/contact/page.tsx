@@ -8,7 +8,7 @@ import { ChatIcon, MailIcon, PhoneIcon, PinIcon } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Contact Us",
-  description: `Get in touch with ${school.name}, Bulimbo — admissions enquiries, visits and general questions.`,
+  description: `Get in touch with ${school.shortName} — admissions enquiries, fees, visits and general questions. ${school.address}.`,
 };
 
 const ENQUIRY_SUBJECTS = [
@@ -24,8 +24,9 @@ export default function ContactPage() {
     <>
       <PageHero
         eyebrow="Contact us"
-        title="We'd love to hear from you"
-        intro="Questions about admissions, fees or school life? Send us a message or reach the office directly."
+        title="Somebody picks up"
+        intro="Questions about admissions, fees or boarding? Send a message, or just ring the office."
+        photo="school-grounds"
       />
       <Section>
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
@@ -44,8 +45,14 @@ export default function ContactPage() {
                 </span>
                 <div>
                   <p className="text-xs font-bold uppercase tracking-wider text-ink-400">Phone</p>
-                  <a href={`tel:${school.phoneHref}`} className="font-bold text-ink-900 hover:text-brand-600">
+                  <a href={`tel:${school.phoneHref}`} className="block font-bold text-ink-900 hover:text-brand-600">
                     {school.phone}
+                  </a>
+                  <a
+                    href={`tel:${school.phoneAltHref}`}
+                    className="block font-bold text-ink-900 hover:text-brand-600"
+                  >
+                    {school.phoneAlt}
                   </a>
                 </div>
               </li>
@@ -55,7 +62,7 @@ export default function ContactPage() {
                 </span>
                 <div>
                   <p className="text-xs font-bold uppercase tracking-wider text-ink-400">Email</p>
-                  <a href={`mailto:${school.email}`} className="font-bold text-ink-900 hover:text-brand-600">
+                  <a href={`mailto:${school.email}`} className="break-all font-bold text-ink-900 hover:text-brand-600">
                     {school.email}
                   </a>
                 </div>
@@ -67,7 +74,9 @@ export default function ContactPage() {
                 <div>
                   <p className="text-xs font-bold uppercase tracking-wider text-ink-400">Address</p>
                   <p className="font-bold text-ink-900">{school.address}</p>
-                  <p className="mt-1 text-sm">{school.location}</p>
+                  <p className="mt-1 text-sm">
+                    {school.ward} · {school.location}
+                  </p>
                 </div>
               </li>
             </ul>

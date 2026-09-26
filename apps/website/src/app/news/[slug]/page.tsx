@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { formatDate, news } from "@/lib/site";
+import { Photo } from "@/components/photo";
 import { Section } from "@/components/ui";
 import { ArrowRightIcon } from "@/components/icons";
 
@@ -41,7 +41,7 @@ export default async function NewsPostPage({
       <div className="bg-navy-900">
         <div className="container-page py-16 md:py-20">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-300">
-            {formatDate(post.date)} · News &amp; Updates
+            {formatDate(post.date)} · News
           </p>
           <h1 className="mt-3 max-w-3xl font-display text-3xl font-extrabold tracking-tight text-white text-balance md:text-5xl">
             {post.title}
@@ -51,14 +51,13 @@ export default async function NewsPostPage({
 
       <Section>
         <div className="mx-auto max-w-3xl">
-          {post.image && (
-            <Image
-              src={post.image}
-              alt=""
-              width={1600}
-              height={1000}
-              className="mb-10 w-full rounded-2xl object-cover shadow-lg"
+          {post.photo && (
+            <Photo
+              src={post.photo}
+              sizes="(min-width: 768px) 768px, 100vw"
+              ratio="16/10"
               priority
+              className="mb-10 rounded-2xl shadow-lg"
             />
           )}
           <div className="space-y-5 text-lg leading-relaxed">
