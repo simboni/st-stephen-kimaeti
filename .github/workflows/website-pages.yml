@@ -1,0 +1,74 @@
+# PREVIEW COPY of the public website, published free from this repository.
+#
+# The school's real home is its own server (deploy/contabo/, runbook in
+# docs/DEPLOY-CONTABO.md). This is a link to share while that server is being
+# set up, and afterwards a way to view a branch before it goes live.
+#
+# WEBSITE ONLY. The EMS needs Node and PostgreSQL, which GitHub Pages cannot
+# run, so there is no management system at this address. Contact and complaint
+# forms here reach the school through the FormSubmit fallback; the EMS
+# front-office queue only starts filling once the real server is up.
+#
+# One-time setup by a repo admin: Settings → Pages → Build and deployment →
+# Source: "GitHub Actions". The preview then rebuilds on every push to main at
+# https://simboni.github.io/st-stephen-kimaeti/
+name: Publish website preview (GitHub Pages)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/website/**"
+      - ".github/workflows/website-pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a running deploy finish rather than cancelling it half-published.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/website
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.16.0"
+          cache: npm
+          cache-dependency-path: apps/website/package-lock.json
+
+      - run: npm ci
+
+      - run: npm run build
+        env:
+          # Served from /st-stephen-kimaeti/ on github.io. Remove this when the
+          # site moves to a root custom domain.
+          PAGES_BASE_PATH: /st-stephen-kimaeti
+
+      # Next.js emits _next/; without this, Pages' legacy Jekyll step would
+      # strip every underscore-prefixed directory and the CSS/JS would 404.
+      - run: touch out/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/website/out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

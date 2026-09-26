@@ -1,0 +1,70 @@
+# Holy Cross platform — Caddy configuration template.
+#
+# setup.sh substitutes the {{...}} placeholders and writes the result to
+# /etc/caddy/Caddyfile. Caddy obtains and renews the HTTPS certificates by
+# itself; there is no certbot cron to forget about.
+
+{
+	email {{LETSENCRYPT_EMAIL}}
+}
+
+# ----------------------------------------------------------- public website --
+{{WEBSITE_DOMAIN}}, www.{{WEBSITE_DOMAIN}} {
+	root * {{WEB_ROOT}}
+	encode zstd gzip
+
+	# The site is exported with trailingSlash, so /about/ maps to
+	# /about/index.html and a miss falls through to the 404 page.
+	try_files {path} {path}/ /404.html
+	file_server
+
+	# Next.js fingerprints these filenames, so they can be cached forever.
+	@immutable path /_next/static/*
+	header @immutable Cache-Control "public, max-age=31536000, immutable"
+
+	header {
+		X-Content-Type-Options nosniff
+		X-Frame-Options SAMEORIGIN
+		Referrer-Policy strict-origin-when-cross-origin
+		-Server
+	}
+
+	log {
+		output file /var/log/caddy/website.log {
+			roll_size 10MiB
+			roll_keep 5
+		}
+	}
+}
+
+# ------------------------------------------------------------------- the EMS --
+{{EMS_DOMAIN}} {
+	reverse_proxy 127.0.0.1:{{EMS_PORT}} {
+		# Next.js streams responses; Caddy passes them straight through, which
+		# is why this needs no anti-buffering workaround.
+		flush_interval -1
+	}
+
+	header {
+		X-Content-Type-Options nosniff
+		X-Frame-Options SAMEORIGIN
+		Referrer-Policy strict-origin-when-cross-origin
+		# The EMS holds pupil records — keep it out of search engines.
+		X-Robots-Tag "noindex, nofollow"
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		-Server
+	}
+
+	# Pupil photographs and CSV imports go through forms; the default 10MB
+	# request cap is generous enough while still bounding abuse.
+	request_body {
+		max_size 10MB
+	}
+
+	log {
+		output file /var/log/caddy/ems.log {
+			roll_size 10MiB
+			roll_keep 10
+		}
+	}
+}

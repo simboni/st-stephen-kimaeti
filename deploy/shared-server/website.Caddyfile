@@ -1,0 +1,22 @@
+# Internal static file server for the school's public website.
+#
+# Plain HTTP on the container network only — the machine's existing reverse
+# proxy terminates HTTPS and forwards here. `auto_https off` matters: without
+# it this Caddy would try to obtain its own certificates and compete with the
+# proxy that already owns ports 80 and 443.
+{
+	auto_https off
+	admin off
+}
+
+:80 {
+	root * /srv/website
+	encode zstd gzip
+
+	# The export uses trailing slashes: /about/ → /about/index.html.
+	try_files {path} {path}/ /404.html
+	file_server
+
+	@immutable path /_next/static/*
+	header @immutable Cache-Control "public, max-age=31536000, immutable"
+}

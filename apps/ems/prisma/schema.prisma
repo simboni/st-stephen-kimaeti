@@ -1,0 +1,894 @@
+// Holy Cross EMS — database schema.
+// Item 0.1: users, roles, permissions, audit trail.
+// Later items extend this file; every change ships as a migration.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  ACCOUNTANT
+  TEACHER
+  RECEPTIONIST
+  LIBRARIAN
+  PARENT
+  STUDENT
+}
+
+model User {
+  id                 String    @id @default(cuid())
+  username           String    @unique
+  name               String
+  email              String?
+  phone              String?
+  passwordHash       String
+  role               Role
+  active             Boolean   @default(true)
+  archiveReason      String?
+  mustChangePassword Boolean   @default(false)
+  lastLoginAt        DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  auditLogs          AuditLog[]
+  classTeacherOf     ClassTeacher[]
+  subjectTeacherOf   SubjectTeacher[]
+  timetableSlots     TimetableSlot[]
+  studentAccount     Student?         @relation("studentAccount")
+  parentLinks        ParentLink[]
+  staffProfile       StaffProfile?
+
+  @@index([role, active])
+}
+
+/// Per-role module permissions, editable by the Super Admin.
+/// SUPER_ADMIN bypasses this table entirely (always allowed).
+model RolePermission {
+  id         String  @id @default(cuid())
+  role       Role
+  module     String
+  canView    Boolean @default(false)
+  canCreate  Boolean @default(false)
+  canEdit    Boolean @default(false)
+  canArchive Boolean @default(false)
+
+  @@unique([role, module])
+}
+
+/// Singleton school profile — one row with id "school".
+model SchoolSetting {
+  id        String   @id @default("school")
+  name      String
+  shortName String
+  motto     String?
+  email     String?
+  phone     String?
+  address   String?
+  currency  String   @default("KES")
+  timezone  String   @default("Africa/Nairobi")
+  /// Uploaded logo image (small, one per school — SaaS-tenant friendly).
+  logo      Bytes?
+  logoType  String?
+  updatedAt DateTime @updatedAt
+}
+
+/// An academic year, e.g. "2025-2026". Exactly one is active at a time.
+model AcademicSession {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  startDate DateTime
+  endDate   DateTime
+  active        Boolean        @default(false)
+  terms           Term[]
+  classTeachers   ClassTeacher[]
+  subjectTeachers SubjectTeacher[]
+  timetableSlots  TimetableSlot[]
+  enrollments     Enrollment[]
+  feeItems        FeeItem[]
+  feeAdjustments  FeeAdjustment[]
+  feePayments     FeePayment[]
+  exams           Exam[]
+  homework        Homework[]
+  createdAt       DateTime         @default(now())
+}
+
+/// A term within a session (Kenyan calendar: Terms 1–3).
+model Term {
+  id        String          @id @default(cuid())
+  session   AcademicSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId String
+  number    Int
+  name      String
+  startDate DateTime
+  endDate   DateTime
+  feeItems  FeeItem[]
+  exams     Exam[]
+
+  @@unique([sessionId, number])
+}
+
+/// School stage a class belongs to — drives grouping and, later, fees/reports.
+enum Stage {
+  INFANT
+  PRIMARY
+  JUNIOR
+}
+
+/// A class (grade level), e.g. "Grade 4". `level` orders them school-wide.
+model SchoolClass {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  level     Int      @unique
+  stage     Stage
+  archived      Boolean        @default(false)
+  streams       Stream[]
+  classSubjects ClassSubject[]
+  feeItems      FeeItem[]
+  createdAt     DateTime       @default(now())
+}
+
+/// A stream/section within a class, e.g. Grade 4 "A".
+model Stream {
+  id            String         @id @default(cuid())
+  class         SchoolClass    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  classId       String
+  name          String
+  archived        Boolean          @default(false)
+  classTeachers   ClassTeacher[]
+  subjectTeachers SubjectTeacher[]
+  timetableSlots  TimetableSlot[]
+  enrollments     Enrollment[]
+  homework        Homework[]
+
+  @@unique([classId, name])
+}
+
+/// The class teacher of a stream for a given session (one per stream per session).
+model ClassTeacher {
+  id        String          @id @default(cuid())
+  stream    Stream          @relation(fields: [streamId], references: [id], onDelete: Cascade)
+  streamId  String
+  teacher   User            @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  teacherId String
+  session   AcademicSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId String
+
+  @@unique([streamId, sessionId])
+}
+
+enum SubjectType {
+  CORE
+  OPTIONAL
+}
+
+/// A learning area (CBC), e.g. "Mathematics".
+model Subject {
+  id              String           @id @default(cuid())
+  name            String           @unique
+  code            String?          @unique
+  type            SubjectType      @default(CORE)
+  archived        Boolean          @default(false)
+  classSubjects   ClassSubject[]
+  subjectTeachers SubjectTeacher[]
+  timetableSlots  TimetableSlot[]
+  marks           Mark[]
+  homework        Homework[]
+  createdAt       DateTime         @default(now())
+}
+
+/// Which subjects a class takes (the class's "subject group").
+model ClassSubject {
+  id        String      @id @default(cuid())
+  class     SchoolClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+  classId   String
+  subject   Subject     @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  subjectId String
+
+  @@unique([classId, subjectId])
+}
+
+/// Who teaches a subject in a stream, per session.
+model SubjectTeacher {
+  id        String          @id @default(cuid())
+  stream    Stream          @relation(fields: [streamId], references: [id], onDelete: Cascade)
+  streamId  String
+  subject   Subject         @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  subjectId String
+  teacher   User            @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  teacherId String
+  session   AcademicSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId String
+
+  @@unique([streamId, subjectId, sessionId])
+}
+
+/// One lesson in a stream's weekly timetable (per session).
+/// day: 1=Monday … 5=Friday; period: 1..10.
+model TimetableSlot {
+  id        String          @id @default(cuid())
+  stream    Stream          @relation(fields: [streamId], references: [id], onDelete: Cascade)
+  streamId  String
+  session   AcademicSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId String
+  day       Int
+  period    Int
+  subject   Subject         @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  subjectId String
+  teacher   User?           @relation(fields: [teacherId], references: [id], onDelete: SetNull)
+  teacherId String?
+  room      String?
+
+  @@unique([streamId, sessionId, day, period])
+  @@index([teacherId, sessionId])
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+/// Why a pupil left the roll. Set when a pupil exits; cleared on restore.
+enum ExitType {
+  TRANSFERRED
+  GRADUATED
+  WITHDRAWN
+}
+
+enum BoardingType {
+  DAY
+  BOARDER
+}
+
+/// A pupil. Identity data lives here; class placement lives in Enrollment
+/// (per session), so history survives promotions.
+model Student {
+  id            String       @id @default(cuid())
+  admissionNo   String       @unique
+  upiNumber     String?      @unique
+  firstName     String
+  lastName      String
+  gender        Gender
+  dateOfBirth   DateTime?
+  religion      String?
+  address       String?
+  medicalNotes  String?
+  boarding      BoardingType @default(DAY)
+  archived      Boolean      @default(false)
+  archiveReason String?
+  exitType        ExitType?
+  exitAt          DateTime?
+  exitDestination String?
+  /// Fee balance at the moment of exit (cents) — kept for the record.
+  exitBalanceCents Int?
+  admittedAt    DateTime     @default(now())
+  /// The pupil's own portal login, if created.
+  user          User?        @relation("studentAccount", fields: [userId], references: [id], onDelete: SetNull)
+  userId        String?      @unique
+  parentLinks    ParentLink[]
+  guardians      Guardian[]
+  enrollments    Enrollment[]
+  feeAdjustments FeeAdjustment[]
+  feePayments    FeePayment[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@index([lastName, firstName])
+}
+
+/// Links a PARENT-role user account to a student (a parent can have many
+/// children; a child can have several linked accounts).
+model ParentLink {
+  id        String  @id @default(cuid())
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String
+
+  @@unique([userId, studentId])
+}
+
+/// A parent/guardian contact for a student.
+model Guardian {
+  id         String  @id @default(cuid())
+  student    Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId  String
+  relation   String
+  name       String
+  phone      String?
+  email      String?
+  occupation String?
+}
+
+/// A student's class placement for one session — the record everything
+/// else (attendance, fees, marks) will hang off.
+model Enrollment {
+  id        String          @id @default(cuid())
+  student   Student         @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String
+  stream    Stream          @relation(fields: [streamId], references: [id], onDelete: Restrict)
+  streamId  String
+  session   AcademicSession @relation(fields: [sessionId], references: [id], onDelete: Restrict)
+  sessionId String
+  createdAt DateTime        @default(now())
+  attendance AttendanceRecord[]
+  marks      Mark[]
+  homeworkSubmissions HomeworkSubmission[]
+  studentLeaves       StudentLeave[]
+  reportRemarks       ReportRemark[]
+
+  @@unique([studentId, sessionId])
+  @@index([streamId, sessionId])
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  HALF_DAY
+}
+
+/// One pupil's attendance on one school day (via their enrollment, so the
+/// record stays tied to the class and session it happened in).
+model AttendanceRecord {
+  id           String           @id @default(cuid())
+  enrollment   Enrollment       @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  enrollmentId String
+  date         DateTime         @db.Date
+  status       AttendanceStatus
+  note         String?
+  markedBy     String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@unique([enrollmentId, date])
+  @@index([date])
+}
+
+enum PaymentMethod {
+  CASH
+  BANK
+  CHEQUE
+  MPESA
+}
+
+/// A vote head — the unit fees are charged and collected under,
+/// e.g. Tuition, Examinations, Lunch, Transport, Boarding.
+model FeeType {
+  id          String              @id @default(cuid())
+  name        String              @unique
+  archived    Boolean             @default(false)
+  items       FeeItem[]
+  allocations PaymentAllocation[]
+  adjustments FeeAdjustment[]
+  createdAt   DateTime            @default(now())
+}
+
+/// One line of the fee structure: an amount charged for a fee type,
+/// scoped to a session, optionally to a term, a class and day/boarder.
+/// A pupil's charges = all items matching their enrollment.
+model FeeItem {
+  id          String          @id @default(cuid())
+  feeType     FeeType         @relation(fields: [feeTypeId], references: [id], onDelete: Cascade)
+  feeTypeId   String
+  session     AcademicSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId   String
+  term        Term?           @relation(fields: [termId], references: [id], onDelete: Cascade)
+  termId      String?
+  class       SchoolClass?    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  classId     String?
+  boarding    BoardingType?
+  amountCents Int
+  dueDate     DateTime?
+  archived    Boolean         @default(false)
+  createdAt   DateTime        @default(now())
+
+  @@index([sessionId])
+}
+
+/// A per-pupil manual adjustment: negative = discount/bursary,
+/// positive = extra charge. Optionally scoped to one vote head.
+model FeeAdjustment {
+  id          String          @id @default(cuid())
+  student     Student         @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId   String
+  session     AcademicSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId   String
+  feeType     FeeType?        @relation(fields: [feeTypeId], references: [id], onDelete: SetNull)
+  feeTypeId   String?
+  label       String
+  amountCents Int
+  createdBy   String?
+  createdAt   DateTime        @default(now())
+
+  @@index([studentId, sessionId])
+}
+
+/// Money received. Never edited after creation — corrections are voids.
+/// The total is split across vote heads in `allocations`.
+model FeePayment {
+  id          String              @id @default(cuid())
+  receiptNo   String              @unique
+  student     Student             @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  studentId   String
+  session     AcademicSession     @relation(fields: [sessionId], references: [id], onDelete: Restrict)
+  sessionId   String
+  amountCents Int
+  method      PaymentMethod
+  reference   String?
+  note        String?
+  receivedBy  String
+  receivedAt  DateTime            @default(now())
+  voided      Boolean             @default(false)
+  voidReason  String?
+  allocations PaymentAllocation[]
+
+  @@index([studentId, sessionId])
+}
+
+/// How much of one payment went to one vote head. Lines sum to the
+/// payment total; voiding the payment voids its allocations with it.
+model PaymentAllocation {
+  id          String     @id @default(cuid())
+  payment     FeePayment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  paymentId   String
+  feeType     FeeType    @relation(fields: [feeTypeId], references: [id], onDelete: Restrict)
+  feeTypeId   String
+  amountCents Int
+
+  @@unique([paymentId, feeTypeId])
+  @@index([feeTypeId])
+}
+
+/// An examination within a term, e.g. "End-Term 1 Exam". Marks are entered
+/// out of maxMarks; report cards translate them to CBC performance levels.
+model Exam {
+  id        String          @id @default(cuid())
+  session   AcademicSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId String
+  term      Term            @relation(fields: [termId], references: [id], onDelete: Cascade)
+  termId    String
+  name      String
+  maxMarks  Int             @default(100)
+  /// Published exams appear in the parent & pupil portals.
+  published Boolean         @default(false)
+  archived  Boolean         @default(false)
+  marks     Mark[]
+  remarks   ReportRemark[]
+  createdAt DateTime        @default(now())
+
+  @@unique([termId, name])
+}
+
+/// Hand-written report-card remarks for one pupil in one exam — the
+/// class teacher's and head teacher's words, printed over the auto remark.
+model ReportRemark {
+  id            String     @id @default(cuid())
+  exam          Exam       @relation(fields: [examId], references: [id], onDelete: Cascade)
+  examId        String
+  enrollment    Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  enrollmentId  String
+  teacherRemark String?
+  headRemark    String?
+  updatedBy     String?
+  updatedAt     DateTime   @updatedAt
+
+  @@unique([examId, enrollmentId])
+}
+
+/// One pupil's score in one subject in one exam (via their enrollment,
+/// so the mark stays tied to the class it was earned in). score null = absent.
+model Mark {
+  id           String     @id @default(cuid())
+  exam         Exam       @relation(fields: [examId], references: [id], onDelete: Cascade)
+  examId       String
+  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  enrollmentId String
+  subject      Subject    @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  subjectId    String
+  score        Int?
+  enteredBy    String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([examId, enrollmentId, subjectId])
+  @@index([examId, subjectId])
+}
+
+/// A staff member. Separate from User — not all staff have logins, and
+/// identity data must survive account changes. Linked via userId when the
+/// staff member does sign in (unlocks self-service leave).
+model StaffProfile {
+  id            String    @id @default(cuid())
+  employeeNo    String    @unique
+  firstName     String
+  lastName      String
+  gender        Gender
+  phone         String?
+  email         String?
+  department    String?
+  designation   String
+  qualification String?
+  joinedAt      DateTime?
+  user          User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId        String?   @unique
+  archived      Boolean   @default(false)
+  archiveReason String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  attendance    StaffAttendanceRecord[]
+  leaves        LeaveApplication[]
+  salary        SalaryStructure?
+  payrollItems  PayrollItem[]
+
+  @@index([lastName, firstName])
+}
+
+/// A staff member's current monthly salary structure (KES cents).
+/// Statutory deductions (NSSF, SHIF, PAYE) are entered by the accountant —
+/// the system stores what's decided, it doesn't compute tax tables.
+model SalaryStructure {
+  id               String       @id @default(cuid())
+  staff            StaffProfile @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  staffId          String       @unique
+  basicCents       Int
+  allowancesCents  Int          @default(0)
+  nssfCents        Int          @default(0)
+  shifCents        Int          @default(0)
+  payeCents        Int          @default(0)
+  otherDeductCents Int          @default(0)
+  updatedAt        DateTime     @updatedAt
+}
+
+enum PayrollStatus {
+  DRAFT
+  PAID
+}
+
+/// One month's payroll run. Items are a snapshot — later salary edits
+/// don't change a generated run; drafts can be deleted and regenerated.
+model PayrollRun {
+  id          String        @id @default(cuid())
+  month       String        @unique // "2026-07"
+  status      PayrollStatus @default(DRAFT)
+  generatedBy String
+  paidBy      String?
+  paidAt      DateTime?
+  items       PayrollItem[]
+  createdAt   DateTime      @default(now())
+}
+
+/// One payslip line in a run — immutable once the run is paid.
+model PayrollItem {
+  id               String       @id @default(cuid())
+  run              PayrollRun   @relation(fields: [runId], references: [id], onDelete: Cascade)
+  runId            String
+  staff            StaffProfile @relation(fields: [staffId], references: [id], onDelete: Restrict)
+  staffId          String
+  basicCents       Int
+  allowancesCents  Int
+  nssfCents        Int
+  shifCents        Int
+  payeCents        Int
+  otherDeductCents Int
+  grossCents       Int
+  netCents         Int
+
+  @@unique([runId, staffId])
+}
+
+enum StaffAttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  HALF_DAY
+  ON_LEAVE
+}
+
+/// One staff member's attendance on one working day.
+model StaffAttendanceRecord {
+  id        String                @id @default(cuid())
+  staff     StaffProfile          @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  staffId   String
+  date      DateTime              @db.Date
+  status    StaffAttendanceStatus
+  note      String?
+  markedBy  String?
+  createdAt DateTime              @default(now())
+  updatedAt DateTime              @updatedAt
+
+  @@unique([staffId, date])
+  @@index([date])
+}
+
+/// A leave category with its annual quota, e.g. Annual 21 days.
+model LeaveType {
+  id           String             @id @default(cuid())
+  name         String             @unique
+  daysPerYear  Int
+  archived     Boolean            @default(false)
+  applications LeaveApplication[]
+  createdAt    DateTime           @default(now())
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+/// A leave request. days counts weekdays (Mon–Fri) in the range.
+model LeaveApplication {
+  id           String       @id @default(cuid())
+  staff        StaffProfile @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  staffId      String
+  leaveType    LeaveType    @relation(fields: [leaveTypeId], references: [id], onDelete: Restrict)
+  leaveTypeId  String
+  startDate    DateTime     @db.Date
+  endDate      DateTime     @db.Date
+  days         Int
+  reason       String
+  status       LeaveStatus  @default(PENDING)
+  decidedBy    String?
+  decisionNote String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([staffId])
+  @@index([status])
+}
+
+enum FinanceKind {
+  INCOME
+  EXPENSE
+}
+
+/// A category in the income & expenses ledger, e.g. "Salaries", "Uniform Sales".
+model FinanceHead {
+  id        String         @id @default(cuid())
+  name      String
+  kind      FinanceKind
+  archived  Boolean        @default(false)
+  entries   FinanceEntry[]
+  createdAt DateTime       @default(now())
+
+  @@unique([name, kind])
+}
+
+/// One ledger line. Never edited after creation — corrections are voids.
+model FinanceEntry {
+  id          String      @id @default(cuid())
+  head        FinanceHead @relation(fields: [headId], references: [id], onDelete: Restrict)
+  headId      String
+  description String
+  amountCents Int
+  date        DateTime    @db.Date
+  reference   String?
+  recordedBy  String
+  voided      Boolean     @default(false)
+  voidReason  String?
+  createdAt   DateTime    @default(now())
+
+  @@index([date])
+  @@index([headId])
+}
+
+enum StudentLeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+/// A pupil's absence-permission request (from a parent, the pupil, or the
+/// office). Approval marks the register Absent with an "approved leave" note.
+model StudentLeave {
+  id           String             @id @default(cuid())
+  enrollment   Enrollment         @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  enrollmentId String
+  startDate    DateTime           @db.Date
+  endDate      DateTime           @db.Date
+  reason       String
+  appliedBy    String
+  status       StudentLeaveStatus @default(PENDING)
+  decidedBy    String?
+  decisionNote String?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  @@index([status])
+}
+
+enum EnquiryStatus {
+  NEW
+  FOLLOW_UP
+  WON
+  LOST
+}
+
+/// An admission/general enquiry — from the office or the public website.
+model Enquiry {
+  id         String        @id @default(cuid())
+  name       String
+  phone      String?
+  email      String?
+  subject    String?
+  message    String
+  source     String        @default("OFFICE") // OFFICE | WEBSITE | PHONE
+  status     EnquiryStatus @default(NEW)
+  followUpAt DateTime?     @db.Date
+  note       String?
+  handledBy  String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@index([status])
+}
+
+enum ComplaintStatus {
+  OPEN
+  RESOLVED
+}
+
+/// A complaint — walk-in/phone (OFFICE) or via the website's complaint form.
+model Complaint {
+  id             String          @id @default(cuid())
+  name           String
+  phone          String?
+  email          String?
+  subject        String?
+  message        String
+  source         String          @default("OFFICE") // OFFICE | WEBSITE
+  status         ComplaintStatus @default(OPEN)
+  resolutionNote String?
+  resolvedBy     String?
+  resolvedAt     DateTime?
+  createdAt      DateTime        @default(now())
+
+  @@index([status])
+}
+
+/// Visitor book: who came, why, and when they signed out.
+model VisitorLog {
+  id        String    @id @default(cuid())
+  name      String
+  phone     String?
+  purpose   String
+  whomToSee String?
+  inAt      DateTime  @default(now())
+  outAt     DateTime?
+  loggedBy  String
+
+  @@index([inAt])
+}
+
+enum CallDirection {
+  INCOMING
+  OUTGOING
+}
+
+/// Phone-call log.
+model CallLog {
+  id        String        @id @default(cuid())
+  direction CallDirection
+  name      String?
+  phone     String
+  note      String
+  at        DateTime      @default(now())
+  loggedBy  String
+
+  @@index([at])
+}
+
+enum PostalDirection {
+  DISPATCHED
+  RECEIVED
+}
+
+/// Postal dispatch/receive register.
+model PostalLog {
+  id        String          @id @default(cuid())
+  direction PostalDirection
+  refNo     String?
+  party     String // sender or recipient
+  item      String
+  note      String?
+  date      DateTime        @db.Date
+  loggedBy  String
+
+  @@index([date])
+}
+
+/// Who a notice or calendar event is meant for.
+enum NoticeAudience {
+  ALL
+  STAFF
+  PARENTS
+  STUDENTS
+}
+
+/// A notice-board post, shown on matching dashboards until it expires.
+model Notice {
+  id        String         @id @default(cuid())
+  title     String
+  body      String
+  audience  NoticeAudience @default(ALL)
+  expiresAt DateTime?
+  createdBy String
+  archived  Boolean        @default(false)
+  createdAt DateTime       @default(now())
+
+  @@index([audience, archived])
+}
+
+/// A school calendar entry (event, holiday, exam week…).
+model CalendarEvent {
+  id        String         @id @default(cuid())
+  title     String
+  date      DateTime       @db.Date
+  endDate   DateTime?      @db.Date
+  audience  NoticeAudience @default(ALL)
+  note      String?
+  createdBy String
+  archived  Boolean        @default(false)
+  createdAt DateTime       @default(now())
+
+  @@index([date])
+}
+
+/// Homework set for one stream + subject; pupils tick it done, the
+/// teacher evaluates. Attachments join in the download-center item.
+model Homework {
+  id           String          @id @default(cuid())
+  stream       Stream          @relation(fields: [streamId], references: [id], onDelete: Cascade)
+  streamId     String
+  subject      Subject         @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  subjectId    String
+  session      AcademicSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId    String
+  title        String
+  instructions String
+  dueDate      DateTime        @db.Date
+  createdBy    String
+  archived     Boolean         @default(false)
+  createdAt    DateTime        @default(now())
+  submissions  HomeworkSubmission[]
+
+  @@index([streamId, sessionId])
+}
+
+/// A pupil's response to one homework (marked done, then evaluated).
+model HomeworkSubmission {
+  id           String     @id @default(cuid())
+  homework     Homework   @relation(fields: [homeworkId], references: [id], onDelete: Cascade)
+  homeworkId   String
+  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  enrollmentId String
+  note         String?
+  submittedAt  DateTime   @default(now())
+  evaluated    Boolean    @default(false)
+  remark       String?
+  evaluatedBy  String?
+
+  @@unique([homeworkId, enrollmentId])
+}
+
+/// Immutable audit trail — every login and every admin action.
+model AuditLog {
+  id        String   @id @default(cuid())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId    String?
+  username  String
+  action    String
+  module    String
+  detail    String   @default("")
+  ip        String   @default("")
+  createdAt DateTime @default(now())
+
+  @@index([createdAt(sort: Desc)])
+  @@index([module])
+}

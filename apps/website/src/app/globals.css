@@ -1,0 +1,227 @@
+@import "tailwindcss";
+
+/* --------------------------------------------------------------------------
+   Holy Cross Junior & Infant Schools — Bulimbo
+   Warm, bright, faith-and-learning design system.
+   Brand orange from the school's identity (#ff5722), deep navy for contrast,
+   cream paper surfaces. Fonts: Plus Jakarta Sans (display) · Inter (body)
+--------------------------------------------------------------------------- */
+@theme {
+  /* Brand — Holy Cross orange */
+  --color-brand-50: #fff3ee;
+  --color-brand-100: #ffe4d9;
+  --color-brand-200: #ffc6b0;
+  --color-brand-300: #ffa285;
+  --color-brand-400: #ff7d4d;
+  --color-brand-500: #ff5722; /* primary */
+  --color-brand-600: #f4511e;
+  --color-brand-700: #d84315;
+  --color-brand-800: #bf360c;
+  --color-brand-900: #962b09;
+
+  /* Navy — deep, calm contrast for header/footer/dark bands */
+  --color-navy-950: #0c1220;
+  --color-navy-900: #111a2e; /* dark band background */
+  --color-navy-800: #182338;
+  --color-navy-700: #223049;
+  --color-navy-600: #33425e; /* borders on dark */
+  --color-navy-500: #4a5a78;
+
+  /* Ink — text on light surfaces */
+  --color-ink-900: #1a2130; /* headings */
+  --color-ink-700: #39445a;
+  --color-ink-500: #5b6678; /* body */
+  --color-ink-400: #7d8798; /* meta */
+
+  /* Paper — light surfaces */
+  --color-paper-50: #ffffff;
+  --color-paper-100: #faf7f2; /* page background */
+  --color-paper-200: #f3eee5; /* tinted band */
+  --color-paper-300: #e8e1d4; /* borders */
+
+  /* Accents — nods to the school building & badge */
+  --color-leaf-500: #4caf50;
+  --color-leaf-600: #388e3c;
+  --color-sun-400: #fbc02d;
+  --color-sun-500: #f9a825;
+  --color-sky-500: #3f51b5;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-jakarta), var(--font-inter), ui-sans-serif, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 7rem;
+}
+
+body {
+  background: var(--color-paper-100);
+  color: var(--color-ink-500);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(255, 87, 34, 0.22);
+  color: var(--color-ink-900);
+}
+
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: 76rem; /* 1216px */
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 1024px) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* Section eyebrow label */
+  .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-brand-600);
+  }
+  .kicker::before {
+    content: "";
+    width: 1.75rem;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--color-brand-500);
+  }
+
+  .card {
+    background: var(--color-paper-50);
+    border: 1px solid var(--color-paper-300);
+    border-radius: 1rem;
+    box-shadow: 0 1px 2px rgba(26, 33, 48, 0.05), 0 12px 32px -20px rgba(26, 33, 48, 0.18);
+  }
+
+  .card-hover {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 2px 4px rgba(26, 33, 48, 0.06), 0 24px 48px -24px rgba(26, 33, 48, 0.28);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Soft dotted texture for light bands */
+  .bg-dots {
+    background-image: radial-gradient(rgba(26, 33, 48, 0.07) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+}
+
+@layer components {
+  /* Frosted glass chip/card for use over imagery */
+  .glass {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* FAQ accordion built on <details> — no JS needed */
+  .faq-item summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after {
+    content: "+";
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 999px;
+    background: var(--color-brand-50);
+    color: var(--color-brand-600);
+    font-size: 1.2rem;
+    font-weight: 700;
+    transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+  }
+  .faq-item[open] summary::after {
+    transform: rotate(45deg);
+    background: var(--color-brand-500);
+    color: #fff;
+  }
+}
+
+/* Slow cinematic zoom on hero imagery */
+@keyframes kenburns {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+.kenburns {
+  animation: kenburns 18s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* Endless scrolling marquee band */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+
+/* Scroll-down hint */
+@keyframes drift {
+  0%, 100% { transform: translateY(0); opacity: 0.9; }
+  50% { transform: translateY(8px); opacity: 0.5; }
+}
+.scroll-hint { animation: drift 2.2s ease-in-out infinite; }
+
+/* Gentle entrance used on hero content */
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: none; }
+}
+.hero-stagger > * { animation: riseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.hero-stagger > *:nth-child(1) { animation-delay: 0.05s; }
+.hero-stagger > *:nth-child(2) { animation-delay: 0.14s; }
+.hero-stagger > *:nth-child(3) { animation-delay: 0.23s; }
+.hero-stagger > *:nth-child(4) { animation-delay: 0.32s; }
+.hero-stagger > *:nth-child(5) { animation-delay: 0.41s; }
+
+/* Scroll reveal — hidden state applies only once JS has marked <html class="js">,
+   so content is never invisible on slow connections or if scripts fail. */
+html.js .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+html.js .reveal-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-stagger > * { animation: none !important; }
+  .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .kenburns,
+  .marquee-track,
+  .scroll-hint { animation: none !important; }
+}

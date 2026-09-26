@@ -1,0 +1,66 @@
+# St Stephen — for a server that ALREADY runs something else.
+#
+# Deliberate properties, so this cannot disturb a co-tenant:
+#
+#   · `name:` pins its own Compose project, so `docker compose` here never
+#     touches another stack's containers, networks or volumes.
+#   · Nothing publishes a host port. Not 80, not 443, not 5432. The only way in
+#     is through the reverse proxy that already runs on this machine.
+#   · PostgreSQL lives in a named volume belonging to this project alone.
+#   · No Node, PostgreSQL or build tooling is installed on the host.
+#
+#   docker compose up -d --build     start
+#   docker compose down              stop (volumes, and the data, survive)
+name: ststephen
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ststephen
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+      POSTGRES_DB: ststephen
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ststephen -d ststephen"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  ems:
+    build:
+      context: ../../apps/ems
+      args:
+        NEXT_SERVER_ACTIONS_ENCRYPTION_KEY: ${NEXT_SERVER_ACTIONS_ENCRYPTION_KEY:?set it in .env}
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://ststephen:${DB_PASSWORD}@db:5432/ststephen
+      AUTH_SECRET: ${AUTH_SECRET:?set AUTH_SECRET in .env}
+      NEXT_SERVER_ACTIONS_ENCRYPTION_KEY: ${NEXT_SERVER_ACTIONS_ENCRYPTION_KEY}
+      # First superadmin password, used only while the database has no users.
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?set ADMIN_PASSWORD in .env}
+      # Never the demo pupils or the shared demo password on a real school.
+      SEED_DEMO: "false"
+      NODE_ENV: production
+      PORT: "3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - "3000"
+
+  # Serves the public website's static export. caddy:2-alpine is already on
+  # this machine if a Caddy container is running, so this pulls nothing new.
+  web:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    volumes:
+      - ./website.Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../../apps/website/out:/srv/website:ro
+    expose:
+      - "80"
+
+volumes:
+  db-data:

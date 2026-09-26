@@ -1,0 +1,44 @@
+[Unit]
+Description=St Stephen EMS (Next.js)
+Documentation=https://github.com/simboni/st-stephen-kimaeti
+After=network-online.target postgresql.service
+Wants=network-online.target
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User=ststephen
+Group=ststephen
+WorkingDirectory=/srv/ststephen/apps/ems
+EnvironmentFile=/etc/ststephen/ems.env
+# Invoke Next directly rather than through npm: npm insists on a writable cache
+# directory, which ProtectSystem=strict below deliberately denies it.
+ExecStart=/usr/bin/node node_modules/next/dist/bin/next start
+Restart=always
+RestartSec=5
+# Give a slow first boot (migrations, cold start) room before systemd gives up.
+TimeoutStartSec=120
+
+# Hardening: the app only ever needs to read its own directory and talk to
+# PostgreSQL on localhost. It writes nothing to disk — even the school logo
+# lives in the database — so the filesystem can stay read-only.
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+# Next.js writes its build cache and rotating logs under .next/.
+ReadWritePaths=/srv/ststephen/apps/ems/.next
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=ststephen-ems
+
+[Install]
+WantedBy=multi-user.target
