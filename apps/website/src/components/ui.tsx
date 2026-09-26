@@ -51,7 +51,7 @@ export function SectionHeading({
 
 const buttonStyles = {
   primary:
-    "bg-brand-500 text-white hover:bg-brand-600 shadow-[0_10px_24px_-10px_rgba(255,87,34,0.65)]",
+    "bg-brand-500 text-white hover:bg-brand-600 shadow-[0_10px_24px_-10px_rgba(27,122,180,0.55)]",
   secondary:
     "bg-white text-ink-900 border border-paper-300 hover:border-brand-400 hover:text-brand-600",
   ghost: "text-brand-600 hover:text-brand-700 hover:bg-brand-50",

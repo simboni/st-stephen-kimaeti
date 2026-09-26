@@ -130,7 +130,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     <div className="flex min-h-screen">
       {/* Sidebar */}
       <aside className="hidden w-64 shrink-0 flex-col bg-navy-900 text-white/80 lg:flex">
-        <div className="flex items-center gap-3 px-5 py-5">
+        <div className="flex items-center gap-3 border-b-2 border-maroon-500 px-5 py-5">
           <Image
             src={logoSrc(school)}
             alt=""
@@ -143,7 +143,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             <p className="truncate font-display text-sm font-extrabold text-white">
               {school.shortName}
             </p>
-            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand-300">
+            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-maroon-300">
               School Management
             </p>
           </div>
@@ -188,7 +188,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         </nav>
 
         <p className="px-5 py-4 text-[10px] text-white/30">
-          {activeSession ? `Session ${activeSession.name}` : "No active session"} · Holy Cross EMS
+          {activeSession ? `Session ${activeSession.name}` : "No active session"} · {school.shortName}
         </p>
       </aside>
 
@@ -197,7 +197,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <header className="sticky top-0 z-40 flex h-16 items-center justify-between gap-4 border-b border-paper-300 bg-paper-50/95 px-5 backdrop-blur lg:px-8">
           <div className="flex items-center gap-3 lg:hidden">
             <Image src={logoSrc(school)} alt="" width={34} height={34} unoptimized className="h-9 w-9 rounded-full bg-white object-contain" />
-            <span className="font-display text-sm font-extrabold text-ink-900">Holy Cross EMS</span>
+            <span className="font-display text-sm font-extrabold text-ink-900">{school.shortName}</span>
           </div>
           <div className="hidden items-center gap-2 lg:flex">
             {activeSession && (

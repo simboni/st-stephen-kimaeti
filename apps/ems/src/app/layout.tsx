@@ -11,11 +11,11 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "Holy Cross EMS",
-    template: "%s | Holy Cross EMS",
+    default: "St Stephen's Kimaeti — School Management",
+    template: "%s | St Stephen's Kimaeti",
   },
   description:
-    "Education management system for Holy Cross Junior & Infant Schools, Bulimbo.",
+    "School management system for St Stephen Mixed Day and Boarding Primary School, Junior School & Early Years of Education Centre, Kimaeti.",
   robots: { index: false, follow: false },
 };
 

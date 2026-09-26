@@ -9,12 +9,12 @@ export async function getSchoolSettings() {
     update: {},
     create: {
       id: "school",
-      name: "Holy Cross Junior & Infant Schools",
-      shortName: "Holy Cross Bulimbo",
+      name: "St Stephen Mixed Day and Boarding Primary School, Junior School & Early Years of Education Centre",
+      shortName: "St Stephen's Kimaeti",
       motto: "Learners Today, Leaders Tomorrow",
-      email: "info@holycrossbulimbo.com",
-      phone: "0714 103 761",
-      address: "P.O. Box 134 – 50109, Bulimbo, Kakamega",
+      email: "ststephenprimarykimaeti@gmail.com",
+      phone: "0714 118 611 / 0724 570 171",
+      address: "P.O. Box 93 – 50200, Bungoma",
     },
     omit: { logo: true },
   });

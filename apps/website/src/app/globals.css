@@ -1,31 +1,43 @@
 @import "tailwindcss";
 
 /* --------------------------------------------------------------------------
-   Holy Cross Junior & Infant Schools — Bulimbo
-   Warm, bright, faith-and-learning design system.
-   Brand orange from the school's identity (#ff5722), deep navy for contrast,
-   cream paper surfaces. Fonts: Plus Jakarta Sans (display) · Inter (body)
+   St Stephen's School, Kimaeti — design system taken from the uniform:
+   sky-blue shirts, maroon striped ties, grey trousers. The blue leads and the
+   maroon accents, which is how the uniform itself reads.
+   Fonts: Plus Jakarta Sans (display) · Inter (body)
 --------------------------------------------------------------------------- */
 @theme {
-  /* Brand — Holy Cross orange */
-  --color-brand-50: #fff3ee;
-  --color-brand-100: #ffe4d9;
-  --color-brand-200: #ffc6b0;
-  --color-brand-300: #ffa285;
-  --color-brand-400: #ff7d4d;
-  --color-brand-500: #ff5722; /* primary */
-  --color-brand-600: #f4511e;
-  --color-brand-700: #d84315;
-  --color-brand-800: #bf360c;
-  --color-brand-900: #962b09;
+  /* Brand — the sky-blue shirt */
+  --color-brand-50: #eff7fc;
+  --color-brand-100: #d8ecf8;
+  --color-brand-200: #aed8f1;
+  --color-brand-300: #7bbde5;
+  --color-brand-400: #479fd4;
+  --color-brand-500: #1b7ab4; /* primary */
+  --color-brand-600: #156598;
+  --color-brand-700: #12527c;
+  --color-brand-800: #0f4263;
+  --color-brand-900: #0b3049;
 
-  /* Navy — deep, calm contrast for header/footer/dark bands */
-  --color-navy-950: #0c1220;
-  --color-navy-900: #111a2e; /* dark band background */
-  --color-navy-800: #182338;
-  --color-navy-700: #223049;
-  --color-navy-600: #33425e; /* borders on dark */
-  --color-navy-500: #4a5a78;
+  /* Maroon — the striped tie */
+  --color-maroon-50: #fbf1f3;
+  --color-maroon-100: #f6dfe4;
+  --color-maroon-200: #ecbec6;
+  --color-maroon-300: #db909e;
+  --color-maroon-400: #c45f73;
+  --color-maroon-500: #9e2b40;
+  --color-maroon-600: #872436;
+  --color-maroon-700: #6f1d2c;
+  --color-maroon-800: #571722;
+  --color-maroon-900: #3f1119;
+
+  /* Navy — the grey trousers, cooled to a slate for dark bands */
+  --color-navy-950: #0d1218;
+  --color-navy-900: #161d26; /* dark band background */
+  --color-navy-800: #1f2732;
+  --color-navy-700: #2c3541;
+  --color-navy-600: #3f4a59; /* borders on dark */
+  --color-navy-500: #566275;
 
   /* Ink — text on light surfaces */
   --color-ink-900: #1a2130; /* headings */
@@ -35,9 +47,9 @@
 
   /* Paper — light surfaces */
   --color-paper-50: #ffffff;
-  --color-paper-100: #faf7f2; /* page background */
-  --color-paper-200: #f3eee5; /* tinted band */
-  --color-paper-300: #e8e1d4; /* borders */
+  --color-paper-100: #f6f8fa; /* page background */
+  --color-paper-200: #eaeff4; /* tinted band */
+  --color-paper-300: #dae1e9; /* borders */
 
   /* Accents — nods to the school building & badge */
   --color-leaf-500: #4caf50;
@@ -64,7 +76,7 @@ body {
 }
 
 ::selection {
-  background: rgba(255, 87, 34, 0.22);
+  background: rgba(27, 122, 180, 0.22);
   color: var(--color-ink-900);
 }
 

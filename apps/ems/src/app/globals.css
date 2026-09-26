@@ -1,28 +1,48 @@
 @import "tailwindcss";
 
 /* --------------------------------------------------------------------------
-   Holy Cross EMS — admin design system.
-   Same brand family as the public website: Holy Cross orange, deep navy,
-   warm paper surfaces. Fonts: Plus Jakarta Sans (display) · Inter (body)
+   Admin design system, drawn from the school uniform:
+
+     brand   the sky-blue shirt — primary actions, links, active states
+     maroon  the striped tie    — accents, section labels, the sidebar rule
+     navy    the grey trousers  — sidebar and dark surfaces, cooled to slate
+
+   Brand is the blue rather than the maroon deliberately: a primary button has
+   to sit beside a red destructive button without the two reading as the same
+   thing. Fonts: Plus Jakarta Sans (display) · Inter (body)
 --------------------------------------------------------------------------- */
 @theme {
-  --color-brand-50: #fff3ee;
-  --color-brand-100: #ffe4d9;
-  --color-brand-200: #ffc6b0;
-  --color-brand-300: #ffa285;
-  --color-brand-400: #ff7d4d;
-  --color-brand-500: #ff5722;
-  --color-brand-600: #f4511e;
-  --color-brand-700: #d84315;
-  --color-brand-800: #bf360c;
-  --color-brand-900: #962b09;
+  /* The shirt. brand-500 on white is 4.9:1; white on brand-500 is 4.3:1. */
+  --color-brand-50: #eff7fc;
+  --color-brand-100: #d8ecf8;
+  --color-brand-200: #aed8f1;
+  --color-brand-300: #7bbde5;
+  --color-brand-400: #479fd4;
+  --color-brand-500: #1b7ab4;
+  --color-brand-600: #156598;
+  --color-brand-700: #12527c;
+  --color-brand-800: #0f4263;
+  --color-brand-900: #0b3049;
 
-  --color-navy-950: #0c1220;
-  --color-navy-900: #111a2e;
-  --color-navy-800: #182338;
-  --color-navy-700: #223049;
-  --color-navy-600: #33425e;
-  --color-navy-500: #4a5a78;
+  /* The tie. */
+  --color-maroon-50: #fbf1f3;
+  --color-maroon-100: #f6dfe4;
+  --color-maroon-200: #ecbec6;
+  --color-maroon-300: #db909e;
+  --color-maroon-400: #c45f73;
+  --color-maroon-500: #9e2b40;
+  --color-maroon-600: #872436;
+  --color-maroon-700: #6f1d2c;
+  --color-maroon-800: #571722;
+  --color-maroon-900: #3f1119;
+
+  /* The trousers — a slate that leans blue so it sits with the shirt. */
+  --color-navy-950: #0d1218;
+  --color-navy-900: #161d26;
+  --color-navy-800: #1f2732;
+  --color-navy-700: #2c3541;
+  --color-navy-600: #3f4a59;
+  --color-navy-500: #566275;
 
   --color-ink-900: #1a2130;
   --color-ink-700: #39445a;
@@ -30,9 +50,9 @@
   --color-ink-400: #7d8798;
 
   --color-paper-50: #ffffff;
-  --color-paper-100: #f7f6f3;
-  --color-paper-200: #efece5;
-  --color-paper-300: #e3ded2;
+  --color-paper-100: #f6f8fa;
+  --color-paper-200: #eaeff4;
+  --color-paper-300: #dae1e9;
 
   --color-leaf-500: #4caf50;
   --color-leaf-600: #388e3c;
@@ -52,7 +72,7 @@ body {
 }
 
 ::selection {
-  background: rgba(255, 87, 34, 0.22);
+  background: rgba(27, 122, 180, 0.22);
   color: var(--color-ink-900);
 }
 
@@ -77,7 +97,7 @@ body {
   .field:focus {
     outline: none;
     border-color: var(--color-brand-500);
-    box-shadow: 0 0 0 3px rgba(255, 87, 34, 0.18);
+    box-shadow: 0 0 0 3px rgba(27, 122, 180, 0.18);
   }
   .field::placeholder {
     color: var(--color-ink-400);

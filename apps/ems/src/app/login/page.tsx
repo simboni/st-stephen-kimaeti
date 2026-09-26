@@ -20,7 +20,7 @@ export default async function LoginPage() {
         aria-hidden
         style={{
           background:
-            "radial-gradient(600px 400px at 20% 10%, rgba(255,87,34,0.18), transparent 60%), radial-gradient(500px 350px at 85% 90%, rgba(63,81,181,0.15), transparent 60%)",
+            "radial-gradient(600px 400px at 20% 10%, rgba(27,122,180,0.20), transparent 60%), radial-gradient(500px 350px at 85% 90%, rgba(158,43,64,0.16), transparent 60%)",
         }}
       />
       <div className="relative w-full max-w-sm">
