@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { requireUser, type SessionUser } from "@/lib/auth";
 
 /** Modules that exist so far — later items append here and to the seed. */
-export const MODULES = ["dashboard", "frontoffice", "academics", "students", "attendance", "exams", "homework", "fees", "finance", "staff", "payroll", "communication", "reports", "users", "settings", "audit"] as const;
+export const MODULES = ["dashboard", "frontoffice", "academics", "students", "attendance", "exams", "homework", "fees", "finance", "transport", "boarding", "staff", "payroll", "communication", "reports", "users", "settings", "audit"] as const;
 export type Module = (typeof MODULES)[number];
 
 export type Action = "view" | "create" | "edit" | "archive";

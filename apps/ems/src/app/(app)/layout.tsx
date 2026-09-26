@@ -77,6 +77,14 @@ const NAV_GROUPS: { label: string | null; items: NavItem[] }[] = [
     ],
   },
   {
+    label: "Transport & Boarding",
+    items: [
+      { module: "transport", href: "/transport", label: "Routes & Riders", icon: UsersIcon },
+      { module: "transport", href: "/transport/vehicles", label: "Vehicles & Drivers", icon: SettingsIcon },
+      { module: "boarding", href: "/boarding", label: "Dormitories", icon: HomeIcon },
+    ],
+  },
+  {
     label: "Staff & HR",
     items: [
       { module: "staff", href: "/staff", label: "Staff Directory", icon: UsersIcon },

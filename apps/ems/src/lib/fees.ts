@@ -2,12 +2,20 @@ import "server-only";
 import { db } from "@/lib/db";
 
 /** All fee-structure lines that apply to a pupil in a session:
-    matching class (or all-classes), matching boarding type (or both). */
+    matching class (or all-classes), matching boarding type (or both), and —
+    for transport — only the route the pupil is actually assigned to. A pupil
+    who rides no bus is charged no route fee. */
 export async function studentCharges(studentId: string, sessionId: string) {
-  const enrollment = await db.enrollment.findUnique({
-    where: { studentId_sessionId: { studentId, sessionId } },
-    include: { stream: true, student: true },
-  });
+  const [enrollment, transport] = await Promise.all([
+    db.enrollment.findUnique({
+      where: { studentId_sessionId: { studentId, sessionId } },
+      include: { stream: true, student: true },
+    }),
+    db.transportAssignment.findUnique({
+      where: { studentId_sessionId: { studentId, sessionId } },
+      select: { routeId: true },
+    }),
+  ]);
   if (!enrollment) return { items: [], totalCents: 0 };
 
   const items = await db.feeItem.findMany({
@@ -15,7 +23,16 @@ export async function studentCharges(studentId: string, sessionId: string) {
       sessionId,
       archived: false,
       OR: [{ classId: null }, { classId: enrollment.stream.classId }],
-      AND: [{ OR: [{ boarding: null }, { boarding: enrollment.student.boarding }] }],
+      AND: [
+        { OR: [{ boarding: null }, { boarding: enrollment.student.boarding }] },
+        // Route-scoped lines reach only the pupils riding that route.
+        {
+          OR: [
+            { routeId: null },
+            ...(transport ? [{ routeId: transport.routeId }] : []),
+          ],
+        },
+      ],
     },
     include: { feeType: true, term: true },
     orderBy: [{ term: { number: "asc" } }, { createdAt: "asc" }],

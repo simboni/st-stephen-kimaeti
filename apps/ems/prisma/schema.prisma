@@ -23,19 +23,19 @@ enum Role {
 }
 
 model User {
-  id                 String    @id @default(cuid())
-  username           String    @unique
+  id                 String           @id @default(cuid())
+  username           String           @unique
   name               String
   email              String?
   phone              String?
   passwordHash       String
   role               Role
-  active             Boolean   @default(true)
+  active             Boolean          @default(true)
   archiveReason      String?
-  mustChangePassword Boolean   @default(false)
+  mustChangePassword Boolean          @default(false)
   lastLoginAt        DateTime?
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
   auditLogs          AuditLog[]
   classTeacherOf     ClassTeacher[]
   subjectTeacherOf   SubjectTeacher[]
@@ -80,11 +80,11 @@ model SchoolSetting {
 
 /// An academic year, e.g. "2025-2026". Exactly one is active at a time.
 model AcademicSession {
-  id        String   @id @default(cuid())
-  name      String   @unique
-  startDate DateTime
-  endDate   DateTime
-  active        Boolean        @default(false)
+  id              String                @id @default(cuid())
+  name            String                @unique
+  startDate       DateTime
+  endDate         DateTime
+  active          Boolean               @default(false)
   terms           Term[]
   classTeachers   ClassTeacher[]
   subjectTeachers SubjectTeacher[]
@@ -95,7 +95,9 @@ model AcademicSession {
   feePayments     FeePayment[]
   exams           Exam[]
   homework        Homework[]
-  createdAt       DateTime         @default(now())
+  transport       TransportAssignment[]
+  bedAllocations  BedAllocation[]
+  createdAt       DateTime              @default(now())
 }
 
 /// A term within a session (Kenyan calendar: Terms 1–3).
@@ -122,10 +124,10 @@ enum Stage {
 
 /// A class (grade level), e.g. "Grade 4". `level` orders them school-wide.
 model SchoolClass {
-  id        String   @id @default(cuid())
-  name      String   @unique
-  level     Int      @unique
-  stage     Stage
+  id            String         @id @default(cuid())
+  name          String         @unique
+  level         Int            @unique
+  stage         Stage
   archived      Boolean        @default(false)
   streams       Stream[]
   classSubjects ClassSubject[]
@@ -135,10 +137,10 @@ model SchoolClass {
 
 /// A stream/section within a class, e.g. Grade 4 "A".
 model Stream {
-  id            String         @id @default(cuid())
-  class         SchoolClass    @relation(fields: [classId], references: [id], onDelete: Cascade)
-  classId       String
-  name          String
+  id              String           @id @default(cuid())
+  class           SchoolClass      @relation(fields: [classId], references: [id], onDelete: Cascade)
+  classId         String
+  name            String
   archived        Boolean          @default(false)
   classTeachers   ClassTeacher[]
   subjectTeachers SubjectTeacher[]
@@ -248,35 +250,37 @@ enum BoardingType {
 /// A pupil. Identity data lives here; class placement lives in Enrollment
 /// (per session), so history survives promotions.
 model Student {
-  id            String       @id @default(cuid())
-  admissionNo   String       @unique
-  upiNumber     String?      @unique
-  firstName     String
-  lastName      String
-  gender        Gender
-  dateOfBirth   DateTime?
-  religion      String?
-  address       String?
-  medicalNotes  String?
-  boarding      BoardingType @default(DAY)
-  archived      Boolean      @default(false)
-  archiveReason String?
-  exitType        ExitType?
-  exitAt          DateTime?
-  exitDestination String?
+  id               String                @id @default(cuid())
+  admissionNo      String                @unique
+  upiNumber        String?               @unique
+  firstName        String
+  lastName         String
+  gender           Gender
+  dateOfBirth      DateTime?
+  religion         String?
+  address          String?
+  medicalNotes     String?
+  boarding         BoardingType          @default(DAY)
+  archived         Boolean               @default(false)
+  archiveReason    String?
+  exitType         ExitType?
+  exitAt           DateTime?
+  exitDestination  String?
   /// Fee balance at the moment of exit (cents) — kept for the record.
   exitBalanceCents Int?
-  admittedAt    DateTime     @default(now())
+  admittedAt       DateTime              @default(now())
   /// The pupil's own portal login, if created.
-  user          User?        @relation("studentAccount", fields: [userId], references: [id], onDelete: SetNull)
-  userId        String?      @unique
-  parentLinks    ParentLink[]
-  guardians      Guardian[]
-  enrollments    Enrollment[]
-  feeAdjustments FeeAdjustment[]
-  feePayments    FeePayment[]
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  user             User?                 @relation("studentAccount", fields: [userId], references: [id], onDelete: SetNull)
+  userId           String?               @unique
+  parentLinks      ParentLink[]
+  guardians        Guardian[]
+  enrollments      Enrollment[]
+  feeAdjustments   FeeAdjustment[]
+  feePayments      FeePayment[]
+  transport        TransportAssignment[]
+  bed              BedAllocation[]
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
 
   @@index([lastName, firstName])
 }
@@ -308,16 +312,16 @@ model Guardian {
 /// A student's class placement for one session — the record everything
 /// else (attendance, fees, marks) will hang off.
 model Enrollment {
-  id        String          @id @default(cuid())
-  student   Student         @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  studentId String
-  stream    Stream          @relation(fields: [streamId], references: [id], onDelete: Restrict)
-  streamId  String
-  session   AcademicSession @relation(fields: [sessionId], references: [id], onDelete: Restrict)
-  sessionId String
-  createdAt DateTime        @default(now())
-  attendance AttendanceRecord[]
-  marks      Mark[]
+  id                  String               @id @default(cuid())
+  student             Student              @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId           String
+  stream              Stream               @relation(fields: [streamId], references: [id], onDelete: Restrict)
+  streamId            String
+  session             AcademicSession      @relation(fields: [sessionId], references: [id], onDelete: Restrict)
+  sessionId           String
+  createdAt           DateTime             @default(now())
+  attendance          AttendanceRecord[]
+  marks               Mark[]
   homeworkSubmissions HomeworkSubmission[]
   studentLeaves       StudentLeave[]
   reportRemarks       ReportRemark[]
@@ -383,6 +387,10 @@ model FeeItem {
   class       SchoolClass?    @relation(fields: [classId], references: [id], onDelete: Cascade)
   classId     String?
   boarding    BoardingType?
+  /// Scopes the charge to pupils riding this route. Transport is billed by
+  /// route because the fee follows distance, not class.
+  route       TransportRoute? @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  routeId     String?
   amountCents Int
   dueDate     DateTime?
   archived    Boolean         @default(false)
@@ -504,8 +512,8 @@ model Mark {
 /// identity data must survive account changes. Linked via userId when the
 /// staff member does sign in (unlocks self-service leave).
 model StaffProfile {
-  id            String    @id @default(cuid())
-  employeeNo    String    @unique
+  id            String                  @id @default(cuid())
+  employeeNo    String                  @unique
   firstName     String
   lastName      String
   gender        Gender
@@ -515,16 +523,17 @@ model StaffProfile {
   designation   String
   qualification String?
   joinedAt      DateTime?
-  user          User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
-  userId        String?   @unique
-  archived      Boolean   @default(false)
+  user          User?                   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId        String?                 @unique
+  archived      Boolean                 @default(false)
   archiveReason String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime                @default(now())
+  updatedAt     DateTime                @updatedAt
   attendance    StaffAttendanceRecord[]
   leaves        LeaveApplication[]
   salary        SalaryStructure?
   payrollItems  PayrollItem[]
+  hostelsWarded Hostel[]
 
   @@index([lastName, firstName])
 }
@@ -843,19 +852,19 @@ model CalendarEvent {
 /// Homework set for one stream + subject; pupils tick it done, the
 /// teacher evaluates. Attachments join in the download-center item.
 model Homework {
-  id           String          @id @default(cuid())
-  stream       Stream          @relation(fields: [streamId], references: [id], onDelete: Cascade)
+  id           String               @id @default(cuid())
+  stream       Stream               @relation(fields: [streamId], references: [id], onDelete: Cascade)
   streamId     String
-  subject      Subject         @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  subject      Subject              @relation(fields: [subjectId], references: [id], onDelete: Cascade)
   subjectId    String
-  session      AcademicSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  session      AcademicSession      @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId    String
   title        String
   instructions String
-  dueDate      DateTime        @db.Date
+  dueDate      DateTime             @db.Date
   createdBy    String
-  archived     Boolean         @default(false)
-  createdAt    DateTime        @default(now())
+  archived     Boolean              @default(false)
+  createdAt    DateTime             @default(now())
   submissions  HomeworkSubmission[]
 
   @@index([streamId, sessionId])
@@ -891,4 +900,128 @@ model AuditLog {
 
   @@index([createdAt(sort: Desc)])
   @@index([module])
+}
+
+// ===========================================================================
+// Transport — routes the buses run, who rides them, and what that costs.
+// ===========================================================================
+
+enum TransportDirection {
+  BOTH
+  MORNING
+  EVENING
+}
+
+/// A bus route. Fees are charged per route (see FeeItem.routeId), because
+/// what a family pays follows the distance travelled, not the pupil's class.
+model TransportRoute {
+  id          String                @id @default(cuid())
+  name        String                @unique
+  description String?
+  archived    Boolean               @default(false)
+  stages      RouteStage[]
+  vehicles    Vehicle[]
+  assignments TransportAssignment[]
+  feeItems    FeeItem[]
+  createdAt   DateTime              @default(now())
+}
+
+/// A pickup point, ordered along the route from its furthest end.
+model RouteStage {
+  id          String                @id @default(cuid())
+  route       TransportRoute        @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  routeId     String
+  name        String
+  position    Int
+  assignments TransportAssignment[]
+
+  @@unique([routeId, name])
+  @@index([routeId, position])
+}
+
+/// A school vehicle and the person who drives it. Renewal dates are kept
+/// here so an expiring insurance or inspection can be surfaced before a bus
+/// is stopped at a roadblock with pupils aboard.
+model Vehicle {
+  id               String          @id @default(cuid())
+  registration     String          @unique
+  make             String?
+  capacity         Int
+  route            TransportRoute? @relation(fields: [routeId], references: [id], onDelete: SetNull)
+  routeId          String?
+  driverName       String?
+  driverPhone      String?
+  driverLicence    String?
+  insuranceExpiry  DateTime?       @db.Date
+  inspectionExpiry DateTime?       @db.Date
+  archived         Boolean         @default(false)
+  createdAt        DateTime        @default(now())
+}
+
+/// A pupil's place on a route for one session. One route per pupil per
+/// session — a pupil cannot ride two routes at once, and the unique
+/// constraint is what stops double-billing.
+model TransportAssignment {
+  id        String             @id @default(cuid())
+  student   Student            @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String
+  session   AcademicSession    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId String
+  route     TransportRoute     @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  routeId   String
+  stage     RouteStage?        @relation(fields: [stageId], references: [id], onDelete: SetNull)
+  stageId   String?
+  direction TransportDirection @default(BOTH)
+  createdAt DateTime           @default(now())
+
+  @@unique([studentId, sessionId])
+  @@index([routeId])
+  @@index([sessionId])
+}
+
+// ===========================================================================
+// Boarding — where boarders sleep.
+// ===========================================================================
+
+/// A dormitory block. Single-sex, with a member of staff in charge.
+model Hostel {
+  id        String        @id @default(cuid())
+  name      String        @unique
+  gender    Gender
+  warden    StaffProfile? @relation(fields: [wardenId], references: [id], onDelete: SetNull)
+  wardenId  String?
+  archived  Boolean       @default(false)
+  rooms     HostelRoom[]
+  createdAt DateTime      @default(now())
+}
+
+/// A room within a dormitory. `beds` is how many the room holds; an
+/// allocation may not exceed it.
+model HostelRoom {
+  id          String          @id @default(cuid())
+  hostel      Hostel          @relation(fields: [hostelId], references: [id], onDelete: Cascade)
+  hostelId    String
+  name        String
+  beds        Int
+  allocations BedAllocation[]
+
+  @@unique([hostelId, name])
+}
+
+/// One pupil in one bed for one session. Both unique constraints matter: a
+/// pupil sleeps in one bed, and a bed holds one pupil.
+model BedAllocation {
+  id        String          @id @default(cuid())
+  student   Student         @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String
+  session   AcademicSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId String
+  room      HostelRoom      @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId    String
+  bedNumber Int
+  createdAt DateTime        @default(now())
+
+  @@unique([studentId, sessionId])
+  @@unique([roomId, bedNumber, sessionId])
+  @@index([sessionId])
 }

@@ -52,6 +52,8 @@ const MATRIX: Record<string, Record<string, [number, number, number, number]>> =
   exams: { ADMIN: [1, 1, 1, 1], TEACHER: [1, 1, 0, 0] },
   fees: { ADMIN: [1, 1, 1, 1], ACCOUNTANT: [1, 1, 1, 1], RECEPTIONIST: [1, 0, 0, 0] },
   finance: { ADMIN: [1, 1, 1, 1], ACCOUNTANT: [1, 1, 1, 1] },
+  transport: { ADMIN: [1, 1, 1, 1], ACCOUNTANT: [1, 0, 0, 0], RECEPTIONIST: [1, 0, 0, 0] },
+  boarding: { ADMIN: [1, 1, 1, 1], RECEPTIONIST: [1, 0, 0, 0], TEACHER: [1, 0, 0, 0] },
   staff: { ADMIN: [1, 1, 1, 1], ACCOUNTANT: [1, 0, 0, 0] },
   payroll: { ADMIN: [1, 1, 1, 1], ACCOUNTANT: [1, 1, 1, 1] },
   communication: { ADMIN: [1, 1, 1, 1], RECEPTIONIST: [1, 1, 0, 0], TEACHER: [1, 0, 0, 0] },

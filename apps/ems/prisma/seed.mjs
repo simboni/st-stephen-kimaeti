@@ -8,12 +8,12 @@ const prisma = new PrismaClient();
 const DEMO_PASSWORD = "holycross2026";
 
 const users = [
-  { username: "superadmin", name: "System Owner", role: "SUPER_ADMIN", email: "superadmin@holycrossbulimbo.com" },
-  { username: "admin", name: "School Administrator", role: "ADMIN", email: "admin@holycrossbulimbo.com" },
-  { username: "accountant", name: "School Accountant", role: "ACCOUNTANT", email: "accounts@holycrossbulimbo.com" },
-  { username: "teacher", name: "Demo Teacher", role: "TEACHER", email: "teacher@holycrossbulimbo.com" },
-  { username: "reception", name: "Front Office", role: "RECEPTIONIST", email: "frontoffice@holycrossbulimbo.com" },
-  { username: "librarian", name: "School Librarian", role: "LIBRARIAN", email: "library@holycrossbulimbo.com" },
+  { username: "superadmin", name: "System Owner", role: "SUPER_ADMIN", email: "superadmin@ststephenkimaeti.ac.ke" },
+  { username: "admin", name: "School Administrator", role: "ADMIN", email: "admin@ststephenkimaeti.ac.ke" },
+  { username: "accountant", name: "School Accountant", role: "ACCOUNTANT", email: "accounts@ststephenkimaeti.ac.ke" },
+  { username: "teacher", name: "Demo Teacher", role: "TEACHER", email: "teacher@ststephenkimaeti.ac.ke" },
+  { username: "reception", name: "Front Office", role: "RECEPTIONIST", email: "frontoffice@ststephenkimaeti.ac.ke" },
+  { username: "librarian", name: "School Librarian", role: "LIBRARIAN", email: "library@ststephenkimaeti.ac.ke" },
   { username: "parent", name: "Demo Parent", role: "PARENT", email: "parent@example.com" },
   { username: "student", name: "Demo Student", role: "STUDENT", email: "student@example.com" },
 ];
@@ -43,6 +43,12 @@ const matrix = {
   },
   finance: {
     ADMIN: [1, 1, 1, 1], ACCOUNTANT: [1, 1, 1, 1],
+  },
+  transport: {
+    ADMIN: [1, 1, 1, 1], ACCOUNTANT: [1, 0, 0, 0], RECEPTIONIST: [1, 0, 0, 0],
+  },
+  boarding: {
+    ADMIN: [1, 1, 1, 1], RECEPTIONIST: [1, 0, 0, 0], TEACHER: [1, 0, 0, 0],
   },
   staff: {
     ADMIN: [1, 1, 1, 1], ACCOUNTANT: [1, 0, 0, 0],
@@ -124,12 +130,12 @@ async function main() {
     update: {},
     create: {
       id: "school",
-      name: "Holy Cross Junior & Infant Schools",
-      shortName: "Holy Cross Bulimbo",
-      motto: "Learners Today, Leaders Tomorrow",
-      email: "info@holycrossbulimbo.com",
-      phone: "0714 103 761",
-      address: "P.O. Box 134 – 50109, Bulimbo, Kakamega",
+      name: "St Stephen Mixed Day and Boarding Primary School, Junior School & Early Years of Education Centre",
+      shortName: "St Stephen's Kimaeti",
+      motto: "Pray and Work",
+      email: "ststephenprimarykimaeti@gmail.com",
+      phone: "0714 118 611 / 0724 570 171",
+      address: "P.O. Box 93 – 50200, Bungoma",
     },
   });
 

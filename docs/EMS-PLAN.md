@@ -430,11 +430,25 @@ server, not just hidden in the UI.
   dates & fine calculation. *Test:* issue and return a book, one overdue.
 - [ ] **9.2 Inventory** — items, categories, stores, suppliers, stock in/out, issue to
   staff/rooms, low-stock alerts. *Test:* receive stock and issue items.
-- [ ] **9.3 Transport** — routes, pickup points, vehicles & drivers, pupil
-  assignments, transport fees feeding module 4. *Test:* assign pupils to a route and
-  bill them.
-- [ ] **9.4 Hostel/Boarding** — hostels, room types, rooms & beds, pupil allocation,
-  boarding fees feeding module 4. *Test:* allocate boarders to rooms.
+- [x] **9.3 Transport** *(built & E2E-verified 26 Sep 2026 — 20 checks with 9.4)*
+  Routes with stages in travel order, vehicles with drivers and licence/insurance/
+  inspection expiry (flagged 30 days out), pupil assignment per session with
+  morning/evening/both direction, and **route-scoped fee items**: a charge set on a
+  route reaches only the pupils riding it, appears on their statement the moment
+  they are assigned, and disappears when they leave. One route per pupil per
+  session, enforced by a unique constraint, so nobody is billed twice. Archiving a
+  route that still carries pupils is refused.
+  *Depends on:* 2.1, 4.1. *Test:* assign a pupil to a route and watch the charge
+  appear on their fee statement; confirm a non-rider is charged nothing.
+- [x] **9.4 Hostel/Boarding** *(built & E2E-verified 26 Sep 2026)*
+  Dormitories with a sex and a matron or master drawn from the staff directory,
+  rooms with a bed count, and per-session bed allocation that fills the lowest free
+  bed so beds fill in order rather than scattering. Refuses to place a girl in a
+  boys' dormitory, refuses a day scholar, and refuses to overfill a room. Occupancy
+  shown per dormitory and school-wide, including boarders on the roll who still have
+  no bed. Archiving an occupied dormitory is refused.
+  *Depends on:* 2.1, 6.1. *Test:* allocate beds until a room is full; confirm the
+  wrong-sex and day-scholar placements are refused.
 - [ ] **9.5 Certificates & ID cards** — template designer (school header, fields,
   photo, QR verification), batch-generate pupil/staff ID cards and certificates as
   PDFs. *Test:* print a class's ID cards.
