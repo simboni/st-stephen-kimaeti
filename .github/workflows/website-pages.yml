@@ -9,8 +9,14 @@
 # forms here reach the school through the FormSubmit fallback; the EMS
 # front-office queue only starts filling once the real server is up.
 #
-# One-time setup by a repo admin: Settings → Pages → Build and deployment →
-# Source: "GitHub Actions". The preview then rebuilds on every push to main at
+# Every run before this one failed at the deploy step with "Ensure GitHub Pages
+# has been enabled", because Pages had never been switched on for the
+# repository and this workflow assumed somebody would do it by hand. It now
+# turns Pages on itself through actions/configure-pages, so there is no manual
+# step to forget. If that ever fails, the fallback is still Settings → Pages →
+# Build and deployment → Source: "GitHub Actions".
+#
+# The preview rebuilds on every push to main at
 # https://simboni.github.io/st-stephen-kimaeti/
 name: Publish website preview (GitHub Pages)
 
@@ -49,11 +55,26 @@ jobs:
 
       - run: npm ci
 
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
+        with:
+          # Turns Pages on the first time this runs, rather than leaving a
+          # manual setting for somebody to forget.
+          enablement: true
+
       - run: npm run build
         env:
-          # Served from /st-stephen-kimaeti/ on github.io. Remove this when the
-          # site moves to a root custom domain.
-          PAGES_BASE_PATH: /st-stephen-kimaeti
+          # Pages serves a project repository under /<repo>/; the action reports
+          # that prefix, so it stays right if the repository is ever renamed.
+          # Empty it when the site moves to a root custom domain.
+          PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          # Marks the build as a preview: a strip across the top of every page,
+          # and robots.txt disallowing everything. The pages carry photographs
+          # of identifiable children, fee figures, and news and term dates that
+          # are still placeholders — none of which should turn up in a search
+          # for the school before the school has published them itself.
+          NEXT_PUBLIC_SITE_PREVIEW: "1"
 
       # Next.js emits _next/; without this, Pages' legacy Jekyll step would
       # strip every underscore-prefixed directory and the CSS/JS would 404.
