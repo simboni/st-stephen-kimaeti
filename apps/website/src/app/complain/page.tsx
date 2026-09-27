@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { school } from "@/lib/site";
 import { PageHero } from "@/components/page-hero";
-import { Section } from "@/components/ui";
+import { Reveal, Section, SectionHead } from "@/components/ui";
 import { EnquiryForm } from "@/components/enquiry-form";
 import { CheckIcon } from "@/components/icons";
 
 export const metadata: Metadata = {
-  title: "Make a Complaint",
+  title: "Raise a concern",
   description: `Raise a concern or complaint with the administration of ${school.shortName}. Every complaint is handled seriously and confidentially.`,
 };
 
@@ -23,17 +23,18 @@ export default function ComplainPage() {
   return (
     <>
       <PageHero
-        eyebrow="Complaints"
-        title="Raise a concern with us"
-        intro="Your feedback helps us protect our learners and improve our school. Every complaint reaches the administration directly."
+        eyebrow="Raise a concern"
+        title="Tell us when something is wrong"
+        lede="Your feedback protects our learners and improves the school. Every complaint reaches the administration directly."
+        photo="office-desk"
+        crumb={[{ href: "/contact/", label: "Contact" }]}
       />
-      <Section>
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+      <Section size="loose">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
-            <h2 className="font-display text-2xl font-extrabold text-ink-900">
-              How we handle complaints
-            </h2>
-            <ul className="mt-6 space-y-4">
+            <Reveal>
+            <SectionHead index="01" eyebrow="Our promise" title="How we handle a complaint" />
+            <ul className="mt-8 space-y-4">
               {[
                 "Your complaint goes straight to the school administration.",
                 "We treat every report seriously and confidentially.",
@@ -41,24 +42,23 @@ export default function ComplainPage() {
                 "Matters touching on child welfare are always given first priority.",
               ].map((point) => (
                 <li key={point} className="flex items-start gap-3 leading-relaxed">
-                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-leaf-500/15 text-leaf-600">
-                    <CheckIcon className="h-3 w-3" />
-                  </span>
+                  <CheckIcon className="mt-1 h-4 w-4 shrink-0 text-second" />
                   {point}
                 </li>
               ))}
             </ul>
-            <p className="mt-8 rounded-2xl bg-paper-200 p-5 text-sm leading-relaxed">
+            <p className="mt-8 rounded-lg border border-line bg-surface-2 p-5 text-sm leading-relaxed">
               You can also raise a concern in person at the school office, call{" "}
-              <a href={`tel:${school.phoneHref}`} className="font-bold text-ink-900">
+              <a href={`tel:${school.phoneHref}`} className="link-underline">
                 {school.phone}
               </a>{" "}
               or email{" "}
-              <a href={`mailto:${school.email}`} className="font-bold text-ink-900">
+              <a href={`mailto:${school.email}`} className="link-underline break-all">
                 {school.email}
               </a>
               .
             </p>
+            </Reveal>
           </div>
           <div className="lg:col-span-7">
             <EnquiryForm kind="Complaint" subjects={COMPLAINT_SUBJECTS} />

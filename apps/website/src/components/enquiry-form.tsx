@@ -1,21 +1,32 @@
 "use client";
 
-import { useState } from "react";
-import { emsUrl, school } from "@/lib/site";
-import { CheckIcon } from "@/components/icons";
+import { useId, useRef, useState } from "react";
+import { emsUrl, school, whatsapp } from "@/lib/site";
+import { CheckIcon, WhatsAppIcon } from "@/components/icons";
 
 type Status = "idle" | "submitting" | "done" | "error";
 
 /**
  * Dual delivery: every message posts into the school management system's
- * front-office queue AND to FormSubmit (which emails the school inbox as a
- * backup). Submission succeeds if either channel accepts it.
+ * front-office queue AND to FormSubmit, which emails the school inbox as a
+ * backup. Submission succeeds if either channel accepts it, so nothing is lost
+ * while the EMS is still being deployed.
+ *
+ * Accessibility notes, because forms are where sites usually fail an audit:
+ * errors are announced through aria-live, tied to their field with
+ * aria-describedby, and focus jumps to the first invalid field on submit.
+ * Validation is ours rather than the browser's (`noValidate`) so the messages
+ * are in our own words, but the fields still carry `required` and the right
+ * `type`, so assistive technology and phone keyboards behave correctly.
  */
+
 const FORM_ENDPOINT = `https://formsubmit.co/ajax/${school.email}`;
 const EMS_ENDPOINT = `${emsUrl}/api/public/message`;
 
-const inputCls =
-  "w-full rounded-xl border border-paper-300 bg-white px-4 py-3 text-sm text-ink-900 placeholder:text-ink-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25 transition";
+const field =
+  "w-full rounded-lg border border-line bg-surface-3 px-4 py-3 text-[15px] text-text " +
+  "placeholder:text-text-3 transition-colors focus:border-accent " +
+  "aria-[invalid=true]:border-second";
 
 function isEmail(v: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
@@ -25,10 +36,12 @@ export function EnquiryForm({
   kind,
   subjects,
 }: {
-  /** Used in the email subject line so the office can triage messages. */
+  /** Used in the subject line so the office can triage messages. */
   kind: "Enquiry" | "Complaint";
   subjects: string[];
 }) {
+  const uid = useId();
+  const formRef = useRef<HTMLFormElement>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [form, setForm] = useState({
@@ -40,6 +53,9 @@ export function EnquiryForm({
     _honey: "",
   });
 
+  const id = (k: string) => `${uid}-${k}`;
+  const errId = (k: string) => `${uid}-${k}-error`;
+
   const update =
     (k: keyof typeof form) =>
     (
@@ -50,9 +66,13 @@ export function EnquiryForm({
   function validate() {
     const e: Record<string, string> = {};
     if (!form.name.trim()) e.name = "Please tell us your name.";
-    if (!isEmail(form.email)) e.email = "Enter a valid email address.";
+    if (!isEmail(form.email)) e.email = "Enter an email address we can reply to.";
     if (form.message.trim().length < 10) e.message = "Please give us a little more detail.";
     setErrors(e);
+    const first = Object.keys(e)[0];
+    if (first) {
+      formRef.current?.querySelector<HTMLElement>(`#${CSS.escape(id(first))}`)?.focus();
+    }
     return Object.keys(e).length === 0;
   }
 
@@ -97,75 +117,102 @@ export function EnquiryForm({
 
   if (status === "done") {
     return (
-      <div className="card flex flex-col items-center gap-4 p-10 text-center">
-        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-leaf-500/15 text-leaf-600">
+      <div className="rounded-lg border border-line bg-surface-3 p-10 text-center" role="status">
+        <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent-soft text-accent">
           <CheckIcon className="h-7 w-7" />
         </span>
-        <h3 className="font-display text-2xl font-extrabold text-ink-900">
+        <h2 className="display mt-6 text-2xl">
           {kind === "Complaint" ? "Complaint received" : "Message sent"}
-        </h3>
-        <p className="max-w-sm leading-relaxed">
-          Thank you, {form.name.split(" ")[0]}. The school office has received your{" "}
-          {kind.toLowerCase()} and will get back to you at {form.email}.
+        </h2>
+        <p className="mx-auto mt-3 max-w-sm leading-relaxed">
+          Thank you, {form.name.split(" ")[0]}. The school office has your{" "}
+          {kind.toLowerCase()} and will reply to {form.email}.
         </p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="card p-6 sm:p-8">
+    <form
+      ref={formRef}
+      onSubmit={handleSubmit}
+      noValidate
+      className="relative rounded-lg border border-line bg-surface-3 p-6 sm:p-8"
+    >
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="name" className="mb-1.5 block text-sm font-bold text-ink-900">
-            Full name <span className="text-brand-600">*</span>
+          <label htmlFor={id("name")} className="mb-2 block text-sm font-semibold text-text">
+            Full name <span className="text-second">*</span>
           </label>
           <input
-            id="name"
+            id={id("name")}
             type="text"
+            required
             value={form.name}
             onChange={update("name")}
             placeholder="e.g. Jane Wanjala"
-            className={inputCls}
+            className={field}
             autoComplete="name"
+            aria-invalid={Boolean(errors.name)}
+            aria-describedby={errors.name ? errId("name") : undefined}
           />
-          {errors.name && <p className="mt-1.5 text-xs font-semibold text-brand-700">{errors.name}</p>}
+          {errors.name && (
+            <p id={errId("name")} className="mt-2 text-sm font-semibold text-second">
+              {errors.name}
+            </p>
+          )}
         </div>
+
         <div>
-          <label htmlFor="email" className="mb-1.5 block text-sm font-bold text-ink-900">
-            Email address <span className="text-brand-600">*</span>
+          <label htmlFor={id("email")} className="mb-2 block text-sm font-semibold text-text">
+            Email address <span className="text-second">*</span>
           </label>
           <input
-            id="email"
+            id={id("email")}
             type="email"
+            required
             value={form.email}
             onChange={update("email")}
             placeholder="you@example.com"
-            className={inputCls}
+            className={field}
             autoComplete="email"
+            inputMode="email"
+            aria-invalid={Boolean(errors.email)}
+            aria-describedby={errors.email ? errId("email") : undefined}
           />
           {errors.email && (
-            <p className="mt-1.5 text-xs font-semibold text-brand-700">{errors.email}</p>
+            <p id={errId("email")} className="mt-2 text-sm font-semibold text-second">
+              {errors.email}
+            </p>
           )}
         </div>
+
         <div>
-          <label htmlFor="phone" className="mb-1.5 block text-sm font-bold text-ink-900">
-            Phone <span className="text-ink-400 font-normal">(optional)</span>
+          <label htmlFor={id("phone")} className="mb-2 block text-sm font-semibold text-text">
+            Phone <span className="font-normal text-text-3">(optional)</span>
           </label>
           <input
-            id="phone"
+            id={id("phone")}
             type="tel"
             value={form.phone}
             onChange={update("phone")}
             placeholder="07xx xxx xxx"
-            className={inputCls}
+            className={field}
             autoComplete="tel"
+            inputMode="tel"
           />
         </div>
+
         <div>
-          <label htmlFor="subject" className="mb-1.5 block text-sm font-bold text-ink-900">
+          <label htmlFor={id("subject")} className="mb-2 block text-sm font-semibold text-text">
             {kind === "Complaint" ? "What is it about?" : "How can we help?"}
           </label>
-          <select id="subject" value={form.subject} onChange={update("subject")} className={inputCls}>
+          <select
+            id={id("subject")}
+            value={form.subject}
+            onChange={update("subject")}
+            className={field}
+          >
             <option value="">Choose one…</option>
             {subjects.map((s) => (
               <option key={s} value={s}>
@@ -177,59 +224,78 @@ export function EnquiryForm({
       </div>
 
       <div className="mt-5">
-        <label htmlFor="message" className="mb-1.5 block text-sm font-bold text-ink-900">
+        <label htmlFor={id("message")} className="mb-2 block text-sm font-semibold text-text">
           {kind === "Complaint" ? "Describe your complaint" : "Your message"}{" "}
-          <span className="text-brand-600">*</span>
+          <span className="text-second">*</span>
         </label>
         <textarea
-          id="message"
+          id={id("message")}
           rows={6}
+          required
           value={form.message}
           onChange={update("message")}
           placeholder={
             kind === "Complaint"
-              ? "Tell us what happened, when, and who was involved. We treat every complaint seriously and confidentially."
+              ? "Tell us what happened, when, and who was involved. Every complaint is handled seriously and confidentially."
               : "Tell us a little about your enquiry…"
           }
-          className={inputCls}
+          className={field}
+          aria-invalid={Boolean(errors.message)}
+          aria-describedby={errors.message ? errId("message") : undefined}
         />
         {errors.message && (
-          <p className="mt-1.5 text-xs font-semibold text-brand-700">{errors.message}</p>
+          <p id={errId("message")} className="mt-2 text-sm font-semibold text-second">
+            {errors.message}
+          </p>
         )}
       </div>
 
-      {/* honeypot */}
-      <input
-        type="text"
-        value={form._honey}
-        onChange={update("_honey")}
-        className="hidden"
-        tabIndex={-1}
-        autoComplete="off"
-        aria-hidden
-      />
+      {/* Bot trap. Moved off-screen rather than display:none, which some bots
+          detect and skip. Hidden from assistive technology and from the tab
+          order, so nobody legitimate will ever meet it. */}
+      <div aria-hidden className="absolute left-[-9999px] top-0 h-px w-px overflow-hidden">
+        <label htmlFor={id("website")}>Leave this field empty</label>
+        <input
+          id={id("website")}
+          type="text"
+          value={form._honey}
+          onChange={update("_honey")}
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
 
-      {status === "error" && (
-        <p className="mt-4 rounded-xl bg-brand-50 px-4 py-3 text-sm font-semibold text-brand-700">
-          Something went wrong sending your message. Please try again, or email us directly at{" "}
-          <a className="underline" href={`mailto:${school.email}`}>
-            {school.email}
-          </a>
-          .
-        </p>
-      )}
+      {/* Announced the moment it appears, wherever the keyboard happens to be. */}
+      <div aria-live="polite">
+        {status === "error" && (
+          <p className="mt-5 rounded-lg border border-second/40 bg-second-soft px-4 py-3 text-sm leading-relaxed">
+            Something went wrong sending your message. Please try again, email us at{" "}
+            <a className="link-underline break-all" href={`mailto:${school.email}`}>
+              {school.email}
+            </a>
+            , or send it on WhatsApp.
+          </p>
+        )}
+      </div>
 
-      <button
-        type="submit"
-        disabled={status === "submitting"}
-        className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-500 px-8 py-3.5 text-sm font-bold text-white transition-colors hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
-      >
-        {status === "submitting"
-          ? "Sending…"
-          : kind === "Complaint"
-            ? "Submit complaint"
-            : "Send message"}
-      </button>
+      <div className="mt-7 flex flex-wrap items-center gap-3">
+        <button type="submit" disabled={status === "submitting"} className="btn btn-primary">
+          {status === "submitting"
+            ? "Sending…"
+            : kind === "Complaint"
+              ? "Submit complaint"
+              : "Send message"}
+        </button>
+        <a
+          href={`https://wa.me/${whatsapp}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn btn-outline"
+        >
+          <WhatsAppIcon className="h-4 w-4" />
+          Or message on WhatsApp
+        </a>
+      </div>
     </form>
   );
 }

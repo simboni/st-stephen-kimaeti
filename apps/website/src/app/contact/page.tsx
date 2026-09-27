@@ -1,102 +1,158 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { school } from "@/lib/site";
+import { school, whatsapp } from "@/lib/site";
 import { PageHero } from "@/components/page-hero";
-import { Section } from "@/components/ui";
+import { Photo } from "@/components/photo";
+import { Reveal, Section, SectionHead } from "@/components/ui";
 import { EnquiryForm } from "@/components/enquiry-form";
-import { ChatIcon, MailIcon, PhoneIcon, PinIcon } from "@/components/icons";
+import {
+  ChatIcon,
+  ClockIcon,
+  MailIcon,
+  PhoneIcon,
+  PinIcon,
+  WhatsAppIcon,
+} from "@/components/icons";
 
 export const metadata: Metadata = {
-  title: "Contact Us",
-  description: `Get in touch with ${school.shortName} — admissions enquiries, fees, visits and general questions. ${school.address}.`,
+  title: "Contact",
+  description: `Reach ${school.shortName} — admissions enquiries, fees, boarding and visits. ${school.address}. Call ${school.phone} or message the school on WhatsApp.`,
 };
 
 const ENQUIRY_SUBJECTS = [
   "Admissions enquiry",
   "Fees and payments",
+  "Boarding",
+  "School transport",
   "Visiting the school",
   "General question",
-  "Something else",
 ];
 
 export default function ContactPage() {
   return (
     <>
       <PageHero
-        eyebrow="Contact us"
+        index="09"
+        eyebrow="Contact"
         title="Somebody picks up"
-        intro="Questions about admissions, fees or boarding? Send a message, or just ring the office."
+        lede="Questions about admissions, fees, boarding or the bus? Send a message, or just ring the office."
         photo="school-grounds"
       />
-      <Section>
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
-          <div className="lg:col-span-5">
-            <h2 className="font-display text-2xl font-extrabold text-ink-900">
-              Reach the school office
-            </h2>
-            <p className="mt-3 leading-relaxed">
-              The office is open on all working days during term time. Prefer to talk? Any of
-              these work:
-            </p>
-            <ul className="mt-8 space-y-6">
-              <li className="flex items-start gap-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
-                  <PhoneIcon className="h-5 w-5" />
-                </span>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-ink-400">Phone</p>
-                  <a href={`tel:${school.phoneHref}`} className="block font-bold text-ink-900 hover:text-brand-600">
-                    {school.phone}
-                  </a>
-                  <a
-                    href={`tel:${school.phoneAltHref}`}
-                    className="block font-bold text-ink-900 hover:text-brand-600"
-                  >
-                    {school.phoneAlt}
-                  </a>
-                </div>
-              </li>
-              <li className="flex items-start gap-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
-                  <MailIcon className="h-5 w-5" />
-                </span>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-ink-400">Email</p>
-                  <a href={`mailto:${school.email}`} className="break-all font-bold text-ink-900 hover:text-brand-600">
-                    {school.email}
-                  </a>
-                </div>
-              </li>
-              <li className="flex items-start gap-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
-                  <PinIcon className="h-5 w-5" />
-                </span>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-ink-400">Address</p>
-                  <p className="font-bold text-ink-900">{school.address}</p>
-                  <p className="mt-1 text-sm">
-                    {school.ward} · {school.location}
-                  </p>
-                </div>
-              </li>
-            </ul>
 
-            <div className="mt-10 rounded-2xl border border-brand-200 bg-brand-50 p-6">
-              <p className="flex items-center gap-2 font-display text-sm font-extrabold text-brand-800">
-                <ChatIcon className="h-4 w-4" /> Have a concern to raise?
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-ink-700">
-                We take feedback seriously. Use our dedicated{" "}
-                <Link href="/complain/" className="font-bold text-brand-700 underline">
-                  complaints page
-                </Link>{" "}
-                and the administration will handle it confidentially.
-              </p>
-            </div>
+      <Section size="loose">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+          {/* Ways to reach the school */}
+          <div className="lg:col-span-5">
+            <Reveal>
+              <SectionHead
+                index="01"
+                eyebrow="The office"
+                title="Four ways to reach us"
+                lede="Open every working day during term. Any of these will get an answer."
+              />
+
+              <ul className="mt-10 divide-y divide-line border-y border-line">
+                <li className="flex items-start gap-4 py-6">
+                  <PhoneIcon className="mt-1 h-5 w-5 shrink-0 text-second" />
+                  <div>
+                    <p className="eyebrow eyebrow-plain">Telephone</p>
+                    <a
+                      href={`tel:${school.phoneHref}`}
+                      className="mt-1.5 block font-display text-2xl text-text hover:text-accent"
+                    >
+                      {school.phone}
+                    </a>
+                    <a
+                      href={`tel:${school.phoneAltHref}`}
+                      className="block font-display text-2xl text-text hover:text-accent"
+                    >
+                      {school.phoneAlt}
+                    </a>
+                  </div>
+                </li>
+
+                <li className="flex items-start gap-4 py-6">
+                  <WhatsAppIcon className="mt-1 h-5 w-5 shrink-0 text-second" />
+                  <div>
+                    <p className="eyebrow eyebrow-plain">WhatsApp</p>
+                    <a
+                      href={`https://wa.me/${whatsapp}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1.5 block font-display text-xl text-text hover:text-accent"
+                    >
+                      Message the school
+                    </a>
+                    <p className="mt-1 text-sm text-text-3">
+                      The fastest way to send a fee receipt.
+                    </p>
+                  </div>
+                </li>
+
+                <li className="flex items-start gap-4 py-6">
+                  <MailIcon className="mt-1 h-5 w-5 shrink-0 text-second" />
+                  <div>
+                    <p className="eyebrow eyebrow-plain">Email</p>
+                    <a
+                      href={`mailto:${school.email}`}
+                      className="mt-1.5 block break-all font-display text-lg text-text hover:text-accent"
+                    >
+                      {school.email}
+                    </a>
+                  </div>
+                </li>
+
+                <li className="flex items-start gap-4 py-6">
+                  <PinIcon className="mt-1 h-5 w-5 shrink-0 text-second" />
+                  <div>
+                    <p className="eyebrow eyebrow-plain">In person</p>
+                    <p className="mt-1.5 font-display text-lg text-text">{school.address}</p>
+                    <p className="text-text-3">
+                      {school.ward} · {school.location}
+                    </p>
+                    <p className="mt-2 inline-flex items-center gap-1.5 text-sm text-text-3">
+                      <ClockIcon className="h-4 w-4" />
+                      Monday to Friday, 7:30 AM – 5:00 PM
+                    </p>
+                  </div>
+                </li>
+              </ul>
+
+              <div className="mt-8 rounded-lg border border-line bg-surface-2 p-6">
+                <p className="inline-flex items-center gap-2 font-display text-lg text-text">
+                  <ChatIcon className="h-4 w-4 text-second" />
+                  Something to raise, not to ask?
+                </p>
+                <p className="mt-2 leading-relaxed">
+                  Use the{" "}
+                  <Link href="/complain/" className="link-underline">
+                    complaints page
+                  </Link>
+                  . It goes straight to the administration and is handled confidentially.
+                </p>
+              </div>
+            </Reveal>
           </div>
 
+          {/* The form */}
           <div className="lg:col-span-7">
-            <EnquiryForm kind="Enquiry" subjects={ENQUIRY_SUBJECTS} />
+            <Reveal delay={80}>
+              <EnquiryForm kind="Enquiry" subjects={ENQUIRY_SUBJECTS} />
+            </Reveal>
+
+            <Reveal delay={140}>
+              <figure className="mt-10">
+                <Photo
+                  src="one-to-one"
+                  sizes="(min-width: 1024px) 55vw, 100vw"
+                  ratio="16/10"
+                  className="rounded-lg"
+                />
+                <figcaption className="plate-caption">
+                  Come on any working day — the office will walk you round.
+                </figcaption>
+              </figure>
+            </Reveal>
           </div>
         </div>
       </Section>

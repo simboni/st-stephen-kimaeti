@@ -1,18 +1,38 @@
+import { Crest } from "@/components/crest";
 import { ButtonLink } from "@/components/ui";
-import { ArrowRightIcon } from "@/components/icons";
+import { allLinks } from "@/lib/site";
+import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="container-page flex flex-col items-center py-28 text-center md:py-40">
-      <p className="kicker">Page not found</p>
-      <h1 className="mt-4 font-display text-5xl font-extrabold text-ink-900 md:text-7xl">404</h1>
-      <p className="mt-4 max-w-md text-lg leading-relaxed">
-        We couldn&rsquo;t find that page. It may have moved — let&rsquo;s take you back home.
-      </p>
-      <div className="mt-8">
-        <ButtonLink href="/">
-          Back to home <ArrowRightIcon className="h-4 w-4" />
-        </ButtonLink>
+    <div className="container-page py-24 md:py-36">
+      <div className="mx-auto max-w-2xl text-center">
+        <Crest mark className="mx-auto h-16 w-16" />
+        <p className="eyebrow mt-8 justify-center">Page not found</p>
+        <h1 className="display mt-4 text-[3rem] md:text-[4.5rem]">404</h1>
+        <p className="lede mt-5">
+          We could not find that page. It may have moved — here is everything else.
+        </p>
+        <div className="mt-9">
+          <ButtonLink href="/">Back to the home page</ButtonLink>
+        </div>
+      </div>
+
+      <div className="mx-auto mt-16 grid max-w-3xl grid-cols-2 gap-8 border-t border-line pt-10 sm:grid-cols-3">
+        {allLinks.map((group) => (
+          <div key={group.heading}>
+            <p className="eyebrow">{group.heading}</p>
+            <ul className="mt-4 space-y-2.5">
+              {group.links.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="link-underline !font-normal !no-underline hover:!underline">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
     </div>
   );

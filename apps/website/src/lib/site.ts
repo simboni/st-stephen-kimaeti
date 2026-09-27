@@ -1,9 +1,9 @@
 /* ---------------------------------------------------------------------------
-   St Stephen's, Kimaeti — every word on the public site lives in this file.
+   St Stephen’s, Kimaeti — every word on the public site lives in this file.
    The pages are layout; this is content. To change what the site says, change
    it here.
 
-   Facts below come from the school's own papers unless a comment says
+   Facts below come from the school’s own papers unless a comment says
    otherwise:
      · letterheads and the 2026 fee sheets  → docs/school/FEE-STRUCTURE-2026.md
      · the Term II 2026 enrolment return    → docs/school/ENROLMENT-2026.md
@@ -15,34 +15,41 @@
 
 export const site = {
   domain: "ststephenkimaeti.ac.ke",
-  title: "St Stephen's Kimaeti — Early Years, Primary & Junior School, Bungoma",
+  title: "St Stephen’s Kimaeti — Early Years, Primary & Junior School, Bungoma",
   description:
     "St Stephen Mixed Day and Boarding School, Kimaeti, Bungoma County. 525 learners from Playgroup to Grade 9, day and boarding, under the Brothers of St Charles Lwanga. Pray and Work.",
 };
 
 /** The school management system — contact and complaint forms post into its
  *  front-office queue. The deploy script sets NEXT_PUBLIC_EMS_URL from the
- *  server's EMS_DOMAIN; this fallback only matters for local builds. */
+ *  server’s EMS_DOMAIN; this fallback only matters for local builds. */
 export const emsUrl =
   process.env.NEXT_PUBLIC_EMS_URL ?? "https://ems.ststephenkimaeti.ac.ke";
 
 export const school = {
   name: "St Stephen Mixed Day and Boarding Primary School, Junior School & Early Years of Education Centre",
   /** What the school is called in running text and in the header. */
-  shortName: "St Stephen's Kimaeti",
+  shortName: "St Stephen’s Kimaeti",
   /** Shorter still, for the logo lockup. */
-  wordmark: "St Stephen's",
+  wordmark: "St Stephen’s",
   sponsor: "Brothers of St Charles Lwanga",
   founded: 2006,
   location: "Kimaeti, Bungoma County",
   /* The papers disagree: the letterhead says Box 93–50200 Bungoma, the
-     administrator's stamp reads "Myanga–Bungoma", and the requirements form
+     administrator’s stamp reads "Myanga–Bungoma", and the requirements form
      said Napara, Kimaeti ward. Confirm the physical location before launch. */
   ward: "Napara, Kimaeti Ward",
   motto: "Pray and Work",
+  /* Painted on the classroom wall, above the vision: "THE SCHOOL MOTTO —
+     ORA ET LABORA (PRAY & WORK)". The Latin is the old Benedictine formula. */
+  mottoLatin: "Ora et Labora",
   vision: "To form a holistic, self-reliant person in society.",
   mission:
     "To promote the intellectual, emotional and spiritual development of every learner.",
+  /* From the completed requirements form. Note that the values painted on the
+     classroom wall are a slightly different list — the legible words include
+     Friendly, Professionalism and Accountability. Ask the school which set is
+     current before launch. */
   values: [
     "God-fearing",
     "Honesty",
@@ -74,7 +81,7 @@ export const announcement = {
 
 /** Two paragraphs of plain English for the home page and the About page. */
 export const intro = [
-  "St Stephen's is a mixed day and boarding school at Kimaeti in Bungoma County, sponsored by the Brothers of St Charles Lwanga. It opened in 2006 and now teaches 525 learners — from three-year-olds in Playgroup to Grade 9 candidates — across its Early Years, Primary and Junior sections.",
+  "St Stephen’s is a mixed day and boarding school at Kimaeti in Bungoma County, sponsored by the Brothers of St Charles Lwanga. It opened in 2006 and now teaches 525 learners — from three-year-olds in Playgroup to Grade 9 candidates — across its Early Years, Primary and Junior sections.",
   "A hundred and fifty-seven of those learners board with us. Twenty-six teachers know every one of them by name. Our motto is two words long and it is the whole plan: Pray and Work.",
 ];
 
@@ -124,21 +131,103 @@ export const pillars = [
   {
     title: "Boarding that feels like home",
     photo: "dining-hall",
-    text: "157 boarders, a matron and master in each dormitory, three cooked meals a day, and supervised prep every evening. Parents are welcome on visiting days.",
+    text: "157 boarders, a matron or master in charge of each dormitory, three cooked meals a day and supervised prep every evening. Parents are welcome on visiting days, announced or not.",
   },
   {
     title: "Work as well as prayer",
-    photo: "shamba-work",
-    text: "The school shamba, the tree line and the water tank were all built by learners and staff together. Self-reliance is not a subject here; it is a habit.",
+    photo: "agriculture-lesson",
+    text: "The shamba, the kitchen garden in its old tyres, the tree line and the water tank were all made by learners and staff together. Agriculture is taught standing in the beds. Self-reliance is not a subject here; it is a habit.",
   },
   {
-    title: "Sport, music and dance",
-    photo: "cultural-troupe",
-    text: "Football for the boys and the girls, a cultural dance troupe that travels, and music and verse teams that take the school beyond the ward.",
+    title: "A school that travels",
+    photo: "festival-troupe",
+    text: "Football for the boys and the girls, a dance troupe and a drama team that compete at the music festival, and trips that have taken our learners as far as Kisumu International Airport.",
   },
 ];
 
-/** The photo strip under "A day at St Stephen's". Order is the day's order. */
+/* ----------------------------------------------------------- school life -- */
+
+/** The five strands of life outside the timetable. Each is its own section on
+ *  /school-life, and each is anchored to photographs rather than adjectives. */
+export const lifeStrands = [
+  {
+    slug: "boarding",
+    title: "Boarding",
+    icon: "bed" as const,
+    lead: "157 of our 525 learners sleep here, so the evening matters as much as the morning.",
+    body: [
+      "Boarding here is not a dormitory bolted onto a day school. Nearly a third of the roll sleeps on the compound, so the evening — prep, supper, prayers, lights out — is as much part of the school’s week as the morning.",
+      "Parents are welcome on visiting days, and welcome to come unannounced. We would rather you saw the place as it actually runs.",
+    ],
+    photos: ["dining-hall", "dining-juniors"],
+  },
+  {
+    slug: "faith",
+    title: "Faith",
+    icon: "cross" as const,
+    lead: "Mass is said in the open air, with the whole school standing round the lectern.",
+    body: [
+      "The school belongs to the Brothers of St Charles Lwanga, and the day opens and closes in prayer. Learners of every background are welcome and all take part in the values programme.",
+      "Nothing about it is done behind closed doors — the altar table is carried out under the trees and the congregation is 525 learners deep.",
+    ],
+    photos: ["mass-outdoors", "mass-lectern"],
+  },
+  {
+    slug: "music",
+    title: "Music, dance and drama",
+    icon: "music" as const,
+    lead: "A dance troupe, a cultural group and a drama team — all of which travel, and come back with something.",
+    body: [
+      "The troupes rehearse outside the art room and perform far from Kimaeti. For a school in a rural ward, getting thirty learners onto a bus with a keyboard is a logistical feat; doing it every year is a tradition.",
+      "Music and verse build the confidence that later shows up in a Grade 8 defending a science project in front of strangers.",
+    ],
+    photos: ["festival-troupe", "cultural-dancers", "troupe-close", "festival-travel"],
+  },
+  {
+    slug: "sport",
+    title: "Sport",
+    icon: "trophy" as const,
+    lead: "Football for the boys and the girls, and games every afternoon before prep.",
+    body: [
+      "The pitch is the flat ground at the top of the compound. Teams are picked from Grade 5 upwards and play through the term against the other schools in the ward.",
+    ],
+    photos: ["football-team", "football-squad"],
+  },
+  {
+    slug: "shamba",
+    title: "The shamba",
+    icon: "leaf" as const,
+    lead: "A working farm, a kitchen garden in old tyres, and agriculture taught standing in the beds.",
+    body: [
+      "Onions, kale and vegetables grow in timber-framed beds and stacked tyres a few steps from the classrooms. Learners dig, plant, weed and harvest, and the kitchen uses what comes out.",
+      "It is the cheapest possible way to teach CBC agriculture and the most convincing: the lesson is the crop.",
+    ],
+    photos: ["kitchen-garden", "agriculture-lesson", "shamba-work", "farm-plot"],
+  },
+  {
+    slug: "trips",
+    title: "Beyond the ward",
+    icon: "bus" as const,
+    lead: "Our learners have stood under the sign at Kisumu International Airport. For most, the first aeroplane they had seen up close.",
+    body: [
+      "Educational trips take whole year groups out of Bungoma. They cost money and take organising, and they are worth both — a child who has been somewhere believes they can go somewhere.",
+    ],
+    photos: ["kisumu-airport", "airport-group", "school-gate-trip"],
+  },
+];
+
+/* ------------------------------------------------------------- calendar -- */
+
+/** Kenya’s three-term year as the school runs it. SAMPLE dates — confirm
+ *  against the Ministry calendar and the school’s own diary before launch.
+ *  These drive the term-dates table and the .ics download. */
+export const terms = [
+  { name: "Term 1, 2027", opens: "2027-01-04", closes: "2027-04-09", halfTerm: "2027-02-18" },
+  { name: "Term 2, 2027", opens: "2027-05-03", closes: "2027-08-06", halfTerm: "2027-06-24" },
+  { name: "Term 3, 2027", opens: "2027-08-30", closes: "2027-10-22", halfTerm: "2027-09-24" },
+];
+
+/** The photo strip under "A day at St Stephen’s". Order is the day’s order. */
 export const dayInTheLife = [
   { photo: "mass-outdoors", time: "7:30", label: "Assembly and prayers" },
   { photo: "classroom-lesson", time: "8:00", label: "First lesson" },
@@ -150,7 +239,7 @@ export const dayInTheLife = [
 
 /* ------------------------------------------------------------------ fees -- */
 
-/** 2026 termly fees, exactly as the school's own sheets read. The Grade 4–6
+/** 2026 termly fees, exactly as the school’s own sheets read. The Grade 4–6
  *  sheet has not been supplied — see docs/school/FEE-STRUCTURE-2026.md. */
 export const fees = {
   year: 2026,
@@ -196,7 +285,7 @@ export const admissionSteps = [
   },
   {
     title: "Collect an admission form",
-    text: "The office gives you the form, the current fee structure and the requirements list. Bring a copy of the child's birth certificate, and the last report card if they are transferring.",
+    text: "The office gives you the form, the current fee structure and the requirements list. Bring a copy of the child’s birth certificate, and the last report card if they are transferring.",
   },
   {
     title: "A friendly placement assessment",
@@ -213,19 +302,19 @@ export type Faq = { q: string; a: string };
 export const faqs: Faq[] = [
   {
     q: "Which classes do you offer?",
-    a: "Playgroup, PP1 and PP2 in Early Years; Grade 1 to Grade 6 in Primary; and Grade 7 to Grade 9 in Junior School — twelve classes in all, following Kenya's Competency-Based Curriculum. Grade 9 is our highest class.",
+    a: "Playgroup, PP1 and PP2 in Early Years; Grade 1 to Grade 6 in Primary; and Grade 7 to Grade 9 in Junior School — twelve classes in all, following Kenya’s Competency-Based Curriculum. Grade 9 is our highest class.",
   },
   {
-    q: "Is St Stephen's a day school or a boarding school?",
+    q: "Is St Stephen’s a day school or a boarding school?",
     a: "Both. Of the 525 learners on the roll, 157 board. Boarders have a matron or master in charge of each dormitory, cooked meals and supervised evening prep.",
   },
   {
     q: "What do the fees come to?",
-    a: `For 2026, Early Years is ${money(16550)} for the year, Grade 1–3 is ${money(19410)}, and Junior School is ${money(41850)}, payable by term. The office will give you the sheet for your child's class, including uniform and one-off charges.`,
+    a: `For 2026, Early Years is ${money(16550)} for the year, Grade 1–3 is ${money(19410)}, and Junior School is ${money(41850)}, payable by term. The office will give you the sheet for your child’s class, including uniform and one-off charges.`,
   },
   {
     q: "How do I pay?",
-    a: `By M-PESA to the KCB Lipa Karo paybill ${payment.mpesa.paybill}, using account number ${payment.accountFormat} followed by your child's name with no spaces — for example ${payment.accountExample}. Or into KCB account ${payment.bank.account}, "${payment.bank.holder}". Always bring or send the receipt to the office.`,
+    a: `By M-PESA to the KCB Lipa Karo paybill ${payment.mpesa.paybill}, using account number ${payment.accountFormat} followed by your child’s name with no spaces — for example ${payment.accountExample}. Or into KCB account ${payment.bank.account}, "${payment.bank.holder}". Always bring or send the receipt to the office.`,
   },
   {
     q: "Is there a school bus?",
@@ -236,8 +325,8 @@ export const faqs: Faq[] = [
     a: `We are sponsored by the ${school.sponsor} and our day begins and ends in prayer. Learners of every background are welcome, and all of them take part in the values programme — the motto is "${school.motto}" and both halves are meant.`,
   },
   {
-    q: "How do I follow my child's progress?",
-    a: "Report cards come home each term and parents are invited to consultation days. A parents' portal showing live fee statements, attendance and assessment results is being rolled out with the school's new management system.",
+    q: "How do I follow my child’s progress?",
+    a: "Report cards come home each term and parents are invited to consultation days. A parents' portal showing live fee statements, attendance and assessment results is being rolled out with the school’s new management system.",
   },
 ];
 
@@ -260,7 +349,7 @@ export const news: NewsPost[] = [
     title: "The whole school turns scientist for a day",
     date: "2026-08-14",
     excerpt:
-      "Every class from PP2 to Grade 9 built, drew and defended a project of its own at this year's science and engineering fair.",
+      "Every class from PP2 to Grade 9 built, drew and defended a project of its own at this year’s science and engineering fair.",
     body: [
       "For one long, bright day the eucalyptus grove behind the classrooms became a laboratory. Desks were carried out under the trees, tents went up, and every class from PP2 to Grade 9 set out a project it had built itself.",
       "There were bottles of coloured water demonstrating chromatography, balloons proving that a gas takes the shape of its container, a hand-drawn solar system, a working model of conduction in liquids, and a great deal of careful argument in front of the judges.",
@@ -307,7 +396,7 @@ export type SchoolEvent = {
   text: string;
 };
 
-// SAMPLE — replace with the school's real calendar.
+// SAMPLE — replace with the school’s real calendar.
 export const events: SchoolEvent[] = [
   {
     title: "Term 3 opening day",
@@ -328,14 +417,14 @@ export const events: SchoolEvent[] = [
     date: "2026-10-16",
     time: "9:00 AM – 3:00 PM",
     venue: "School assembly ground",
-    text: "Parents join us to celebrate the year's work. Class exhibitions, the cultural troupe and the choir, and awards for the top performers in every class.",
+    text: "Parents join us to celebrate the year’s work. Class exhibitions, the cultural troupe and the choir, and awards for the top performers in every class.",
   },
   {
     title: "Parents' consultation day",
     date: "2026-11-06",
     time: "9:00 AM – 1:00 PM",
     venue: "Classrooms",
-    text: "One-to-one meetings between parents and class teachers to go through each learner's progress before the end-of-year assessments.",
+    text: "One-to-one meetings between parents and class teachers to go through each learner’s progress before the end-of-year assessments.",
   },
 ];
 
@@ -346,7 +435,7 @@ export type Testimonial = { quote: string; name: string; relation: string };
 /** The home page shows the testimonials only when this is true.
  *
  *  It is false because the quotes below are SAMPLES — nobody said them. An
- *  invented parent quote on a school's own website is a lie about a real
+ *  invented parent quote on a school’s own website is a lie about a real
  *  person, so the section stays hidden until the school supplies real words
  *  and permission to use them. Replace the array, then flip this to true. */
 export const showTestimonials = false;
@@ -358,33 +447,64 @@ export const testimonials: Testimonial[] = [
     quote:
       "I moved my daughter here in Grade 4. By the end of the year she was standing in front of strangers explaining her own science project. That is not the child who left the other school.",
     name: "Parent, Grade 6",
-    relation: "SAMPLE — awaiting the school's real quotes",
+    relation: "SAMPLE — awaiting the school’s real quotes",
   },
   {
     quote:
       "My son boards. I was worried about the food and the nights. I have visited unannounced twice and found him fed, warm and doing prep. That is all a parent wants.",
     name: "Parent, Grade 8",
-    relation: "SAMPLE — awaiting the school's real quotes",
+    relation: "SAMPLE — awaiting the school’s real quotes",
   },
   {
     quote:
       "Pray and Work sounds like a slogan until you have dug the shamba and then sat down to revise. It stayed with me.",
     name: "Alumnus",
-    relation: "SAMPLE — awaiting the school's real quotes",
+    relation: "SAMPLE — awaiting the school’s real quotes",
   },
 ];
 
 /* ------------------------------------------------------------------ nav --- */
 
 export const navLinks = [
-  { href: "/", label: "Home" },
   { href: "/about/", label: "About" },
+  { href: "/academics/", label: "Academics" },
+  { href: "/school-life/", label: "School life" },
   { href: "/admissions/", label: "Admissions" },
   { href: "/fees/", label: "Fees" },
-  { href: "/news/", label: "News" },
-  { href: "/events/", label: "Events" },
   { href: "/gallery/", label: "Gallery" },
+  { href: "/news/", label: "News" },
   { href: "/contact/", label: "Contact" },
+];
+
+/** Everything, for the footer sitemap and the mobile menu. */
+export const allLinks = [
+  {
+    heading: "The school",
+    links: [
+      { href: "/about/", label: "About us" },
+      { href: "/academics/", label: "Academics" },
+      { href: "/school-life/", label: "School life" },
+      { href: "/gallery/", label: "Gallery" },
+    ],
+  },
+  {
+    heading: "Joining us",
+    links: [
+      { href: "/admissions/", label: "Admissions" },
+      { href: "/fees/", label: "Fees" },
+      { href: "/contact/", label: "Visit the school" },
+      { href: "/complain/", label: "Raise a concern" },
+    ],
+  },
+  {
+    heading: "Keeping up",
+    links: [
+      { href: "/news/", label: "News" },
+      { href: "/events/", label: "Term dates & events" },
+      { href: "/portal/", label: "Parents' portal" },
+      { href: "/news.xml", label: "News feed (RSS)" },
+    ],
+  },
 ];
 
 export function formatDate(iso: string) {

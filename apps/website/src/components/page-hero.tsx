@@ -1,32 +1,68 @@
+import Link from "next/link";
 import { Photo } from "@/components/photo";
+import { ChevronRightIcon } from "@/components/icons";
 
-/** The banner at the top of every page but the home page: one of the school's
- *  own photographs, dimmed under a gradient so the heading stays legible. */
+/**
+ * The banner at the top of every page but the home page: one of the school's
+ * own photographs under a gradient, with a breadcrumb, an index number and a
+ * display line.
+ */
 export function PageHero({
+  index,
   eyebrow,
   title,
-  intro,
+  lede,
   photo = "school-grounds",
+  crumb,
 }: {
+  index?: string;
   eyebrow: string;
   title: string;
-  intro?: string;
+  lede?: string;
   /** A slug from lib/photos. */
   photo?: string;
+  /** Trail above the heading, home implied. */
+  crumb?: { href: string; label: string }[];
 }) {
   return (
-    <div className="relative isolate overflow-hidden bg-navy-900">
-      <Photo src={photo} sizes="100vw" fill imgClassName="opacity-45" />
+    <div className="relative isolate overflow-hidden bg-band">
+      <Photo src={photo} sizes="100vw" fill imgClassName="opacity-35 drift" priority />
       <div
-        className="absolute inset-0 bg-gradient-to-b from-navy-950/85 via-navy-900/75 to-navy-900"
+        className="absolute inset-0 bg-gradient-to-b from-band/75 via-band/80 to-band"
         aria-hidden
       />
-      <div className="container-page relative py-16 md:py-24">
-        <span className="kicker !text-brand-300">{eyebrow}</span>
-        <h1 className="mt-3 max-w-3xl font-display text-4xl font-extrabold tracking-tight text-white text-balance md:text-5xl">
+
+      <div className="container-page relative py-14 md:py-20">
+        <nav aria-label="Breadcrumb" className="mb-6">
+          <ol className="flex flex-wrap items-center gap-1.5 text-xs font-semibold text-band-text-2">
+            <li>
+              <Link href="/" className="transition-colors hover:text-band-text">
+                Home
+              </Link>
+            </li>
+            {(crumb ?? []).map((c) => (
+              <li key={c.href} className="flex items-center gap-1.5">
+                <ChevronRightIcon className="h-3 w-3 opacity-50" />
+                <Link href={c.href} className="transition-colors hover:text-band-text">
+                  {c.label}
+                </Link>
+              </li>
+            ))}
+            <li className="flex items-center gap-1.5">
+              <ChevronRightIcon className="h-3 w-3 opacity-50" />
+              <span className="text-band-accent">{eyebrow}</span>
+            </li>
+          </ol>
+        </nav>
+
+        <p className="eyebrow !text-band-text-2">
+          {index && <span className="text-band-accent">{index}</span>}
+          {eyebrow}
+        </p>
+        <h1 className="display mt-4 max-w-4xl !text-band-text text-[2.4rem] leading-[1.03] sm:text-[3.2rem] md:text-[4rem]">
           {title}
         </h1>
-        {intro && <p className="mt-4 max-w-2xl text-lg leading-relaxed text-white/75">{intro}</p>}
+        {lede && <p className="lede mt-6 max-w-2xl !text-band-text-2">{lede}</p>}
       </div>
     </div>
   );

@@ -1,195 +1,527 @@
 @import "tailwindcss";
 
-/* --------------------------------------------------------------------------
-   St Stephen's School, Kimaeti — design system taken from the uniform:
-   sky-blue shirts, maroon striped ties, grey trousers. The blue leads and the
-   maroon accents, which is how the uniform itself reads.
-   Fonts: Plus Jakarta Sans (display) · Inter (body)
---------------------------------------------------------------------------- */
+/* ===========================================================================
+   St Stephen's, Kimaeti — design system
+
+   The look is editorial rather than corporate: a warm paper ground, a
+   high-contrast serif for display, hairline rules instead of boxes, and the
+   school's own photography carrying the page. Colours come from two places —
+   the uniform (sky-blue shirt, maroon tie) and the compound itself (murram
+   earth, the aqua paint on every wall, eucalyptus).
+
+   Everything the page paints with is a semantic token: --surface, --text,
+   --accent and so on. Those flip under [data-theme="dark"]; the raw brand
+   scales below them do not. Write `bg-surface text-text`, never `bg-white`,
+   and dark mode comes free.
+=========================================================================== */
+
+/* --------------------------------------------------------- brand scales -- */
 @theme {
-  /* Brand — the sky-blue shirt */
-  --color-brand-50: #eff7fc;
-  --color-brand-100: #d8ecf8;
-  --color-brand-200: #aed8f1;
-  --color-brand-300: #7bbde5;
-  --color-brand-400: #479fd4;
-  --color-brand-500: #1b7ab4; /* primary */
-  --color-brand-600: #156598;
-  --color-brand-700: #12527c;
-  --color-brand-800: #0f4263;
-  --color-brand-900: #0b3049;
+  /* Sky blue — the shirt */
+  --color-brand-50: #eef7fd;
+  --color-brand-100: #d5ebf8;
+  --color-brand-200: #a9d6f1;
+  --color-brand-300: #74bae6;
+  --color-brand-400: #3f9ad5;
+  --color-brand-500: #1b7ab4;
+  --color-brand-600: #14618f;
+  --color-brand-700: #114e73;
+  --color-brand-800: #0f3f5c;
+  --color-brand-900: #0b2d43;
+  --color-brand-950: #071d2c;
 
-  /* Maroon — the striped tie */
-  --color-maroon-50: #fbf1f3;
-  --color-maroon-100: #f6dfe4;
-  --color-maroon-200: #ecbec6;
-  --color-maroon-300: #db909e;
-  --color-maroon-400: #c45f73;
-  --color-maroon-500: #9e2b40;
-  --color-maroon-600: #872436;
-  --color-maroon-700: #6f1d2c;
-  --color-maroon-800: #571722;
-  --color-maroon-900: #3f1119;
+  /* Maroon — the tie and the jumpers */
+  --color-maroon-50: #fcf2f4;
+  --color-maroon-100: #f8e1e6;
+  --color-maroon-200: #efc1cb;
+  --color-maroon-300: #e094a6;
+  --color-maroon-400: #c9637c;
+  --color-maroon-500: #a02b43;
+  --color-maroon-600: #8a2038;
+  --color-maroon-700: #721a2e;
+  --color-maroon-800: #5b1525;
+  --color-maroon-900: #3f0f1a;
 
-  /* Navy — the grey trousers, cooled to a slate for dark bands */
-  --color-navy-950: #0d1218;
-  --color-navy-900: #161d26; /* dark band background */
-  --color-navy-800: #1f2732;
-  --color-navy-700: #2c3541;
-  --color-navy-600: #3f4a59; /* borders on dark */
-  --color-navy-500: #566275;
+  /* Clay — the murram underfoot in every photograph */
+  --color-clay-100: #f6e9e3;
+  --color-clay-200: #ebcdc0;
+  --color-clay-300: #d9a58e;
+  --color-clay-400: #c47a5c;
+  --color-clay-500: #a85536;
+  --color-clay-600: #8c442a;
+  --color-clay-700: #6e3522;
 
-  /* Ink — text on light surfaces */
-  --color-ink-900: #1a2130; /* headings */
-  --color-ink-700: #39445a;
-  --color-ink-500: #5b6678; /* body */
-  --color-ink-400: #7d8798; /* meta */
+  /* Gold — from the crest. Used sparingly, and never for body text. */
+  --color-gold-300: #ecf254;
+  --color-gold-500: #c9a227;
+  --color-gold-700: #8a6d14;
 
-  /* Paper — light surfaces */
-  --color-paper-50: #ffffff;
-  --color-paper-100: #f6f8fa; /* page background */
-  --color-paper-200: #eaeff4; /* tinted band */
-  --color-paper-300: #dae1e9; /* borders */
-
-  /* Accents — nods to the school building & badge */
-  --color-leaf-500: #4caf50;
-  --color-leaf-600: #388e3c;
-  --color-sun-400: #fbc02d;
-  --color-sun-500: #f9a825;
-  --color-sky-500: #3f51b5;
-
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-jakarta), var(--font-inter), ui-sans-serif, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
 }
 
+/* ------------------------------------------------------ semantic tokens -- */
+:root {
+  color-scheme: light;
+
+  --surface: #fbf9f5; /* warm paper, not a cold grey */
+  --surface-2: #f3eee4; /* tinted band */
+  --surface-3: #ffffff; /* raised panel */
+  --line: #e4ddd0;
+  --line-strong: #cbc0ad;
+
+  --text: #12161d;
+  --text-2: #3c444f;
+  --text-3: #5f6775; /* 4.9:1 on the tinted band — AA. Do not lighten. */
+
+  --accent: #14618f;
+  --accent-hover: #0f4c72;
+  --accent-soft: #eef7fd;
+  --on-accent: #ffffff;
+
+  --second: #8a2038; /* maroon, the second voice */
+  --second-soft: #fcf2f4;
+
+  --rule: #a85536; /* clay, for short decorative rules only */
+
+  /* A band that stays dark whichever theme is on. */
+  --band: #0e1620;
+  --band-2: #16202c;
+  --band-line: #2a3644;
+  --band-text: #e8edf3;
+  --band-text-2: #a9b6c5;
+  --band-accent: #74bae6;
+
+  --focus: #1b7ab4;
+  --shadow-e1: 0 1px 2px rgb(18 22 29 / 0.05);
+  --shadow-e2: 0 18px 40px -28px rgb(18 22 29 / 0.35);
+  --shadow-e3: 0 32px 70px -40px rgb(18 22 29 / 0.5);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --surface: #0e1216;
+  --surface-2: #141a21;
+  --surface-3: #19212a;
+  --line: #27313c;
+  --line-strong: #3a4653;
+
+  --text: #eef1f5;
+  --text-2: #bcc6d2;
+  --text-3: #8c97a5;
+
+  --accent: #74bae6;
+  --accent-hover: #a9d6f1;
+  --accent-soft: #10222e;
+  --on-accent: #06121b;
+
+  --second: #e094a6;
+  --second-soft: #24141a;
+
+  --rule: #d9a58e;
+
+  --band: #080c11;
+  --band-2: #0f151d;
+  --band-line: #232e3a;
+  --band-text: #eef1f5;
+  --band-text-2: #a9b6c5;
+  --band-accent: #74bae6;
+
+  --focus: #74bae6;
+  --shadow-e1: 0 1px 2px rgb(0 0 0 / 0.5);
+  --shadow-e2: 0 18px 40px -28px rgb(0 0 0 / 0.8);
+  --shadow-e3: 0 32px 70px -40px rgb(0 0 0 / 0.9);
+}
+
+/* Expose the semantic tokens to Tailwind so `bg-surface`, `text-text-2`,
+   `border-line` and friends exist as utilities and flip with the theme. */
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-text: var(--text);
+  --color-text-2: var(--text-2);
+  --color-text-3: var(--text-3);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  --color-second: var(--second);
+  --color-second-soft: var(--second-soft);
+  --color-rule: var(--rule);
+  --color-band: var(--band);
+  --color-band-2: var(--band-2);
+  --color-band-line: var(--band-line);
+  --color-band-text: var(--band-text);
+  --color-band-text-2: var(--band-text-2);
+  --color-band-accent: var(--band-accent);
+}
+
+/* ------------------------------------------------------------- baseline -- */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 7rem;
+  scroll-padding-top: 6rem;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--color-paper-100);
-  color: var(--color-ink-500);
+  background: var(--surface);
+  color: var(--text-2);
   font-family: var(--font-sans);
+  font-synthesis-weight: none;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: rgba(27, 122, 180, 0.22);
-  color: var(--color-ink-900);
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+  color: var(--text);
+}
+
+/* One visible focus treatment everywhere, including inside dark bands. */
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* Images never blow out their column, whatever the markup says. */
+img,
+svg,
+video {
+  max-width: 100%;
 }
 
 @layer components {
+  /* ------------------------------------------------------------ layout -- */
   .container-page {
     width: 100%;
-    max-width: 76rem; /* 1216px */
+    max-width: 82.5rem; /* 1320px */
     margin-inline: auto;
     padding-inline: 1.25rem;
   }
-  @media (min-width: 1024px) {
+  @media (min-width: 768px) {
     .container-page {
       padding-inline: 2rem;
     }
   }
-
-  /* Section eyebrow label */
-  .kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--color-brand-600);
+  @media (min-width: 1280px) {
+    .container-page {
+      padding-inline: 3rem;
+    }
   }
-  .kicker::before {
-    content: "";
-    width: 1.75rem;
-    height: 2px;
+
+  /* A comfortable reading measure for running prose. */
+  .measure {
+    max-width: 64ch;
+  }
+  .measure-tight {
+    max-width: 52ch;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 100;
+    padding: 0.75rem 1.25rem;
     border-radius: 999px;
-    background: var(--color-brand-500);
+    background: var(--accent);
+    color: var(--on-accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    transition: top 0.2s ease;
+  }
+  .skip-link:focus {
+    top: 1rem;
   }
 
-  .card {
-    background: var(--color-paper-50);
-    border: 1px solid var(--color-paper-300);
-    border-radius: 1rem;
-    box-shadow: 0 1px 2px rgba(26, 33, 48, 0.05), 0 12px 32px -20px rgba(26, 33, 48, 0.18);
-  }
-
-  .card-hover {
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
-  }
-  .card-hover:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 2px 4px rgba(26, 33, 48, 0.06), 0 24px 48px -24px rgba(26, 33, 48, 0.28);
-  }
-
-  .text-balance {
+  /* ---------------------------------------------------------- typography -- */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.02;
+    letter-spacing: -0.022em;
+    color: var(--text);
     text-wrap: balance;
   }
 
-  /* Soft dotted texture for light bands */
-  .bg-dots {
-    background-image: radial-gradient(rgba(26, 33, 48, 0.07) 1px, transparent 1px);
-    background-size: 22px 22px;
+  .lede {
+    font-size: 1.1875rem;
+    line-height: 1.65;
+    color: var(--text-2);
   }
-}
+  @media (min-width: 768px) {
+    .lede {
+      font-size: 1.3125rem;
+    }
+  }
 
-@layer components {
-  /* Frosted glass chip/card for use over imagery */
-  .glass {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.22);
+  /* Section label: a short clay rule, then tracked small caps. */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 1.5rem;
+    height: 2px;
+    flex: none;
+    background: var(--rule);
+  }
+  .eyebrow-plain::before {
+    display: none;
+  }
+
+  /* A large pale index numeral, drawn from data-index. Decorative: it repeats
+     the number already in the section's eyebrow, so it belongs in CSS rather
+     than in the document, where it would be read out twice. */
+  .index-ghost::before {
+    content: attr(data-index);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: -0.03em;
+    line-height: 0.9;
+    color: var(--line-strong);
+  }
+
+  /* Big statistic numerals. */
+  .numeral {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: -0.03em;
+    line-height: 0.9;
+    color: var(--text);
+  }
+
+  .quote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    color: var(--text);
+    text-wrap: pretty;
+  }
+
+  /* ----------------------------------------------------------- surfaces -- */
+  .panel {
+    background: var(--surface-3);
+    border: 1px solid var(--line);
+    border-radius: 0.875rem;
+  }
+
+  .lift {
+    transition:
+      transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.35s ease,
+      border-color 0.35s ease;
+  }
+  .lift:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-e2);
+    border-color: var(--line-strong);
+  }
+
+  .hairline {
+    border-top: 1px solid var(--line);
+  }
+
+  /* A magazine plate: full-bleed image, caption set small beneath it. */
+  .plate-caption {
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--text-3);
+    border-left: 2px solid var(--rule);
+    padding-left: 0.75rem;
+  }
+
+  /* ------------------------------------------------------------ buttons -- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    padding: 0.8125rem 1.5rem;
+    font-size: 0.9375rem;
+    font-weight: 650;
+    line-height: 1;
+    white-space: nowrap;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s ease;
+  }
+  .btn:active {
+    transform: translateY(1px);
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  .btn-primary:hover {
+    background: var(--accent-hover);
+  }
+  .btn-outline {
+    border: 1px solid var(--line-strong);
+    color: var(--text);
+  }
+  .btn-outline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .btn-on-band {
+    background: var(--band-text);
+    color: var(--band);
+  }
+  .btn-on-band:hover {
+    background: #fff;
+  }
+  .btn-ghost-band {
+    border: 1px solid rgb(255 255 255 / 0.28);
+    color: #fff;
+  }
+  .btn-ghost-band:hover {
+    background: rgb(255 255 255 / 0.12);
+  }
+
+  /* --------------------------------------------------------------- misc -- */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-2);
+  }
+
+  .link-underline {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  .link-underline:hover {
+    color: var(--accent-hover);
+  }
+
+  /* Accordion built on <details> — no JavaScript. */
+  .qa summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+  .qa summary::-webkit-details-marker {
+    display: none;
+  }
+  .qa summary::after {
+    content: "";
+    flex: none;
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-top: 0.35rem;
+    border-right: 2px solid var(--text-3);
+    border-bottom: 2px solid var(--text-3);
+    transform: rotate(45deg);
+    transition: transform 0.25s ease;
+  }
+  .qa[open] summary::after {
+    transform: rotate(-135deg);
+  }
+
+  /* The sticky bar. html.scrolled is set by the boot script. */
+  .header-bar {
+    border-bottom: 1px solid transparent;
+    background: var(--surface);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  html.scrolled .header-bar {
+    border-bottom-color: var(--line);
+    background: color-mix(in srgb, var(--surface) 92%, transparent);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
 
-  /* FAQ accordion built on <details> — no JS needed */
-  .faq-item summary {
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-  .faq-item summary::-webkit-details-marker { display: none; }
-  .faq-item summary::after {
-    content: "+";
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.9rem;
-    height: 1.9rem;
-    border-radius: 999px;
-    background: var(--color-brand-50);
-    color: var(--color-brand-600);
-    font-size: 1.2rem;
-    font-weight: 700;
-    transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
-  }
-  .faq-item[open] summary::after {
-    transform: rotate(45deg);
-    background: var(--color-brand-500);
-    color: #fff;
+  .bg-grain {
+    background-image: radial-gradient(
+      color-mix(in srgb, var(--text) 7%, transparent) 1px,
+      transparent 1px
+    );
+    background-size: 20px 20px;
   }
 }
 
-/* Slow cinematic zoom on hero imagery */
-@keyframes kenburns {
-  from { transform: scale(1); }
-  to { transform: scale(1.08); }
+/* ------------------------------------------------------------- motion --- */
+
+/* Slow drift over hero photography. */
+@keyframes driftIn {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
 }
-.kenburns {
-  animation: kenburns 18s ease-in-out infinite alternate;
-  will-change: transform;
+.drift {
+  animation: driftIn 1.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Endless scrolling marquee band */
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.stagger > * {
+  animation: riseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.stagger > *:nth-child(1) { animation-delay: 0.04s; }
+.stagger > *:nth-child(2) { animation-delay: 0.12s; }
+.stagger > *:nth-child(3) { animation-delay: 0.2s; }
+.stagger > *:nth-child(4) { animation-delay: 0.28s; }
+.stagger > *:nth-child(5) { animation-delay: 0.36s; }
+
+/* Scroll reveal. The hidden state applies only once the inline boot script
+   has set <html class="js">, so content is never invisible when scripts fail
+   or are still loading. One IntersectionObserver drives every element. */
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+html.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Endless values band. */
 @keyframes marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -197,43 +529,52 @@ body {
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: marquee 28s linear infinite;
+  animation: marquee 34s linear infinite;
 }
-
-/* Scroll-down hint */
-@keyframes drift {
-  0%, 100% { transform: translateY(0); opacity: 0.9; }
-  50% { transform: translateY(8px); opacity: 0.5; }
-}
-.scroll-hint { animation: drift 2.2s ease-in-out infinite; }
-
-/* Gentle entrance used on hero content */
-@keyframes riseIn {
-  from { opacity: 0; transform: translateY(22px); }
-  to { opacity: 1; transform: none; }
-}
-.hero-stagger > * { animation: riseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
-.hero-stagger > *:nth-child(1) { animation-delay: 0.05s; }
-.hero-stagger > *:nth-child(2) { animation-delay: 0.14s; }
-.hero-stagger > *:nth-child(3) { animation-delay: 0.23s; }
-.hero-stagger > *:nth-child(4) { animation-delay: 0.32s; }
-.hero-stagger > *:nth-child(5) { animation-delay: 0.41s; }
-
-/* Scroll reveal — hidden state applies only once JS has marked <html class="js">,
-   so content is never invisible on slow connections or if scripts fail. */
-html.js .reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-html.js .reveal-in { opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-stagger > * { animation: none !important; }
-  .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
-  .kenburns,
-  .marquee-track,
-  .scroll-hint { animation: none !important; }
+  html {
+    scroll-behavior: auto;
+  }
+  .drift,
+  .stagger > *,
+  .marquee-track {
+    animation: none !important;
+  }
+  html.js [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* Cross-page crossfade. Short, so navigation still feels instant. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.22s;
+}
+
+/* --------------------------------------------------------------- print -- */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.75em;
+    color: #555;
+  }
+  .panel {
+    border: 1px solid #999;
+    box-shadow: none;
+  }
 }

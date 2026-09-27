@@ -9,6 +9,9 @@ const basePath = process.env.PAGES_BASE_PATH ?? "";
 const nextConfig: NextConfig = {
   // Static HTML export — deploys to any static host.
   output: "export",
+  // Crossfade navigations through the browser's View Transitions API. Where it
+  // is unsupported the site simply navigates as before.
+  experimental: { viewTransition: true },
   trailingSlash: true,
   images: { unoptimized: true },
   // The school's photographs are pre-exported as responsive WebP at build

@@ -131,7 +131,7 @@ const PICKS = [
   { i: 72, slug: "football-squad", cat: "sport", focus: "attention",
     alt: "Footballers in yellow-green strip lined up before kick-off",
     caption: "Before kick-off" },
-  { i: 68, slug: "cultural-troupe", cat: "culture", focus: "attention",
+  { i: 68, slug: "cultural-troupe", cat: "music", focus: "attention",
     alt: "The cultural dance troupe in matching blue patterned outfits and red headbands",
     caption: "Our cultural dance troupe" },
   { i: 70, slug: "shamba-work", cat: "community", focus: "attention",
@@ -154,7 +154,55 @@ const PICKS = [
   { i: 80, slug: "pupils-under-trees", cat: "life", focus: "attention",
     alt: "Learners in maroon jumpers gathered under the trees at the edge of the compound",
     caption: "Under the trees" },
+
+  // --- music, drama and the festivals ------------------------------------
+  { i: 94, slug: "festival-troupe", cat: "music", focus: "attention",
+    alt: "The school's dance troupe in pink skirts and white tops, lined up at a music festival venue",
+    caption: "At the music festival" },
+  { i: 95, slug: "troupe-close", cat: "music", focus: "attention",
+    alt: "Members of the dance troupe with their arms round each other, laughing, before going on",
+    caption: "Waiting to go on" },
+  { i: 96, slug: "cultural-dancers", cat: "music", focus: "attention",
+    alt: "A large cultural dance group in matching patterned kit and red caps, holding sticks, seated and standing for a group photograph",
+    caption: "The cultural dance group" },
+  { i: 111, slug: "troupe-art-room", cat: "music", focus: "attention",
+    alt: "Dancers in pink and their teacher outside the door marked Art Room",
+    caption: "Outside the art room" },
+  { i: 112, slug: "festival-travel", cat: "music", focus: "attention",
+    alt: "The whole contingent photographed on the grass beside the bus, a keyboard on the ground in front of them",
+    caption: "Loaded up for the festival" },
+
+  // --- the shamba and the kitchen garden ---------------------------------
+  { i: 103, slug: "kitchen-garden", cat: "community", focus: "attention",
+    alt: "Vegetable beds framed in timber and planted in old tyres, green with onions and kale",
+    caption: "The kitchen garden" },
+  { i: 106, slug: "agriculture-lesson", cat: "community", focus: "attention",
+    alt: "A learner reading from his notes to a class standing among the vegetable beds",
+    caption: "Agriculture, taught in the beds themselves" },
+
+  // --- out of school ------------------------------------------------------
+  { i: 113, slug: "kisumu-airport", cat: "trips", focus: "attention",
+    alt: "The school group photographed under the Kisumu International Airport sign",
+    caption: "Kisumu International Airport" },
+  { i: 109, slug: "airport-group", cat: "trips", focus: "attention",
+    alt: "Learners and their teachers outside the airport terminal on the school trip",
+    caption: "First time at an airport" },
+  { i: 102, slug: "school-gate-trip", cat: "trips", focus: "attention",
+    alt: "The whole party seated and standing at the gate of the place they were visiting",
+    caption: "Everyone who travelled" },
+
+  // --- the school's own walls --------------------------------------------
+  { i: 110, slug: "motto-wall", cat: "campus", focus: "attention",
+    alt: "Learners and a teacher standing under the painted wall reading The School Motto: Ora et Labora, Pray and Work",
+    caption: "Ora et Labora, painted on the wall" },
+  { i: 100, slug: "office-desk", cat: "campus", focus: "attention",
+    alt: "A member of staff going through papers at a desk with two learners, the wall behind painted Brothers of St Charles Lwanga",
+    caption: "The office" },
+  { i: 105, slug: "one-to-one", cat: "life", focus: "attention",
+    alt: "A teacher going through a learner's work with him at a table under the trees",
+    caption: "One to one, under the trees" },
 ];
+
 
 /* ------------------------------------------------------------------- build -- */
 
@@ -230,8 +278,9 @@ export type PhotoCategory =
   | "earlyyears"
   | "academics"
   | "sport"
-  | "culture"
+  | "music"
   | "community"
+  | "trips"
   | "life";
 
 export type Photo = {

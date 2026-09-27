@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { fees, money, payment, school } from "@/lib/site";
 import { PageHero } from "@/components/page-hero";
-import { ButtonLink, Section, SectionHeading } from "@/components/ui";
-import { Reveal } from "@/components/reveal";
+import { FeeCalculator } from "@/components/fee-calculator";
+import { ButtonLink, Reveal, Section, SectionHead } from "@/components/ui";
 import { ArrowRightIcon, PhoneIcon } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Fees",
-  description: `${fees.year} fee structure for ${school.shortName} — termly fees by level, uniform costs, and how to pay by M-PESA or KCB.`,
+  description: `The ${fees.year} fee structure for ${school.shortName} — termly fees by level, uniform costs, a calculator that tells you what a term actually costs, and how to pay by M-PESA or KCB.`,
 };
 
 const kes = (n: number) => n.toLocaleString("en-KE");
@@ -16,245 +16,254 @@ export default function FeesPage() {
   return (
     <>
       <PageHero
-        eyebrow={`${fees.year} fee structure`}
+        index="04"
+        eyebrow="Fees"
         title="What a term costs, written down"
-        intro="No school should make a parent guess. These are the school's own figures for the year, by level and by term."
+        lede="No school should make a parent guess. These are the school’s own figures for the year, by level and by term, with a calculator that adds up what you would actually pay."
         photo="dining-juniors"
       />
 
-      {/* Termly fees */}
-      <Section>
+      {/* Calculator */}
+      <Section size="loose">
         <Reveal>
-          <SectionHeading
-            eyebrow="Termly fees"
-            title={`${fees.year}, by level`}
-            intro={fees.note}
+          <SectionHead
+            index="01"
+            eyebrow="Work it out"
+            title="What would my child’s term cost?"
+            lede="Pick the class and the term. Everything is computed in your browser from the published sheet — nothing is sent anywhere, and it works offline."
           />
         </Reveal>
-
-        <Reveal delay={100}>
-          <div className="card mt-10 overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[34rem] text-sm">
-                <thead className="bg-navy-900 text-white">
-                  <tr>
-                    <th className="px-5 py-3.5 text-left font-display text-xs font-bold uppercase tracking-wider">
-                      Level
-                    </th>
-                    <th className="px-4 py-3.5 text-right font-display text-xs font-bold uppercase tracking-wider">
-                      Term 1
-                    </th>
-                    <th className="px-4 py-3.5 text-right font-display text-xs font-bold uppercase tracking-wider">
-                      Term 2
-                    </th>
-                    <th className="px-4 py-3.5 text-right font-display text-xs font-bold uppercase tracking-wider">
-                      Term 3
-                    </th>
-                    <th className="px-5 py-3.5 text-right font-display text-xs font-bold uppercase tracking-wider">
-                      Whole year
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-paper-300">
-                  {fees.rows.map((r) => (
-                    <tr key={r.level}>
-                      <td className="px-5 py-4 font-semibold text-ink-900">{r.level}</td>
-                      <td className="px-4 py-4 text-right tabular-nums">{kes(r.t1)}</td>
-                      <td className="px-4 py-4 text-right tabular-nums">{kes(r.t2)}</td>
-                      <td className="px-4 py-4 text-right tabular-nums">{kes(r.t3)}</td>
-                      <td className="px-5 py-4 text-right font-display text-base font-extrabold tabular-nums text-ink-900">
-                        {kes(r.total)}
-                      </td>
-                    </tr>
-                  ))}
-                  <tr className="bg-paper-100">
-                    <td className="px-5 py-4 font-semibold text-ink-400">{fees.missing}</td>
-                    <td colSpan={4} className="px-5 py-4 text-right text-ink-400">
-                      Ask the office for the current sheet
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <p className="border-t border-paper-300 px-5 py-4 text-xs leading-relaxed text-ink-400">
-              All amounts in Kenya shillings. The termly figure covers tuition,
-              accommodation where it applies, stationery, meals, medical, electricity,
-              bus maintenance, RMI, games and music, boarding and welfare, assessment
-              and development. Boarding places and school-bus routes are quoted by the
-              office.
-            </p>
-          </div>
-        </Reveal>
-
-        <Reveal delay={150}>
-          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {fees.oneOff.map((o) => (
-              <div key={o.item} className="card flex items-baseline justify-between gap-4 p-5">
-                <span className="font-semibold text-ink-900">{o.item}</span>
-                <span className="font-display text-lg font-extrabold text-brand-600">
-                  {money(o.amount)}
-                </span>
-              </div>
-            ))}
+        <Reveal delay={80}>
+          <div className="mt-12">
+            <FeeCalculator />
           </div>
         </Reveal>
       </Section>
 
-      {/* Uniform */}
-      <Section tinted>
+      {/* The published table */}
+      <Section tone="tint" size="loose">
         <Reveal>
-          <SectionHeading
-            eyebrow="One-off"
-            title="Uniform and kit"
-            intro="Bought once, at the school or from the supplier the office names. Prices are per item."
+          <SectionHead
+            index="02"
+            eyebrow={`${fees.year} termly fees`}
+            title="The whole structure"
+            lede={fees.note}
           />
         </Reveal>
-        <Reveal delay={100}>
-          <div className="card mt-10 overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[28rem] text-sm">
-                <thead className="bg-paper-200">
-                  <tr>
-                    <th className="px-5 py-3.5 text-left font-display text-xs font-bold uppercase tracking-wider text-ink-700">
-                      Item
+
+        <Reveal delay={80}>
+          <div className="mt-12 overflow-x-auto" tabIndex={0} role="group" aria-label="Table, scrolls sideways">
+            <table className="w-full min-w-[36rem] border-collapse text-sm">
+              <caption className="sr-only">
+                Termly fees by level for {fees.year}, in Kenya shillings
+              </caption>
+              <thead>
+                <tr className="border-y border-line-strong">
+                  <th scope="col" className="py-4 pr-4 text-left eyebrow eyebrow-plain">
+                    Level
+                  </th>
+                  <th scope="col" className="px-3 py-4 text-right eyebrow eyebrow-plain">
+                    Term 1
+                  </th>
+                  <th scope="col" className="px-3 py-4 text-right eyebrow eyebrow-plain">
+                    Term 2
+                  </th>
+                  <th scope="col" className="px-3 py-4 text-right eyebrow eyebrow-plain">
+                    Term 3
+                  </th>
+                  <th scope="col" className="py-4 pl-3 text-right eyebrow eyebrow-plain">
+                    Whole year
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {fees.rows.map((r) => (
+                  <tr key={r.level} className="border-b border-line">
+                    <th scope="row" className="py-5 pr-4 text-left font-display text-lg text-text">
+                      {r.level}
                     </th>
-                    <th className="px-4 py-3.5 text-right font-display text-xs font-bold uppercase tracking-wider text-ink-700">
-                      Early Years
-                    </th>
-                    <th className="px-4 py-3.5 text-right font-display text-xs font-bold uppercase tracking-wider text-ink-700">
-                      Primary
-                    </th>
-                    <th className="px-5 py-3.5 text-right font-display text-xs font-bold uppercase tracking-wider text-ink-700">
-                      Junior
-                    </th>
+                    <td className="px-3 py-5 text-right tabular-nums">{kes(r.t1)}</td>
+                    <td className="px-3 py-5 text-right tabular-nums">{kes(r.t2)}</td>
+                    <td className="px-3 py-5 text-right tabular-nums">{kes(r.t3)}</td>
+                    <td className="numeral py-5 pl-3 text-right text-2xl">{kes(r.total)}</td>
                   </tr>
-                </thead>
-                <tbody className="divide-y divide-paper-300">
-                  {fees.uniform.map((u) => (
-                    <tr key={u.item}>
-                      <td className="px-5 py-3.5 font-semibold text-ink-900">{u.item}</td>
-                      <td className="px-4 py-3.5 text-right tabular-nums">
-                        {u.eye === null ? "—" : kes(u.eye)}
-                      </td>
-                      <td className="px-4 py-3.5 text-right tabular-nums">
-                        {u.primary === null ? "—" : kes(u.primary)}
-                      </td>
-                      <td className="px-5 py-3.5 text-right tabular-nums">
-                        {u.junior === null ? "—" : kes(u.junior)}
-                      </td>
-                    </tr>
+                ))}
+                <tr className="border-b border-line text-text-3">
+                  <th scope="row" className="py-5 pr-4 text-left font-normal">
+                    {fees.missing}
+                  </th>
+                  <td colSpan={4} className="py-5 text-right">
+                    Not yet published — ask the office for the current sheet
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-5 max-w-3xl text-sm leading-relaxed text-text-3">
+            All amounts in Kenya shillings. The termly figure covers tuition,
+            accommodation where it applies, stationery, meals, medical, electricity, bus
+            maintenance, RMI, games and music, boarding and welfare, assessment and
+            development. Boarding places and school-bus routes are quoted by the office.
+            One-off on admission:{" "}
+            {fees.oneOff.map((o) => `${o.item.toLowerCase()} ${money(o.amount)}`).join(", ")}.
+          </p>
+        </Reveal>
+      </Section>
+
+      {/* Uniform */}
+      <Section size="loose">
+        <Reveal>
+          <SectionHead
+            index="03"
+            eyebrow="One-off"
+            title="Uniform and kit"
+            lede="Bought once, at the school or from the supplier the office names. Prices are per item."
+          />
+        </Reveal>
+        <Reveal delay={80}>
+          <div className="mt-12 overflow-x-auto" tabIndex={0} role="group" aria-label="Table, scrolls sideways">
+            <table className="w-full min-w-[30rem] border-collapse text-sm">
+              <caption className="sr-only">Uniform prices by section, in Kenya shillings</caption>
+              <thead>
+                <tr className="border-y border-line-strong">
+                  <th scope="col" className="py-4 pr-4 text-left eyebrow eyebrow-plain">
+                    Item
+                  </th>
+                  <th scope="col" className="px-3 py-4 text-right eyebrow eyebrow-plain">
+                    Early Years
+                  </th>
+                  <th scope="col" className="px-3 py-4 text-right eyebrow eyebrow-plain">
+                    Primary
+                  </th>
+                  <th scope="col" className="py-4 pl-3 text-right eyebrow eyebrow-plain">
+                    Junior
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {fees.uniform.map((u) => (
+                  <tr key={u.item} className="border-b border-line">
+                    <th scope="row" className="py-4 pr-4 text-left font-semibold text-text">
+                      {u.item}
+                    </th>
+                    <td className="px-3 py-4 text-right tabular-nums">
+                      {u.eye === null ? "—" : kes(u.eye)}
+                    </td>
+                    <td className="px-3 py-4 text-right tabular-nums">
+                      {u.primary === null ? "—" : kes(u.primary)}
+                    </td>
+                    <td className="py-4 pl-3 text-right tabular-nums">
+                      {u.junior === null ? "—" : kes(u.junior)}
+                    </td>
+                  </tr>
+                ))}
+                <tr className="border-b border-line-strong">
+                  <th scope="row" className="py-5 pr-4 text-left font-display text-lg text-text">
+                    Full set
+                  </th>
+                  {(["eye", "primary", "junior"] as const).map((col, i) => (
+                    <td
+                      key={col}
+                      className={`numeral py-5 text-right text-xl ${i === 2 ? "pl-3" : "px-3"}`}
+                    >
+                      {kes(fees.uniform.reduce((sum, u) => sum + (u[col] ?? 0), 0))}
+                    </td>
                   ))}
-                  <tr className="bg-paper-100 font-display font-extrabold text-ink-900">
-                    <td className="px-5 py-3.5">Full set</td>
-                    {(["eye", "primary", "junior"] as const).map((col) => (
-                      <td key={col} className="px-4 py-3.5 text-right tabular-nums">
-                        {kes(
-                          fees.uniform.reduce((sum, u) => sum + (u[col] ?? 0), 0),
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </Reveal>
       </Section>
 
       {/* How to pay */}
-      <Section>
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
-          <Reveal>
-            <SectionHeading eyebrow="How to pay" title="M-PESA or the bank" />
-            <div className="mt-8 space-y-5">
-              <div className="card p-6">
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-maroon-500">
-                  M-PESA · {payment.mpesa.label}
-                </p>
-                <dl className="mt-4 space-y-2.5 text-sm">
-                  <div className="flex items-baseline justify-between gap-4">
-                    <dt className="text-ink-400">Paybill number</dt>
-                    <dd className="font-display text-lg font-extrabold text-ink-900">
-                      {payment.mpesa.paybill}
-                    </dd>
-                  </div>
-                  <div className="flex items-baseline justify-between gap-4">
-                    <dt className="text-ink-400">Account number</dt>
-                    <dd className="font-display font-extrabold text-ink-900">
-                      {payment.accountFormat} + child&rsquo;s name
-                    </dd>
-                  </div>
-                  <div className="flex items-baseline justify-between gap-4">
-                    <dt className="text-ink-400">Example</dt>
-                    <dd>
-                      <code className="rounded bg-paper-200 px-2 py-1 text-ink-900">
-                        {payment.accountExample}
-                      </code>
-                    </dd>
-                  </div>
-                </dl>
-                <p className="mt-4 text-sm leading-relaxed text-ink-400">
-                  No spaces anywhere in the account number. If the name is long, the
-                  admission number works just as well.
-                </p>
-              </div>
-
-              <div className="card p-6">
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-maroon-500">
-                  Bank
-                </p>
-                <dl className="mt-4 space-y-2.5 text-sm">
-                  <div className="flex items-baseline justify-between gap-4">
-                    <dt className="text-ink-400">Bank</dt>
-                    <dd className="font-display font-extrabold text-ink-900">
-                      {payment.bank.name}
-                    </dd>
-                  </div>
-                  <div className="flex items-baseline justify-between gap-4">
-                    <dt className="text-ink-400">Account number</dt>
-                    <dd className="font-display text-lg font-extrabold text-ink-900">
-                      {payment.bank.account}
-                    </dd>
-                  </div>
-                  <div className="flex items-baseline justify-between gap-4">
-                    <dt className="text-ink-400">Account name</dt>
-                    <dd className="font-display font-extrabold text-ink-900">
-                      {payment.bank.holder}
-                    </dd>
-                  </div>
-                </dl>
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={120}>
-            <div className="rounded-3xl bg-navy-900 p-8 text-white/80 md:p-10">
-              <h2 className="font-display text-2xl font-extrabold text-white">
-                Always keep the receipt
-              </h2>
-              <p className="mt-4 leading-relaxed">
-                Bring the M-PESA message or the bank slip to the office, or send it to the
-                school on WhatsApp. The office posts it against your child&rsquo;s account
-                the same day, and you get a statement showing the balance.
-              </p>
-              <p className="mt-4 leading-relaxed">
-                Parents will soon be able to see that statement themselves, any time,
-                through the parents&rsquo; portal.
-              </p>
+      <Section tone="band" size="loose">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-5">
+            <Reveal>
+              <SectionHead
+                onBand
+                index="04"
+                eyebrow="How to pay"
+                title="M-PESA or the bank"
+                lede="Whichever you use, bring or send the receipt to the office. It is posted against your child’s account the same day."
+              />
               <div className="mt-8 flex flex-wrap gap-3">
-                <ButtonLink href="/portal/" variant="onDark">
-                  Parents&rsquo; portal <ArrowRightIcon className="h-4 w-4" />
+                <ButtonLink href="/portal/" variant="onBand">
+                  Parents&rsquo; portal
+                  <ArrowRightIcon className="h-4 w-4" />
                 </ButtonLink>
-                <a
+                <ButtonLink
                   href={`tel:${school.phoneHref}`}
-                  className="glass inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-white/20"
+                  variant="ghostBand"
+                  external
                 >
                   <PhoneIcon className="h-4 w-4" />
                   {school.phone}
-                </a>
+                </ButtonLink>
               </div>
-            </div>
-          </Reveal>
+            </Reveal>
+          </div>
+
+          <div className="lg:col-span-7">
+            <Reveal delay={80}>
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div className="rounded-lg border border-band-line bg-band-2 p-6">
+                  <p className="eyebrow !text-band-text-2">M-PESA · {payment.mpesa.label}</p>
+                  <dl className="mt-5 space-y-4 text-sm">
+                    <div>
+                      <dt className="text-band-text-2">Paybill number</dt>
+                      <dd className="numeral mt-1 text-3xl !text-band-text">
+                        {payment.mpesa.paybill}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-band-text-2">Account number</dt>
+                      <dd className="mt-1 font-display text-lg text-band-text">
+                        {payment.accountFormat} + child&rsquo;s name
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-band-text-2">For example</dt>
+                      <dd className="mt-1">
+                        <code className="rounded bg-band px-2 py-1 font-mono text-[13px] text-band-accent">
+                          {payment.accountExample}
+                        </code>
+                      </dd>
+                    </div>
+                  </dl>
+                  <p className="mt-5 text-sm leading-relaxed text-band-text-2">
+                    No spaces anywhere in the account number. If the name is long, the
+                    admission number works just as well.
+                  </p>
+                </div>
+
+                <div className="rounded-lg border border-band-line bg-band-2 p-6">
+                  <p className="eyebrow !text-band-text-2">Bank</p>
+                  <dl className="mt-5 space-y-4 text-sm">
+                    <div>
+                      <dt className="text-band-text-2">Bank</dt>
+                      <dd className="mt-1 font-display text-lg text-band-text">
+                        {payment.bank.name}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-band-text-2">Account number</dt>
+                      <dd className="numeral mt-1 text-2xl !text-band-text">
+                        {payment.bank.account}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-band-text-2">Account name</dt>
+                      <dd className="mt-1 font-display text-lg text-band-text">
+                        {payment.bank.holder}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </Section>
     </>

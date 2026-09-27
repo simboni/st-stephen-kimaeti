@@ -216,3 +216,129 @@ export function CloseIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function SunIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <circle cx="12" cy="12" r="4.2" />
+      <path d="M12 2.2v2.2M12 19.6v2.2M4.2 12H2M22 12h-2.2M5.6 5.6 4 4M20 20l-1.6-1.6M18.4 5.6 20 4M4 20l1.6-1.6" />
+    </svg>
+  );
+}
+
+export function MoonIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M20.5 14.3A8.6 8.6 0 0 1 9.7 3.5a8.6 8.6 0 1 0 10.8 10.8Z" />
+    </svg>
+  );
+}
+
+export function SearchIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-3.6-3.6" />
+    </svg>
+  );
+}
+
+export function DownloadIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5" />
+      <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+    </svg>
+  );
+}
+
+export function PrinterIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M7 9V3h10v6" />
+      <rect x="3" y="9" width="18" height="8" rx="2" />
+      <path d="M7 14h10v7H7z" />
+    </svg>
+  );
+}
+
+export function GlobeIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z" />
+    </svg>
+  );
+}
+
+export function PlayIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M8 5.5 18.5 12 8 18.5Z" />
+    </svg>
+  );
+}
+
+export function BusIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M4 17V7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v10" />
+      <path d="M4 11h16M8 4v7M16 4v7" />
+      <path d="M4 17h16M7 17v2.2M17 17v2.2" />
+    </svg>
+  );
+}
+
+export function BedIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M3 18V7M3 12h18v6M21 18v-4a3 3 0 0 0-3-3H3" />
+      <circle cx="7.5" cy="9.5" r="1.8" />
+    </svg>
+  );
+}
+
+export function LeafIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M20 4c0 9-5.5 14-12 14a6 6 0 0 1 0-12c4.5 0 6.5-1 12-2Z" />
+      <path d="M4 20c2-4 5-7 9-9" />
+    </svg>
+  );
+}
+
+export function MusicIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M9 18V5.5l11-2V16" />
+      <circle cx="6.5" cy="18" r="2.5" />
+      <circle cx="17.5" cy="16" r="2.5" />
+    </svg>
+  );
+}
+
+export function TrophyIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M7 4h10v5a5 5 0 0 1-10 0Z" />
+      <path d="M7 6H4.5a2.5 2.5 0 0 0 2.5 4M17 6h2.5a2.5 2.5 0 0 1-2.5 4" />
+      <path d="M12 14v3.5M8.5 21h7l-.8-3.5h-5.4Z" />
+    </svg>
+  );
+}
+
+export function ChevronLeftIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="m14.5 5-7 7 7 7" />
+    </svg>
+  );
+}
+
+export function ChevronRightIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="m9.5 5 7 7-7 7" />
+    </svg>
+  );
+}

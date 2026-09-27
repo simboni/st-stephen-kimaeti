@@ -1,6 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <circle cx="32" cy="32" r="32" fill="#1b7ab4"/>
-  <circle cx="32" cy="32" r="28" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="1.5"/>
-  <path d="M29.6 12h4.8v10.4H44v4.8h-9.6V44h-4.8V27.2H20v-4.8h9.6z" fill="#ffffff"/>
-  <path d="M8 45h48a28 28 0 0 1-24 17A28 28 0 0 1 8 45Z" fill="#9e2b40"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 512" width="400" height="512">
+  <defs>
+    <clipPath id="s"><path d="M72 96 H328 V258 C328 342 292 388 200 430 C108 388 72 342 72 258 Z"/></clipPath>
+    <path id="st" d="M 0,-10 L 2.3,-3.98 L 8.66,-5 L 4.6,0 L 8.66,5 L 2.3,3.98 L 0,10 L -2.3,3.98 L -8.66,5 L -4.6,0 L -8.66,-5 L -2.3,-3.98 Z"/>
+  </defs>
+  <path d="M60 84 H340 V262 C340 352 300 402 200 448 C100 402 60 352 60 262 Z" fill="#dcf4fe" stroke="#0b3049" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M72 96 H328 V258 C328 342 292 388 200 430 C108 388 72 342 72 258 Z" fill="#86a3ff"/>
+  <g clip-path="url(#s)">
+    <path d="M182 96 H218 V430 H182 Z" fill="#dcf4fe"/>
+    <path d="M72 212 H328 V248 H72 Z" fill="#dcf4fe"/>
+    <text x="128" y="185" text-anchor="middle" font-size="112" font-weight="800" fill="#ecf254" font-family="Georgia, serif">S</text>
+    <path d="M272 132 C260 122 244 118 232 120 L232 178 C244 176 260 180 272 190 Z" fill="#dcf4fe" stroke="#5b73c4" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M272 132 C284 122 300 118 312 120 L312 178 C300 176 284 180 272 190 Z" fill="#dcf4fe" stroke="#5b73c4" stroke-width="2.5" stroke-linejoin="round"/>
+    <g stroke="#ecf254" stroke-width="5" stroke-linecap="round" fill="none">
+      <path d="M242 136 C252 136 260 140 265 145"/><path d="M242 150 C252 150 260 154 265 159"/><path d="M242 164 C252 164 260 168 265 173"/>
+      <path d="M302 136 C292 136 284 140 279 145"/><path d="M302 150 C292 150 284 154 279 159"/><path d="M302 164 C292 164 284 168 279 173"/>
+    </g>
+    <g fill="#ecf254">
+      <use href="#st" transform="translate(110 290) scale(1.45)"/><use href="#st" transform="translate(156 310) scale(1.32)"/>
+      <use href="#st" transform="translate(104 340) scale(1.26)"/><use href="#st" transform="translate(150 362) scale(1.18)"/>
+      <use href="#st" transform="translate(126 398) scale(1.08)"/>
+    </g>
+    <path d="M264 272 H282 V420 H264 Z" fill="#dcf4fe"/>
+    <path d="M238 300 H308 V318 H238 Z" fill="#dcf4fe"/>
+  </g>
 </svg>
