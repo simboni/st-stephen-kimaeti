@@ -1,0 +1,13 @@
+{
+  "name": "ststephen-tools",
+  "private": true,
+  "description": "Checks and build helpers that are not part of the site itself, so the site's own install stays small.",
+  "scripts": {
+    "a11y": "node a11y.mjs",
+    "photos": "node photos/process.mjs"
+  },
+  "devDependencies": {
+    "axe-core": "^4.10.3",
+    "playwright": "^1.50.0"
+  }
+}

@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { allLinks, payment, school } from "@/lib/site";
+
+const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 import { Crest } from "@/components/crest";
 import { MailIcon, PhoneIcon, PinIcon } from "@/components/icons";
 
@@ -76,12 +78,23 @@ export function SiteFooter() {
                   <ul className="mt-4 space-y-2.5 text-sm">
                     {group.links.map((link) => (
                       <li key={link.href}>
-                        <Link
-                          href={link.href}
-                          className="transition-colors hover:text-band-accent"
-                        >
-                          {link.label}
-                        </Link>
+                        {"file" in link && link.file ? (
+                          // A generated file, not a route — plain <a>, so the
+                          // client router does not try to render it as a page.
+                          <a
+                            href={`${base}${link.href}`}
+                            className="transition-colors hover:text-band-accent"
+                          >
+                            {link.label}
+                          </a>
+                        ) : (
+                          <Link
+                            href={link.href}
+                            className="transition-colors hover:text-band-accent"
+                          >
+                            {link.label}
+                          </Link>
+                        )}
                       </li>
                     ))}
                   </ul>

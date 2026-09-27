@@ -1,6 +1,8 @@
 import { Crest } from "@/components/crest";
 import { ButtonLink } from "@/components/ui";
 import { allLinks } from "@/lib/site";
+
+const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 import Link from "next/link";
 
 export default function NotFound() {
@@ -25,9 +27,21 @@ export default function NotFound() {
             <ul className="mt-4 space-y-2.5">
               {group.links.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="link-underline !font-normal !no-underline hover:!underline">
-                    {link.label}
-                  </Link>
+                  {"file" in link && link.file ? (
+                    <a
+                      href={`${base}${link.href}`}
+                      className="link-underline !font-normal !no-underline hover:!underline"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="link-underline !font-normal !no-underline hover:!underline"
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

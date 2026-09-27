@@ -58,11 +58,33 @@ npm run build    # static export → ./out
 
 ```bash
 npm run build
-node ../../tools/a11y.mjs   # axe + keyboard + overflow, every page, both themes
+cd ../../tools && npm install && npm run a11y
 ```
 
-It exits non-zero on any finding. Needs `playwright-core` and `axe-core`
-installed wherever you run it.
+axe-core over every page in both themes at 320px and 1440px, plus heading
+order, alt text, horizontal overflow and keyboard focus. It exits non-zero on
+any finding. The browser and axe live in `tools/package.json`, not in the
+site's own dependencies.
+
+## Where to see it
+
+Every push to `main` that touches the site builds it and publishes it to GitHub
+Pages:
+
+**https://simboni.github.io/st-stephen-kimaeti/**
+
+That is a preview host, not the real one. It costs nothing and needs no server,
+so the school and anyone else can look at the current build from a phone while
+the domain and the VPS are still being settled. The live site belongs on
+`ststephenkimaeti.ac.ke` — see [`../../docs/DEPLOY-CONTABO.md`](../../docs/DEPLOY-CONTABO.md).
+
+Pages serves a project repository under `/<repo>/`, so the workflow passes
+`PAGES_BASE_PATH` and everything — Next's own URLs, `<Photo>`, the web manifest,
+the service-worker scope — is prefixed from it.
+
+It also sets `NEXT_PUBLIC_SITE_PREVIEW=1`, which adds a banner and makes
+`robots.txt` disallow everything, so an unapproved build carrying photographs of
+children does not get indexed. Drop it for the real launch.
 
 ## Deployment
 
@@ -76,6 +98,7 @@ Two build-time environment variables:
 |---|---|
 | `PAGES_BASE_PATH` | Sets Next's `basePath` for hosting under a sub-path. Also inlined as `NEXT_PUBLIC_BASE_PATH`, which `<Photo>` and the service worker use to prefix their own URLs. |
 | `NEXT_PUBLIC_EMS_URL` | Where `/portal`, the footer and the enquiry forms point. The deploy script sets it from the server's `EMS_DOMAIN`. |
+| `NEXT_PUBLIC_SITE_PREVIEW` | `1` marks the build as a preview: a banner on every page, and `robots.txt` disallowing everything. Unset on the live site. |
 
 **On every deploy, bump `VERSION` in `public/sw.js`.** That is what tells copies
 already installed on people's phones to fetch the new build.

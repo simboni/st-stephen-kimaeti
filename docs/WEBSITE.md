@@ -197,6 +197,25 @@ paints immediately in a metric-matched fallback rather than waiting. Fraunces is
 requested with only its optical-size axis; its SOFT and WONK axes are lovely and
 cost about 80 KB, which is not a trade worth making for this audience.
 
+## Where to see it
+
+| | |
+|---|---|
+| Preview | **https://simboni.github.io/st-stephen-kimaeti/** — rebuilt by `.github/workflows/website.yml` on every push to `main` that touches the site |
+| Live | `ststephenkimaeti.ac.ke`, once the domain is pointed — see `docs/DEPLOY-CONTABO.md` |
+
+The preview is a project page, so it is served under `/st-stephen-kimaeti/`. The
+workflow passes `PAGES_BASE_PATH`, and the accessibility audit is run against a
+build made the same way, so what is checked is what is served.
+
+**The preview asks not to be indexed.** The workflow also sets
+`NEXT_PUBLIC_SITE_PREVIEW=1`, which puts a strip across the top of every page
+and makes `robots.txt` disallow everything. Two reasons: the news posts and term
+dates are still placeholders and the school has not confirmed its own address;
+and the pages carry photographs of identifiable children, which should not turn
+up in a search for the school before the school has published them itself. Drop
+that variable when the site moves to its own domain.
+
 ## Still to do before launch
 
 - [ ] Replace the three sample testimonials with real, permitted quotes, then

@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
-import { school, site } from "@/lib/site";
+import { isPreview, school, site } from "@/lib/site";
 import { photo } from "@/lib/photos";
 import { Boot } from "@/components/boot";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { WhatsAppButton } from "@/components/whatsapp-button";
+import { PreviewBanner } from "@/components/preview-banner";
 import { RegisterServiceWorker } from "@/components/register-sw";
 
 /* Two families, and a hard eye on the bytes: most parents here are on a phone
@@ -87,7 +88,7 @@ export const metadata: Metadata = {
     description: site.description,
     images: [ogUrl],
   },
-  robots: { index: true, follow: true },
+  robots: isPreview ? { index: false, follow: false } : { index: true, follow: true },
 };
 
 /* Structured data, rich enough that a search result can carry the school's
@@ -141,6 +142,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schoolSchema) }}
         />
+        {isPreview && <PreviewBanner />}
         <SiteHeader />
         <main id="main" className="flex-1">
           {children}

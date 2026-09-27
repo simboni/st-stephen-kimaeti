@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { allLinks, navLinks, school } from "@/lib/site";
+
+const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 import { Crest } from "@/components/crest";
 import { ThemeToggle } from "@/components/theme-toggle";
 import {
@@ -166,13 +168,22 @@ export function SiteHeader() {
               <ul>
                 {group.links.map((link) => (
                   <li key={link.href} className="border-b border-line last:border-0">
-                    <Link
-                      href={link.href}
-                      onClick={() => setOpen(false)}
-                      className="block py-3.5 font-display text-2xl text-text"
-                    >
-                      {link.label}
-                    </Link>
+                    {"file" in link && link.file ? (
+                      <a
+                        href={`${base}${link.href}`}
+                        className="block py-3.5 font-display text-2xl text-text"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        onClick={() => setOpen(false)}
+                        className="block py-3.5 font-display text-2xl text-text"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

@@ -1,0 +1,82 @@
+# Builds the public website and publishes it to GitHub Pages.
+#
+# This is the preview host, not the real one. The live site will sit on the
+# school's own domain (see docs/DEPLOY-CONTABO.md); Pages exists so the school
+# and anyone else can look at the current build from a phone, for free, with no
+# server to keep alive.
+#
+# Because Pages serves a project repository under /<repo>/, the build is given
+# PAGES_BASE_PATH. Next prefixes its own URLs from that, and the site passes it
+# on to <Photo>, the web manifest and the service worker scope.
+
+name: Website
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/website/**"
+      - ".github/workflows/website.yml"
+  workflow_dispatch:
+
+# One deployment at a time; let a run in progress finish rather than cancelling
+# it, so a half-uploaded artifact never becomes the live site.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/website
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/website/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
+        with:
+          # Turns Pages on for the repository the first time this runs, so
+          # nobody has to remember to flip a setting by hand.
+          enablement: true
+
+      - name: Build
+        run: npm run build
+        env:
+          PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          # Marks the build as a preview: a banner across the top, and robots
+          # asked to stay away. The pages carry photographs of identifiable
+          # children and content the school has not signed off, so this host
+          # should not be what a search for the school turns up. Remove it when
+          # the site goes to its own domain.
+          NEXT_PUBLIC_SITE_PREVIEW: "1"
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/website/out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

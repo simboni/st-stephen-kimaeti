@@ -20,6 +20,21 @@ export const site = {
     "St Stephen Mixed Day and Boarding School, Kimaeti, Bungoma County. 525 learners from Playgroup to Grade 9, day and boarding, under the Brothers of St Charles Lwanga. Pray and Work.",
 };
 
+/**
+ * True on the GitHub Pages preview build, false on the real site.
+ *
+ * The preview carries photographs of identifiable children, the school's fee
+ * figures, and sample news and term dates nobody at the school has approved
+ * yet. It exists so the school and Peter can look at the build from a phone —
+ * not so it can turn up in a search for the school's name before anyone has
+ * signed it off. When it is true the site asks not to be indexed, and says so
+ * on the page.
+ *
+ * The deploy workflow sets NEXT_PUBLIC_SITE_PREVIEW. Drop it, or set it to
+ * anything other than "1", for the real launch.
+ */
+export const isPreview = process.env.NEXT_PUBLIC_SITE_PREVIEW === "1";
+
 /** The school management system — contact and complaint forms post into its
  *  front-office queue. The deploy script sets NEXT_PUBLIC_EMS_URL from the
  *  server’s EMS_DOMAIN; this fallback only matters for local builds. */
@@ -502,7 +517,10 @@ export const allLinks = [
       { href: "/news/", label: "News" },
       { href: "/events/", label: "Term dates & events" },
       { href: "/portal/", label: "Parents' portal" },
-      { href: "/news.xml", label: "News feed (RSS)" },
+      // Not a page: a route handler that returns XML. `file: true` tells the
+      // footer to render a plain <a>, because Next's router would try to
+      // client-navigate to it as a route and fail.
+      { href: "/news.xml", label: "News feed (RSS)", file: true },
     ],
   },
 ];

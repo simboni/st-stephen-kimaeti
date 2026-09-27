@@ -10,11 +10,12 @@
    Exits non-zero if anything fails, so it can gate a deploy.
 
    Run:  cd apps/website && npm run build
-         node tools/a11y.mjs
+         cd ../tools && npm install && npm run a11y
 
-   Needs playwright-core and axe-core. They are not in the site's own
-   dependencies on purpose — this is a check we run, not something the site
-   ships — so install them wherever you run it from.                            */
+   The browser and axe live in tools/package.json rather than the site's own
+   dependencies: this is a check we run, not something the site ships.
+   SITE_OUT overrides where the built site is; CHROMIUM_PATH points at a
+   browser the machine already has.                                             */
 
 import { createRequire } from "node:module";
 import { createServer } from "node:http";
@@ -22,11 +23,25 @@ import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 
 const require = createRequire(import.meta.url);
-const { chromium } = require("playwright-core");
+// playwright in CI (it can install a browser), playwright-core locally.
+let chromium;
+try {
+  ({ chromium } = require("playwright"));
+} catch {
+  ({ chromium } = require("playwright-core"));
+}
 const AXE = await readFile(require.resolve("axe-core/axe.min.js"), "utf8");
 
 const HERE = path.dirname(new URL(import.meta.url).pathname);
 const ROOT = process.env.SITE_OUT ?? path.resolve(HERE, "../apps/website/out");
+
+/* A build made with PAGES_BASE_PATH writes every URL with that prefix, but the
+   files still sit at the root of out/. Serving such a build at "/" makes every
+   stylesheet 404 and the audit then reports hundreds of contrast failures
+   against an unstyled page — which is a bug in the harness, not the site. So
+   the prefix is stripped on the way in and added to the routes on the way out,
+   and the whole thing is tested exactly as it will be deployed. */
+const BASE = (process.env.BASE_PATH ?? "").replace(/\/$/, "");
 const PAGES = [
   "/",
   "/about/",
@@ -60,7 +75,9 @@ const TYPES = {
 };
 
 const server = createServer(async (req, res) => {
-  let p = path.join(ROOT, decodeURIComponent(req.url.split("?")[0]));
+  let url = decodeURIComponent(req.url.split("?")[0]);
+  if (BASE && url.startsWith(BASE)) url = url.slice(BASE.length) || "/";
+  let p = path.join(ROOT, url);
   try {
     if ((await stat(p)).isDirectory()) p = path.join(p, "index.html");
   } catch {
@@ -78,8 +95,10 @@ const server = createServer(async (req, res) => {
 });
 await new Promise((r) => server.listen(4500, r));
 
+/* CHROMIUM_PATH points at a browser this machine already has; without it
+   Playwright resolves the one it installed itself. */
 const browser = await chromium.launch({
-  executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome",
+  ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}),
   args: ["--no-sandbox", "--disable-dev-shm-usage"],
 });
 
@@ -102,7 +121,11 @@ for (const theme of ["light", "dark"]) {
     for (const route of PAGES) {
       const page = await ctx.newPage();
       const where = `${route} [${theme}/${label}]`;
-      await page.goto(`http://127.0.0.1:4500${route}`, { waitUntil: "networkidle" });
+      const missing = [];
+      page.on("response", (r) => {
+        if (r.status() === 404) missing.push(new URL(r.url()).pathname);
+      });
+      await page.goto(`http://127.0.0.1:4500${BASE}${route}`, { waitUntil: "networkidle" });
       await page.evaluate(() => {
         for (const img of document.images) img.loading = "eager";
       });
@@ -113,6 +136,9 @@ for (const theme of ["light", "dark"]) {
           { timeout: 20000 },
         )
         .catch(() => {});
+
+      // A 404 on a stylesheet would make every later check meaningless.
+      for (const m of [...new Set(missing)].slice(0, 3)) note(where, `404: ${m}`);
 
       // --- axe ---------------------------------------------------------------
       await page.addScriptTag({ content: AXE });
@@ -205,7 +231,9 @@ await browser.close();
 server.close();
 
 if (problems.length === 0) {
-  console.log(`PASS — ${PAGES.length} pages × 2 themes × 2 widths, nothing found.`);
+  console.log(
+    `PASS — ${PAGES.length} pages × 2 themes × 2 widths${BASE ? ` at ${BASE}` : ""}, nothing found.`,
+  );
 } else {
   const unique = [...new Set(problems)];
   console.log(`${unique.length} problem(s):\n`);

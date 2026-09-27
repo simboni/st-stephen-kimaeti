@@ -1,0 +1,60 @@
+# The accessibility audit, run on its own rather than in the deploy path.
+#
+# It downloads a browser and drives every page twice over, which takes a couple
+# of minutes. Putting that in front of the deploy would mean a slow or flaky
+# check could stop somebody showing the school its own website, so it runs
+# alongside instead and reports separately.
+
+name: Accessibility
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/website/**"
+      - "tools/a11y.mjs"
+      - ".github/workflows/a11y.yml"
+  pull_request:
+    paths:
+      - "apps/website/**"
+      - "tools/a11y.mjs"
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/website/package-lock.json
+
+      # Built the same way Pages builds it, so the audit tests the real URLs.
+      - name: Build the site
+        working-directory: apps/website
+        run: |
+          npm ci
+          npm run build
+        env:
+          PAGES_BASE_PATH: /${{ github.event.repository.name }}
+          # Including the preview banner, since that is what gets deployed.
+          NEXT_PUBLIC_SITE_PREVIEW: "1"
+
+      - name: Install the audit's own tools
+        working-directory: tools
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      # axe-core over every page in both themes at 320px and 1440px, plus
+      # heading order, alt text, horizontal overflow and keyboard focus.
+      # Exits non-zero on any finding.
+      - name: Audit
+        working-directory: tools
+        run: npm run a11y
+        env:
+          SITE_OUT: ${{ github.workspace }}/apps/website/out
+          BASE_PATH: /${{ github.event.repository.name }}
