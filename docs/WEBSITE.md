@@ -201,7 +201,7 @@ cost about 80 KB, which is not a trade worth making for this audience.
 
 | | |
 |---|---|
-| Preview | **https://simboni.github.io/st-stephen-kimaeti/** — rebuilt by `.github/workflows/website.yml` on every push to `main` that touches the site |
+| Preview | **https://simboni.github.io/st-stephen-kimaeti/** — rebuilt by `.github/workflows/website-pages.yml` on every push to `main` that touches the site. Needs one manual switch first: [Settings → Pages](https://github.com/simboni/st-stephen-kimaeti/settings/pages) → Source → **GitHub Actions**. The Actions token may deploy to a Pages site but may not create one, so this cannot be automated. |
 | Live | `ststephenkimaeti.ac.ke`, once the domain is pointed — see `docs/DEPLOY-CONTABO.md` |
 
 The preview is a project page, so it is served under `/st-stephen-kimaeti/`. The

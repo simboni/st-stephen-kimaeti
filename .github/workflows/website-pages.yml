@@ -9,15 +9,20 @@
 # forms here reach the school through the FormSubmit fallback; the EMS
 # front-office queue only starts filling once the real server is up.
 #
-# Every run before this one failed at the deploy step with "Ensure GitHub Pages
-# has been enabled", because Pages had never been switched on for the
-# repository and this workflow assumed somebody would do it by hand. It now
-# turns Pages on itself through actions/configure-pages, so there is no manual
-# step to forget. If that ever fails, the fallback is still Settings → Pages →
-# Build and deployment → Source: "GitHub Actions".
+# ONE-TIME SETUP, and it cannot be automated:
 #
-# The preview rebuilds on every push to main at
-# https://simboni.github.io/st-stephen-kimaeti/
+#   https://github.com/simboni/st-stephen-kimaeti/settings/pages
+#   Build and deployment → Source → "GitHub Actions"
+#
+# Until that is done every run fails at the deploy step with "Ensure GitHub
+# Pages has been enabled". actions/configure-pages with enablement: true was
+# tried and cannot do it either — the Actions token may deploy to a Pages site
+# but may not create one ("Resource not accessible by integration"), so that
+# step only moved the failure earlier. It is gone.
+#
+# Once the source is set, re-run this workflow and the preview is live at
+# https://simboni.github.io/st-stephen-kimaeti/ within a minute or two, and
+# rebuilds on every push to main thereafter.
 name: Publish website preview (GitHub Pages)
 
 on:
@@ -55,20 +60,12 @@ jobs:
 
       - run: npm ci
 
-      - name: Configure Pages
-        id: pages
-        uses: actions/configure-pages@v5
-        with:
-          # Turns Pages on the first time this runs, rather than leaving a
-          # manual setting for somebody to forget.
-          enablement: true
-
       - run: npm run build
         env:
-          # Pages serves a project repository under /<repo>/; the action reports
-          # that prefix, so it stays right if the repository is ever renamed.
-          # Empty it when the site moves to a root custom domain.
-          PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          # Pages serves a project repository under /<repo>/. Renaming the
+          # repository means changing this. Empty it when the site moves to a
+          # root custom domain.
+          PAGES_BASE_PATH: /st-stephen-kimaeti
           # Marks the build as a preview: a strip across the top of every page,
           # and robots.txt disallowing everything. The pages carry photographs
           # of identifiable children, fee figures, and news and term dates that

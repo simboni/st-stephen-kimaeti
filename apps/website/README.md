@@ -73,6 +73,13 @@ Pages:
 
 **https://simboni.github.io/st-stephen-kimaeti/**
 
+⚠️ **One-time setup, by the repository owner, before that URL works:**
+[Settings → Pages](https://github.com/simboni/st-stephen-kimaeti/settings/pages)
+→ Build and deployment → Source → **GitHub Actions**. Until then the deploy
+step fails with "Ensure GitHub Pages has been enabled". The workflow cannot do
+this itself: the Actions token is allowed to deploy to a Pages site but not to
+create one.
+
 That is a preview host, not the real one. It costs nothing and needs no server,
 so the school and anyone else can look at the current build from a phone while
 the domain and the VPS are still being settled. The live site belongs on
