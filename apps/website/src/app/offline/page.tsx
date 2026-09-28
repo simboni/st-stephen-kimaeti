@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { school } from "@/lib/site";
+import { school, primaryPhone } from "@/lib/site";
 import { Crest } from "@/components/crest";
 import { ButtonLink } from "@/components/ui";
 
@@ -24,7 +24,7 @@ export default function OfflinePage() {
       </p>
       <div className="mt-9 flex flex-wrap justify-center gap-3">
         <ButtonLink href="/">Back to the home page</ButtonLink>
-        <ButtonLink href={`tel:${school.phoneHref}`} variant="outline" external>
+        <ButtonLink href={`tel:${primaryPhone.href}`} variant="outline" external>
           Call the school
         </ButtonLink>
       </div>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { admissionSteps, fees, money, school, sections } from "@/lib/site";
+import { contacts,admissionSteps, fees, money, school, sections } from "@/lib/site";
 import { PageHero } from "@/components/page-hero";
 import { Photo } from "@/components/photo";
 import { ButtonLink, Reveal, Section, SectionHead } from "@/components/ui";
@@ -164,18 +164,19 @@ export default function AdmissionsPage() {
                   <PhoneIcon className="mt-1 h-5 w-5 shrink-0 text-band-accent" />
                   <div>
                     <p className="eyebrow !text-band-text-2">Call</p>
-                    <a
-                      href={`tel:${school.phoneHref}`}
-                      className="mt-1 block font-display text-xl text-band-text hover:text-band-accent"
-                    >
-                      {school.phone}
-                    </a>
-                    <a
-                      href={`tel:${school.phoneAltHref}`}
-                      className="block font-display text-xl text-band-text hover:text-band-accent"
-                    >
-                      {school.phoneAlt}
-                    </a>
+                    <ul className="mt-1.5 space-y-2">
+                      {contacts.map((c) => (
+                        <li key={c.href}>
+                          <a
+                            href={`tel:${c.href}`}
+                            className="block font-display text-lg text-band-text hover:text-band-accent"
+                          >
+                            {c.phone}
+                          </a>
+                          <span className="text-sm text-band-text-2">{c.role}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </li>
                 <li className="flex items-start gap-4 py-5">

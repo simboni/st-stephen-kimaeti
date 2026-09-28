@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { school } from "@/lib/site";
+import { school, primaryPhone } from "@/lib/site";
 import { PageHero } from "@/components/page-hero";
 import { ButtonLink, Reveal, Section, SectionHead } from "@/components/ui";
 import {
@@ -77,8 +77,8 @@ export default function PortalPage() {
                 </ButtonLink>
                 <p className="mt-5 text-sm leading-relaxed text-text-3">
                   No account yet, or forgotten the password? Ring the office on{" "}
-                  <a href={`tel:${school.phoneHref}`} className="link-underline">
-                    {school.phone}
+                  <a href={`tel:${primaryPhone.href}`} className="link-underline">
+                    {primaryPhone.phone}
                   </a>
                   .
                 </p>

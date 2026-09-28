@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { school } from "@/lib/site";
+import { school, primaryPhone } from "@/lib/site";
 import { PageHero } from "@/components/page-hero";
 import { Reveal, Section, SectionHead } from "@/components/ui";
 import { EnquiryForm } from "@/components/enquiry-form";
@@ -49,8 +49,8 @@ export default function ComplainPage() {
             </ul>
             <p className="mt-8 rounded-lg border border-line bg-surface-2 p-5 text-sm leading-relaxed">
               You can also raise a concern in person at the school office, call{" "}
-              <a href={`tel:${school.phoneHref}`} className="link-underline">
-                {school.phone}
+              <a href={`tel:${primaryPhone.href}`} className="link-underline">
+                {primaryPhone.phone}
               </a>{" "}
               or email{" "}
               <a href={`mailto:${school.email}`} className="link-underline break-all">

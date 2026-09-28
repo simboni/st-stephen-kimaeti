@@ -14,8 +14,7 @@ import {
   school,
   heroSlides,
   sections,
-  stats,
-} from "@/lib/site";
+  stats, primaryPhone } from "@/lib/site";
 import { photo } from "@/lib/photos";
 import { Photo } from "@/components/photo";
 import { HeroSlider } from "@/components/hero-slider";
@@ -104,9 +103,9 @@ export default function HomePage() {
                 Apply for a place
                 <ArrowRightIcon className="h-4 w-4" />
               </ButtonLink>
-              <ButtonLink href={`tel:${school.phoneHref}`} variant="ghostBand" external>
+              <ButtonLink href={`tel:${primaryPhone.href}`} variant="ghostBand" external>
                 <PhoneIcon className="h-4 w-4" />
-                {school.phone}
+                {primaryPhone.phone}
               </ButtonLink>
             </div>
           </div>

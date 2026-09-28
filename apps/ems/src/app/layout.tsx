@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     template: "%s | St Stephen's Kimaeti",
   },
   description:
-    "School management system for St Stephen Mixed Day and Boarding Primary School, Junior School & Early Years of Education Centre, Kimaeti.",
+    "School management system for St Stephen Early Years of Education, Primary, Junior and Senior School, Kimaeti – Bungoma.",
   robots: { index: false, follow: false },
 };
 

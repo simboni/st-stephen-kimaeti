@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { fees, money, payment, school } from "@/lib/site";
+import { fees, money, payment, school, primaryPhone } from "@/lib/site";
 import { PageHero } from "@/components/page-hero";
 import { FeeCalculator } from "@/components/fee-calculator";
 import { ButtonLink, Reveal, Section, SectionHead } from "@/components/ui";
@@ -194,12 +194,12 @@ export default function FeesPage() {
                   <ArrowRightIcon className="h-4 w-4" />
                 </ButtonLink>
                 <ButtonLink
-                  href={`tel:${school.phoneHref}`}
+                  href={`tel:${primaryPhone.href}`}
                   variant="ghostBand"
                   external
                 >
                   <PhoneIcon className="h-4 w-4" />
-                  {school.phone}
+                  {primaryPhone.phone}
                 </ButtonLink>
               </div>
             </Reveal>

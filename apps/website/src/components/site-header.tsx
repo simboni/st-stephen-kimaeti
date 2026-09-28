@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { allLinks, navLinks, school } from "@/lib/site";
+import { allLinks, navLinks, school, primaryPhone } from "@/lib/site";
 
 const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 import { Crest } from "@/components/crest";
@@ -61,11 +61,11 @@ export function SiteHeader() {
               <span className="sm:hidden">Email</span>
             </a>
             <a
-              href={`tel:${school.phoneHref}`}
+              href={`tel:${primaryPhone.href}`}
               className="inline-flex shrink-0 items-center gap-1.5 transition-colors hover:text-band-text"
             >
               <PhoneIcon className="h-3.5 w-3.5" />
-              {school.phone}
+              {primaryPhone.phone}
             </a>
           </div>
           <div className="flex shrink-0 items-center gap-1">
@@ -201,11 +201,11 @@ export function SiteHeader() {
             <ArrowRightIcon className="h-4 w-4" />
           </Link>
           <a
-            href={`tel:${school.phoneHref}`}
+            href={`tel:${primaryPhone.href}`}
             className="btn btn-outline mt-2.5 w-full"
           >
             <PhoneIcon className="h-4 w-4" />
-            {school.phone}
+            {primaryPhone.phone}
           </a>
         </div>
       </div>

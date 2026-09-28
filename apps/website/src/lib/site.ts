@@ -15,9 +15,13 @@
 
 export const site = {
   domain: "ststephenkimaeti.ac.ke",
-  title: "St Stephen’s Kimaeti — Early Years, Primary & Junior School, Bungoma",
+  title: "St Stephen’s Kimaeti — Early Years, Primary, Junior & Senior School, Bungoma",
+  /* The roll figure and the grade range below still describe the Playgroup to
+     Grade 9 school the fee sheets and letterheads document. The school's new
+     title names a Senior School; until it confirms which senior grades run and
+     how many learners are in them, this sentence must not claim them. */
   description:
-    "St Stephen Mixed Day and Boarding School, Kimaeti, Bungoma County. 525 learners from Playgroup to Grade 9, day and boarding, under the Brothers of St Charles Lwanga. Pray and Work.",
+    "St Stephen Mixed Day and Boarding School, Kimaeti, Bungoma County. Day and boarding, under the Brothers of St Charles Lwanga, since 2006. Pray and Work.",
 };
 
 /**
@@ -42,7 +46,11 @@ export const emsUrl =
   process.env.NEXT_PUBLIC_EMS_URL ?? "https://ems.ststephenkimaeti.ac.ke";
 
 export const school = {
-  name: "St Stephen Mixed Day and Boarding Primary School, Junior School & Early Years of Education Centre",
+  /* The school's own title, as it gave it on 28 September 2026. It now names
+     a Senior School, which the letterheads and fee sheets we were working
+     from did not. See docs/school/ENROLMENT-2026.md — the roll figures below
+     still describe Playgroup to Grade 9 only, and must be re-confirmed. */
+  name: "St Stephen Early Years of Education, Primary, Junior and Senior School, Kimaeti – Bungoma",
   /** What the school is called in running text and in the header. */
   shortName: "St Stephen’s Kimaeti",
   /** Shorter still, for the logo lockup. */
@@ -75,16 +83,24 @@ export const school = {
   ],
   welcome: "Come all and learn together.",
   email: "ststephenprimarykimaeti@gmail.com",
-  phone: "0714 118 611",
-  phoneHref: "+254714118611",
-  phoneAlt: "0724 570 171",
-  phoneAltHref: "+254724570171",
   address: "P.O. Box 93 – 50200, Bungoma, Kenya",
   portalUrl: emsUrl,
 };
 
+/* The three lines the school gave on 28 September 2026, with whose they are.
+   A parent ringing about fees should reach the accountant, not the director,
+   so the site says which is which rather than listing three bare numbers. */
+export const contacts = [
+  { role: "Director", phone: "0728 836 150", href: "+254728836150" },
+  { role: "Head teacher", phone: "0705 046 610", href: "+254705046610" },
+  { role: "Accountant", phone: "0711 288 784", href: "+254711288784" },
+];
+
+/** The number shown in the header strip and used for "call the school". */
+export const primaryPhone = contacts[1];
+
 /** WhatsApp number in international format (for wa.me links). */
-export const whatsapp = "254714118611";
+export const whatsapp = "254705046610";
 
 /** Short announcement shown as a pill in the hero — set text to "" to hide. */
 export const announcement = {
@@ -309,7 +325,7 @@ export function money(kes: number) {
 export const admissionSteps = [
   {
     title: "Call or visit",
-    text: `Ring ${school.phone} or come to the school on any working day. Ask for the office — someone will walk you round the classrooms, the dormitories and the grounds.`,
+    text: `Ring ${primaryPhone.phone} or come to the school on any working day. Ask for the office — someone will walk you round the classrooms, the dormitories and the grounds.`,
   },
   {
     title: "Collect an admission form",
@@ -407,7 +423,7 @@ export const news: NewsPost[] = [
     body: [
       "We are receiving applications for the 2027 academic year across all twelve classes — Playgroup, PP1 and PP2 in Early Years, Grade 1 to 6 in Primary, and Grade 7 to 9 in Junior School.",
       "Parents are welcome to visit on any working day. Come and see the classrooms, the dormitories, the dining hall and the shamba before you decide; nobody should choose a school from a poster.",
-      `Call ${school.phone} or ${school.phoneAlt}, or email ${school.email}. The Admissions page sets out the four steps.`,
+      `Call ${contacts.map((c) => c.phone).join(" or ")}, or email ${school.email}. The Admissions page sets out the four steps.`,
     ],
     photo: "headteacher-and-pupils",
   },

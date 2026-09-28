@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { allLinks, payment, school } from "@/lib/site";
+import { allLinks, contacts, payment, school } from "@/lib/site";
 
 const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 import { Crest } from "@/components/crest";
@@ -32,19 +32,17 @@ export function SiteFooter() {
             <ul className="mt-7 space-y-3.5 text-sm">
               <li className="flex items-start gap-3">
                 <PhoneIcon className="mt-0.5 h-4 w-4 shrink-0 text-band-accent" />
-                <span className="flex flex-wrap gap-x-4">
-                  <a
-                    href={`tel:${school.phoneHref}`}
-                    className="transition-colors hover:text-band-text"
-                  >
-                    {school.phone}
-                  </a>
-                  <a
-                    href={`tel:${school.phoneAltHref}`}
-                    className="transition-colors hover:text-band-text"
-                  >
-                    {school.phoneAlt}
-                  </a>
+                <span className="flex flex-col gap-1">
+                  {contacts.map((c) => (
+                    <a
+                      key={c.href}
+                      href={`tel:${c.href}`}
+                      className="transition-colors hover:text-band-text"
+                    >
+                      {c.phone}
+                      <span className="ml-2 text-xs text-band-text-2/70">{c.role}</span>
+                    </a>
+                  ))}
                 </span>
               </li>
               <li className="flex items-start gap-3">

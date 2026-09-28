@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { school, whatsapp } from "@/lib/site";
+import { contacts, school, whatsapp } from "@/lib/site";
 import { PageHero } from "@/components/page-hero";
 import { Photo } from "@/components/photo";
 import { Reveal, Section, SectionHead } from "@/components/ui";
@@ -16,7 +16,7 @@ import {
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: `Reach ${school.shortName} — admissions enquiries, fees, boarding and visits. ${school.address}. Call ${school.phone} or message the school on WhatsApp.`,
+  description: `Reach ${school.shortName} — admissions enquiries, fees, boarding and visits. ${school.address}. Call the director, the head teacher or the accountant direct, or message the school on WhatsApp.`,
 };
 
 const ENQUIRY_SUBJECTS = [
@@ -56,18 +56,19 @@ export default function ContactPage() {
                   <PhoneIcon className="mt-1 h-5 w-5 shrink-0 text-second" />
                   <div>
                     <p className="eyebrow eyebrow-plain">Telephone</p>
-                    <a
-                      href={`tel:${school.phoneHref}`}
-                      className="mt-1.5 block font-display text-2xl text-text hover:text-accent"
-                    >
-                      {school.phone}
-                    </a>
-                    <a
-                      href={`tel:${school.phoneAltHref}`}
-                      className="block font-display text-2xl text-text hover:text-accent"
-                    >
-                      {school.phoneAlt}
-                    </a>
+                    <ul className="mt-2 space-y-2.5">
+                      {contacts.map((c) => (
+                        <li key={c.href}>
+                          <a
+                            href={`tel:${c.href}`}
+                            className="block font-display text-xl text-text hover:text-accent"
+                          >
+                            {c.phone}
+                          </a>
+                          <span className="text-sm text-text-3">{c.role}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </li>
 

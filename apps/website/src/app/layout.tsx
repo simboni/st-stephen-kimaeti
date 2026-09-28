@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
-import { isPreview, school, site } from "@/lib/site";
+import { isPreview, school, site, primaryPhone } from "@/lib/site";
 import { photo } from "@/lib/photos";
 import { Boot } from "@/components/boot";
 import { SiteHeader } from "@/components/site-header";
@@ -102,7 +102,7 @@ const schoolSchema = {
   slogan: `${school.mottoLatin} — ${school.motto}`,
   description: site.description,
   email: school.email,
-  telephone: school.phoneHref,
+  telephone: primaryPhone.href,
   url: siteUrl,
   logo: `${siteUrl}${basePath}/icon.svg`,
   image: `${siteUrl}${ogUrl}`,

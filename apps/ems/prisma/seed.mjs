@@ -130,11 +130,11 @@ async function main() {
     update: {},
     create: {
       id: "school",
-      name: "St Stephen Mixed Day and Boarding Primary School, Junior School & Early Years of Education Centre",
+      name: "St Stephen Early Years of Education, Primary, Junior and Senior School, Kimaeti – Bungoma",
       shortName: "St Stephen's Kimaeti",
       motto: "Pray and Work",
       email: "ststephenprimarykimaeti@gmail.com",
-      phone: "0714 118 611 / 0724 570 171",
+      phone: "0705 046 610 / 0711 288 784",
       address: "P.O. Box 93 – 50200, Bungoma",
     },
   });
