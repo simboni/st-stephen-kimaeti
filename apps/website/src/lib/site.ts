@@ -309,7 +309,11 @@ export const fees = {
 };
 
 export const payment = {
-  bank: { name: "KCB", account: "1117950980", holder: "St Stephen Primary" },
+  /* The account name is spelt "Stefan", not "Stephen", and it is not a typo —
+     it is how the account is registered at the bank, confirmed by the school
+     on 28 September 2026. A transfer made out to "St Stephen" can be bounced
+     or held. Do not make it agree with school.name. */
+  bank: { name: "KCB", account: "1117950980", holder: "St. Stefan Primary School" },
   mpesa: { paybill: "522123", label: "KCB Lipa Karo" },
   /** How the M-PESA account number must be typed, from the fee sheet. */
   accountFormat: "51180K",

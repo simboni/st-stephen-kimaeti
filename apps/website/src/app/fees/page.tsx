@@ -260,6 +260,14 @@ export default function FeesPage() {
                       </dd>
                     </div>
                   </dl>
+                  {/* Parents do read this and assume the site has misspelt the
+                      school. It has not — the bank holds the account under
+                      that spelling, and a transfer typed the other way can be
+                      held up. Saying so here saves a trip to the office. */}
+                  <p className="mt-5 text-sm leading-relaxed text-band-text-2">
+                    The account name really is spelt <b className="font-semibold text-band-text">Stefan</b>{" "}
+                    — that is how the bank holds it. Type it exactly as shown.
+                  </p>
                 </div>
               </div>
             </Reveal>

@@ -11,7 +11,7 @@ loading any of this into the system.**
 | Sponsor | Brothers of St. Charles Lwanga |
 | Full name | St Stephen Mixed Day and Boarding Primary School, Junior School & Early Years of Education Centre |
 | Postal | P.O. Box 93–50200, Bungoma, Kenya |
-| Telephone | 0714 118 611 / 0724 570 171 |
+| Telephone | 0714 118 611 / 0724 570 171 — **superseded**, see below |
 | Levels | Early Years (EYE), Primary, Junior |
 | Type | Mixed, day **and** boarding |
 
@@ -21,13 +21,40 @@ loading any of this into the system.**
 > must be settled before scoping — Senior School is the single largest piece
 > of new development.
 
+### Corrections from the school, 28 Sep 2026
+
+The table above records what the scanned letterheads and fee sheets say.
+These supersede it:
+
+| Field | Value |
+|---|---|
+| Full name | St Stephen Early Years of Education, Primary, Junior **and Senior** School, Kimaeti – Bungoma |
+| Director | 0728 836 150 |
+| Head teacher | 0705 046 610 |
+| Accountant | 0711 288 784 |
+| Bank account name | St. Stefan Primary School |
+
+The new title names a Senior School that no document mentions, which sharpens
+rather than settles the question above: **which senior grades actually run,
+with how many learners, on which CBC pathways, and at what fees?** Nothing on
+the website or in the EMS claims senior grades until that is answered. A
+fourth number, 0143506720, was sent without a role and is not published.
+
 ## Payment channels
 
 | Channel | Detail |
 |---|---|
-| Bank | KCB, account **1117950980**, name "St Stephen Primary" |
+| Bank | KCB, account **1117950980**, name **"St. Stefan Primary School"** |
 | M-PESA | Lipa Karo paybill **522123** |
 | M-PESA account format | `51180K` + pupil name or admission no, no spaces (e.g. `51180KMARYNEKESA`) |
+
+**The account name is spelt "Stefan", not "Stephen".** The fee sheet I
+transcribed on 26 Sep read "St Stephen Primary"; the school corrected it on
+28 Sep 2026 to *St. Stefan Primary School*, which is how KCB holds the
+account. That spelling is deliberate and must not be made to agree with the
+school's own name — a transfer made out to "St Stephen" can be bounced or
+held. The fees page tells parents so in as many words, because otherwise
+they read it as a misprint on the website and retype it.
 
 The paybill is a KCB Lipa Karo collection account, not a paybill the school
 owns directly. Automatic reconciliation would need confirmation of who holds
