@@ -218,6 +218,22 @@ that variable when the site moves to its own domain.
 
 ## Still to do before launch
 
+- [ ] **Settle the Senior School.** On 28 September the school gave its title
+      as *St Stephen Early Years of Education, Primary, Junior and Senior
+      School, Kimaeti – Bungoma*. Nothing else we hold mentions a senior
+      section: the enrolment sheet counts 525 learners in twelve classes
+      ending at Grade 9, the fee structure has three bands ending at Junior,
+      and the FAQ answer still says "Grade 9 is our highest class". The name
+      is in, because it is the school's own name. The claims are not. Before
+      those lines change we need, from the school:
+      which senior grades actually run (10 only? 10–11?), how many learners
+      are in each, which CBC pathways and subject combinations are offered,
+      and the senior fee sheet. Until then do not edit `intro`, `sections`,
+      `stats`, `faqs` or the 2027 admissions post to mention senior grades.
+- [ ] Confirm the fourth phone number. The school's message listed
+      0143506720 alongside the three it then assigned roles to (Director
+      0728 836 150, Head teacher 0705 046 610, Accountant 0711 288 784).
+      Only the three with roles are on the site.
 - [ ] Replace the three sample testimonials with real, permitted quotes, then
       set `showTestimonials` to true.
 - [ ] Confirm the news posts, the term dates and the event calendar.
