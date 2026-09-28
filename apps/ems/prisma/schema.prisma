@@ -72,6 +72,9 @@ model SchoolSetting {
   address   String?
   currency  String   @default("KES")
   timezone  String   @default("Africa/Nairobi")
+  /// Leads every admission number, e.g. "SSK" in SSK-260041. School identity
+  /// is data, not code: a second school on this platform sets its own.
+  admissionPrefix String @default("ADM")
   /// Uploaded logo image (small, one per school — SaaS-tenant friendly).
   logo      Bytes?
   logoType  String?

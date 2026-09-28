@@ -212,11 +212,17 @@ export async function bootstrapIfEmpty(): Promise<boolean> {
     ["Neema", "Atieno", "FEMALE", "Playgroup", "James Atieno", "Father", "0712000014"],
     ["Oscar", "Juma", "MALE", "Grade 2", "Beatrice Juma", "Mother", "0712000015"],
   ];
+  // The demo pupils' admission numbers carry whatever prefix this school is
+  // configured with, so a demo install never shows another school's initials.
+  const prefix = (await db.schoolSetting.findUnique({
+    where: { id: "school" },
+    select: { admissionPrefix: true },
+  }))?.admissionPrefix ?? "ADM";
   const activeSession = demo ? await db.academicSession.findFirst({ where: { active: true } }) : null;
   if (activeSession) {
     let serial = 1;
     for (const [firstName, lastName, gender, className, gName, gRel, gPhone] of demoStudents) {
-      const admissionNo = `HC-25${String(serial++).padStart(4, "0")}`;
+      const admissionNo = `${prefix}-25${String(serial++).padStart(4, "0")}`;
       const exists = await db.student.findUnique({ where: { admissionNo } });
       if (exists) continue;
       const stream = await db.stream.findFirst({
@@ -242,7 +248,7 @@ export async function bootstrapIfEmpty(): Promise<boolean> {
   const demoParent = demo ? await db.user.findUnique({ where: { username: "parent" } }) : null;
   const demoStudentUser = demo ? await db.user.findUnique({ where: { username: "student" } }) : null;
   const firstPupils = await db.student.findMany({
-    where: { admissionNo: { in: ["HC-250001", "HC-250002"] } },
+    where: { admissionNo: { in: [`${prefix}-250001`, `${prefix}-250002`] } },
     orderBy: { admissionNo: "asc" },
   });
   if (demoParent) {
@@ -328,7 +334,7 @@ export async function bootstrapIfEmpty(): Promise<boolean> {
     });
     // sample payments for the two portal-demo pupils
     const paidPupils = await db.student.findMany({
-      where: { admissionNo: { in: ["HC-250001", "HC-250002"] } },
+      where: { admissionNo: { in: [`${prefix}-250001`, `${prefix}-250002`] } },
     });
     let receiptSerial = (await db.feePayment.count()) + 1;
     for (const pupil of paidPupils) {

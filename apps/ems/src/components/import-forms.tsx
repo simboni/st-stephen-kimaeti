@@ -40,7 +40,7 @@ export function StudentImportForm() {
             name="csv"
             rows={7}
             defaultValue={state.csvText ?? ""}
-            placeholder={"Admission No,Learner Name,Gender,Grade,Guardian Name,Phone\nHC-260101,WEKESA JOHN,M,Grade 4,Mary Wekesa,0712000000"}
+            placeholder={"Admission No,Learner Name,Gender,Grade,Guardian Name,Phone\nSSK-260101,WEKESA JOHN,M,Grade 4,Mary Wekesa,0712000000"}
             className="field font-mono !text-xs"
             spellCheck={false}
           />

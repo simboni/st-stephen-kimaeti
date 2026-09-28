@@ -12,11 +12,13 @@ import {
   news,
   pillars,
   school,
+  heroSlides,
   sections,
   stats,
 } from "@/lib/site";
 import { photo } from "@/lib/photos";
 import { Photo } from "@/components/photo";
+import { HeroSlider } from "@/components/hero-slider";
 import { Crest } from "@/components/crest";
 import { ButtonLink, Reveal, Section, SectionHead, Stat } from "@/components/ui";
 import {
@@ -61,7 +63,7 @@ export default function HomePage() {
       />
       {/* ═══════════════════════════════════════════════════════════ hero ═══ */}
       <section className="relative isolate overflow-hidden bg-band">
-        <Photo src="learners-on-the-field" sizes="100vw" fill priority imgClassName="drift" />
+        <HeroSlider slides={heroSlides} />
         <div
           className="absolute inset-0 bg-gradient-to-br from-band/92 via-band/72 to-band/38"
           aria-hidden

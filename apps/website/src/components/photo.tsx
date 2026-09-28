@@ -27,6 +27,7 @@ export function Photo({
   fill = false,
   alt,
   priority = false,
+  loading,
   className = "",
   imgClassName = "",
 }: {
@@ -38,6 +39,9 @@ export function Photo({
   alt?: string;
   /** Set on the one image above the fold; everything else lazy-loads. */
   priority?: boolean;
+  /** Override the loading hint — the hero slider wants its first slide eager
+   *  and the rest lazy, which `priority` alone cannot express. */
+  loading?: "eager" | "lazy";
   className?: string;
   imgClassName?: string;
 }) {
@@ -67,7 +71,7 @@ export function Photo({
         width={p.width}
         height={p.height}
         alt={alt ?? p.alt}
-        loading={priority ? "eager" : "lazy"}
+        loading={loading ?? (priority ? "eager" : "lazy")}
         decoding={priority ? "sync" : "async"}
         fetchPriority={priority ? "high" : undefined}
         className={`h-full w-full object-cover ${

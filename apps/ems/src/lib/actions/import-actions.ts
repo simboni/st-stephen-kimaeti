@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { audit } from "@/lib/audit";
 import { requirePermission } from "@/lib/rbac";
-import { getActiveSession } from "@/lib/school";
+import { getActiveSession, nextAdmissionNo } from "@/lib/school";
 import { normalizeClassName, parseStudentCsv } from "@/lib/import";
 
 export type ImportRowView = {
@@ -143,16 +143,8 @@ export async function importStudents(
   if (ready.length === 0)
     return { error: "Nothing to import — every row was skipped.", csvText, preview: { rows: views, readyCount: 0 } };
 
-  // Auto admission numbers continue the HC-<yy><serial> sequence.
-  const year = new Date().getFullYear().toString().slice(-2);
-  let serial = (await db.student.count()) + 1;
-  const nextAuto = async (): Promise<string> => {
-    let candidate = `HC-${year}${String(serial++).padStart(4, "0")}`;
-    while (await db.student.findUnique({ where: { admissionNo: candidate } })) {
-      candidate = `HC-${year}${String(serial++).padStart(4, "0")}`;
-    }
-    return candidate;
-  };
+  // Auto admission numbers carry the school's own prefix — see lib/school.
+  const nextAuto = nextAdmissionNo;
 
   let created = 0;
   for (const { row, streamId } of ready) {

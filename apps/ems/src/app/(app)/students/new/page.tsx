@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { db } from "@/lib/db";
+import { nextAdmissionNo } from "@/lib/school";
 import { requirePermission } from "@/lib/rbac";
 import { AdmitStudentForm } from "@/components/student-forms";
 
@@ -8,19 +9,17 @@ export const metadata: Metadata = { title: "Admit pupil" };
 export default async function NewStudentPage() {
   await requirePermission("students", "create");
 
-  const [classes, count] = await Promise.all([
+  const [classes, suggested] = await Promise.all([
     db.schoolClass.findMany({
       where: { archived: false },
       include: { streams: { where: { archived: false }, orderBy: { name: "asc" } } },
       orderBy: { level: "asc" },
     }),
-    db.student.count(),
+    nextAdmissionNo(),
   ]);
   const streams = classes.flatMap((c) =>
     c.streams.map((st) => ({ id: st.id, label: `${c.name} ${st.name}` })),
   );
-  const year = new Date().getFullYear().toString().slice(-2);
-  const suggested = `HC-${year}${String(count + 1).padStart(4, "0")}`;
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">

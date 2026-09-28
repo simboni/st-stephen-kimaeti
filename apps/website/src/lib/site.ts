@@ -243,6 +243,19 @@ export const terms = [
 ];
 
 /** The photo strip under "A day at St Stephen’s". Order is the day’s order. */
+/** The photographs that crossfade behind the hero. Five, chosen to say five
+ *  different things in the first thirty seconds: this is a school, it sings,
+ *  it prays, it works, it plays. Order matters — the first is what a visitor
+ *  sees before anything else has loaded, so it has to be the one that says
+ *  "school" without a caption. */
+export const heroSlides = [
+  "learners-on-the-field",
+  "festival-troupe",
+  "mass-outdoors",
+  "agriculture-lesson",
+  "football-team",
+];
+
 export const dayInTheLife = [
   { photo: "mass-outdoors", time: "7:30", label: "Assembly and prayers" },
   { photo: "classroom-lesson", time: "8:00", label: "First lesson" },

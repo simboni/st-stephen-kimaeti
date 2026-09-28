@@ -6,7 +6,7 @@ import { BoardingType, Gender } from "@prisma/client";
 import { db } from "@/lib/db";
 import { audit } from "@/lib/audit";
 import { requirePermission } from "@/lib/rbac";
-import { getActiveSession } from "@/lib/school";
+import { getActiveSession, nextAdmissionNo } from "@/lib/school";
 import { studentBalance } from "@/lib/fees";
 import { formatMoney } from "@/lib/money";
 
@@ -18,13 +18,6 @@ function formValues(formData: FormData): Record<string, string> {
     if (typeof v === "string" && !k.startsWith("$")) out[k] = v;
   }
   return out;
-}
-
-/** Next admission number: HC-<year><serial>, e.g. HC-260041. Manual override allowed. */
-async function nextAdmissionNo(): Promise<string> {
-  const year = new Date().getFullYear().toString().slice(-2);
-  const count = await db.student.count();
-  return `HC-${year}${String(count + 1).padStart(4, "0")}`;
 }
 
 function parseDate(value: string): Date | null {

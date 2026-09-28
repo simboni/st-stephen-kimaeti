@@ -342,3 +342,11 @@ export function ChevronRightIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function PauseIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M9.5 5v14M14.5 5v14" strokeWidth="2.4" />
+    </svg>
+  );
+}
