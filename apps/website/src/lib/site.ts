@@ -15,13 +15,14 @@
 
 export const site = {
   domain: "ststephenkimaeti.ac.ke",
-  title: "St Stephen’s Kimaeti — Early Years, Primary, Junior & Senior School, Bungoma",
-  /* The roll figure and the grade range below still describe the Playgroup to
-     Grade 9 school the fee sheets and letterheads document. The school's new
-     title names a Senior School; until it confirms which senior grades run and
-     how many learners are in them, this sentence must not claim them. */
+  title: "St Stephen’s Brothers’ School — Kimaeti, Bungoma",
+  /* Says nothing about grades on purpose. The roll figures and the grade range
+     elsewhere in this file still describe the Playgroup-to-Grade-9 school the
+     fee sheets and letterheads document; the school has mentioned a Senior
+     School but not yet said which senior grades run or how many learners are
+     in them, so nothing here may claim them. */
   description:
-    "St Stephen Mixed Day and Boarding School, Kimaeti, Bungoma County. Day and boarding, under the Brothers of St Charles Lwanga, since 2006. Pray and Work.",
+    "St Stephen Mixed Day and Boarding School, Kimaeti, Bungoma County. Day and boarding, under the Brothers of St Charles Lwanga, since 2002. Pray and Work.",
 };
 
 /**
@@ -46,17 +47,22 @@ export const emsUrl =
   process.env.NEXT_PUBLIC_EMS_URL ?? "https://ems.ststephenkimaeti.ac.ke";
 
 export const school = {
-  /* The school's own title, as it gave it on 28 September 2026. It now names
-     a Senior School, which the letterheads and fee sheets we were working
-     from did not. See docs/school/ENROLMENT-2026.md — the roll figures below
-     still describe Playgroup to Grade 9 only, and must be re-confirmed. */
-  name: "St Stephen Early Years of Education, Primary, Junior and Senior School, Kimaeti – Bungoma",
+  /* Given by the school on 30 September 2026, replacing the long
+     "Early Years of Education, Primary, Junior and Senior School" title it
+     sent two days earlier. The message spelt it "ST STEPEHENS BROTHER'S
+     SCHOOL"; Stepehens is a transposition of Stephens — the saint's name is
+     on the crest, the letterheads and the school's own email address — and
+     the sponsor is the *Brothers* of St Charles Lwanga, so it is set here as
+     the plural possessive. Both readings are flagged for the school. Note
+     that this is NOT the bank account name: see `payment.bank.holder`. */
+  name: "St Stephen’s Brothers’ School",
   /** What the school is called in running text and in the header. */
   shortName: "St Stephen’s Kimaeti",
   /** Shorter still, for the logo lockup. */
   wordmark: "St Stephen’s",
   sponsor: "Brothers of St Charles Lwanga",
-  founded: 2006,
+  /* 2002, per the school on 30 September 2026. Earlier copy said 2006. */
+  founded: 2002,
   location: "Kimaeti, Bungoma County",
   /* The papers disagree: the letterhead says Box 93–50200 Bungoma, the
      administrator’s stamp reads "Myanga–Bungoma", and the requirements form
@@ -87,20 +93,23 @@ export const school = {
   portalUrl: emsUrl,
 };
 
-/* The three lines the school gave on 28 September 2026, with whose they are.
-   A parent ringing about fees should reach the accountant, not the director,
-   so the site says which is which rather than listing three bare numbers. */
+/* One published line, the director's, by the school's instruction on
+   30 September 2026 — it had given three with roles two days earlier and then
+   asked for this one only. The head teacher's and accountant's numbers are
+   therefore off the site; they are recorded in docs/school/FEE-STRUCTURE-2026.md
+   so nobody has to ask for them twice.
+
+   This stays an array, and every page still maps over it, so restoring the
+   other two is one edit here rather than a change to six components. */
 export const contacts = [
   { role: "Director", phone: "0728 836 150", href: "+254728836150" },
-  { role: "Head teacher", phone: "0705 046 610", href: "+254705046610" },
-  { role: "Accountant", phone: "0711 288 784", href: "+254711288784" },
 ];
 
 /** The number shown in the header strip and used for "call the school". */
-export const primaryPhone = contacts[1];
+export const primaryPhone = contacts[0];
 
 /** WhatsApp number in international format (for wa.me links). */
-export const whatsapp = "254705046610";
+export const whatsapp = "254728836150";
 
 /** Short announcement shown as a pill in the hero — set text to "" to hide. */
 export const announcement = {
@@ -112,7 +121,7 @@ export const announcement = {
 
 /** Two paragraphs of plain English for the home page and the About page. */
 export const intro = [
-  "St Stephen’s is a mixed day and boarding school at Kimaeti in Bungoma County, sponsored by the Brothers of St Charles Lwanga. It opened in 2006 and now teaches 525 learners — from three-year-olds in Playgroup to Grade 9 candidates — across its Early Years, Primary and Junior sections.",
+  "St Stephen’s is a mixed day and boarding school at Kimaeti in Bungoma County, sponsored by the Brothers of St Charles Lwanga. It opened in 2002 and now teaches 525 learners — from three-year-olds in Playgroup to Grade 9 candidates — across its Early Years, Primary and Junior sections.",
   "A hundred and fifty-seven of those learners board with us. Twenty-six teachers know every one of them by name. Our motto is two words long and it is the whole plan: Pray and Work.",
 ];
 
@@ -121,7 +130,7 @@ export const stats = [
   { value: 525, suffix: "", label: "Learners on the roll" },
   { value: 157, suffix: "", label: "Boarders in residence" },
   { value: 26, suffix: "", label: "Teachers on the staff" },
-  { value: 2006, suffix: "", label: "Teaching here since" },
+  { value: 2002, suffix: "", label: "Teaching here since" },
 ];
 
 /** The three sections, with real class counts from the enrolment return. */

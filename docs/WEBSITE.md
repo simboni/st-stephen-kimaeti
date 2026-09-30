@@ -218,22 +218,36 @@ that variable when the site moves to its own domain.
 
 ## Still to do before launch
 
-- [ ] **Settle the Senior School.** On 28 September the school gave its title
-      as *St Stephen Early Years of Education, Primary, Junior and Senior
-      School, Kimaeti – Bungoma*. Nothing else we hold mentions a senior
-      section: the enrolment sheet counts 525 learners in twelve classes
-      ending at Grade 9, the fee structure has three bands ending at Junior,
-      and the FAQ answer still says "Grade 9 is our highest class". The name
-      is in, because it is the school's own name. The claims are not. Before
-      those lines change we need, from the school:
-      which senior grades actually run (10 only? 10–11?), how many learners
-      are in each, which CBC pathways and subject combinations are offered,
-      and the senior fee sheet. Until then do not edit `intro`, `sections`,
-      `stats`, `faqs` or the 2027 admissions post to mention senior grades.
-- [ ] Confirm the fourth phone number. The school's message listed
-      0143506720 alongside the three it then assigned roles to (Director
-      0728 836 150, Head teacher 0705 046 610, Accountant 0711 288 784).
-      Only the three with roles are on the site.
+- [ ] **Confirm the spelling of the name.** The school gave it on 30 September
+      as `ST STEPEHENS BROTHER'S SCHOOL`. It is set as *St Stephen's Brothers'
+      School*: **Stepehens** is a transposition of **Stephens** (the saint is
+      on the crest, the letterheads and the school's own email address), and
+      the sponsor is the **Brothers** of St Charles Lwanga, so the apostrophe
+      goes after the s. Both are my corrections, not the school's words — and
+      the bank account name turned out to be a genuinely odd spelling, so ask
+      rather than assume.
+- [ ] **Settle the Senior School.** On 28 September the school's title named a
+      Senior School; the shorter name it gave on 30 September does not mention
+      grades at all, so nothing now advertises them either way. Nothing else we
+      hold mentions a senior section: the enrolment sheet counts 525 learners
+      in twelve classes ending at Grade 9, the fee structure has three bands
+      ending at Junior, and the FAQ answer still says "Grade 9 is our highest
+      class". Before any of that changes we need, from the school: which senior
+      grades actually run (10 only? 10–11?), how many learners are in each,
+      which CBC pathways and subject combinations are offered, and the senior
+      fee sheet. Until then do not edit `intro`, `sections`, `stats`, `faqs` or
+      the 2027 admissions post to mention senior grades.
+- [ ] Confirm 2002. The school gave it as the founding year on 30 September;
+      everything written before that said 2006. `school.founded`, the intro
+      paragraph and the "Teaching here since" stat all now say 2002.
+- [ ] Decide whether the head teacher's and accountant's numbers go back on.
+      The school gave three numbers with roles on 28 September, then on the
+      30th asked for **0728 836 150 only**. The site publishes that one, and it
+      is the WhatsApp number too. The other two are recorded in
+      `docs/school/FEE-STRUCTURE-2026.md`; `contacts` in `src/lib/site.ts` is
+      still an array and every page maps over it, so restoring them is one
+      edit. A fourth number, 0143506720, was sent on 28 September without a
+      role and has never been published.
 - [ ] Replace the three sample testimonials with real, permitted quotes, then
       set `showTestimonials` to true.
 - [ ] Confirm the news posts, the term dates and the event calendar.

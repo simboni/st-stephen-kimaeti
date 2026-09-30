@@ -107,11 +107,11 @@ export async function bootstrapIfEmpty(): Promise<boolean> {
     update: {},
     create: {
       id: "school",
-      name: "St Stephen Early Years of Education, Primary, Junior and Senior School, Kimaeti – Bungoma",
+      name: "St Stephen’s Brothers’ School",
       shortName: "St Stephen's Kimaeti",
       motto: "Pray and Work",
       email: "ststephenprimarykimaeti@gmail.com",
-      phone: "0705 046 610 / 0711 288 784",
+      phone: "0728 836 150",
       address: "P.O. Box 93 – 50200, Bungoma",
     },
   });

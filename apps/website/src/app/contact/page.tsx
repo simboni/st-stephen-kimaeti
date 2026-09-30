@@ -16,7 +16,7 @@ import {
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: `Reach ${school.shortName} — admissions enquiries, fees, boarding and visits. ${school.address}. Call the director, the head teacher or the accountant direct, or message the school on WhatsApp.`,
+  description: `Reach ${school.shortName} — admissions enquiries, fees, boarding and visits. ${school.address}. Ring the school direct, message it on WhatsApp, or send an enquiry from this page.`,
 };
 
 const ENQUIRY_SUBJECTS = [

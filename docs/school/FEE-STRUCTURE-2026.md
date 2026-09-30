@@ -21,24 +21,39 @@ loading any of this into the system.**
 > must be settled before scoping — Senior School is the single largest piece
 > of new development.
 
-### Corrections from the school, 28 Sep 2026
+### Corrections from the school
 
 The table above records what the scanned letterheads and fee sheets say.
-These supersede it:
+These supersede it. **The name and the contacts were given twice, two days
+apart, and the second answer replaced the first** — so the "28 Sep" rows are
+kept here only to show what changed, not as anything to use.
 
-| Field | Value |
-|---|---|
-| Full name | St Stephen Early Years of Education, Primary, Junior **and Senior** School, Kimaeti – Bungoma |
-| Director | 0728 836 150 |
-| Head teacher | 0705 046 610 |
-| Accountant | 0711 288 784 |
-| Bank account name | St. Stefan Primary School |
+| Field | 28 Sep 2026 | 30 Sep 2026 — **current** |
+|---|---|---|
+| Name | St Stephen Early Years of Education, Primary, Junior and Senior School, Kimaeti – Bungoma | **St Stephen's Brothers' School** |
+| Founded | (sheets implied 2006) | **2002** |
+| Contact | Director 0728 836 150, Head teacher 0705 046 610, Accountant 0711 288 784 | **0728 836 150 only** ("use this as contact cell only") |
+| Bank account name | St. Stefan Primary School | unchanged |
 
-The new title names a Senior School that no document mentions, which sharpens
-rather than settles the question above: **which senior grades actually run,
-with how many learners, on which CBC pathways, and at what fees?** Nothing on
-the website or in the EMS claims senior grades until that is answered. A
-fourth number, 0143506720, was sent without a role and is not published.
+Unpublished but recorded, so nobody has to ask twice: head teacher
+**0705 046 610**, accountant **0711 288 784**. A fourth number,
+**0143506720**, was sent on 28 Sep without a role and has never been
+published.
+
+**Two things to confirm about the name.** The 30 Sep message spelt it
+`ST STEPEHENS BROTHER'S SCHOOL`. *Stepehens* is a transposition of *Stephens*
+— the saint's name is on the crest, the letterheads and the school's own
+email address — so it is set as **St Stephen's**. And because the sponsor is
+the **Brothers** of St Charles Lwanga, the apostrophe is set as the plural
+**Brothers'**. Both are corrections I made, not the school's words; if either
+is wrong, say so. This is not a case like the bank account name, where an odd
+spelling turned out to be genuine — but it is the same kind of risk, so it is
+written down rather than quietly fixed.
+
+The Senior School question is unchanged and still open: **which senior grades
+actually run, with how many learners, on which CBC pathways, and at what
+fees?** Nothing on the website or in the EMS claims senior grades until that
+is answered. The new short name no longer advertises them either way.
 
 ## Payment channels
 

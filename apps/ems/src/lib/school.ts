@@ -9,14 +9,13 @@ export async function getSchoolSettings() {
     update: {},
     create: {
       id: "school",
-      name: "St Stephen Early Years of Education, Primary, Junior and Senior School, Kimaeti – Bungoma",
+      name: "St Stephen’s Brothers’ School",
       shortName: "St Stephen's Kimaeti",
       motto: "Ora et Labora — Pray and Work",
       email: "ststephenprimarykimaeti@gmail.com",
-      // Receipts, report cards and payslips carry one line, so it holds the
-      // two numbers a parent would ring about them: head teacher, accountant.
-      // The director's line (0728 836 150) is on the website.
-      phone: "0705 046 610 / 0711 288 784",
+      // The one line the school publishes, per its instruction of
+      // 30 September 2026. Receipts, report cards and payslips carry it.
+      phone: "0728 836 150",
       address: "P.O. Box 93 – 50200, Bungoma",
       admissionPrefix: "SSK",
     },

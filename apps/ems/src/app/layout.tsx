@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     template: "%s | St Stephen's Kimaeti",
   },
   description:
-    "School management system for St Stephen Early Years of Education, Primary, Junior and Senior School, Kimaeti – Bungoma.",
+    "School management system for St Stephen’s Brothers’ School, Kimaeti, Bungoma.",
   robots: { index: false, follow: false },
 };
 
