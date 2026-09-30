@@ -84,12 +84,18 @@ export function SiteHeader() {
 
       {/* Main bar */}
       <div className="header-bar">
-        <div className="container-page flex h-[4.25rem] items-center justify-between gap-6">
+        {/* min-h, not h: the name wraps to two lines on a 320px phone and a
+            fixed height would push it out of the bar. At every other width
+            the crest still sets the height, so nothing moves. */}
+        <div className="container-page flex min-h-[4.25rem] items-center justify-between gap-6 py-2">
           <Link href="/" className="flex min-w-0 items-center gap-3">
             <Crest mark className="h-10 w-10 shrink-0" />
+            {/* The name is read from lib/site, never typed in here. It was
+                hard-coded until 30 Sep 2026, which is how the header came to
+                be the last place still carrying the school's old name. */}
             <span className="min-w-0 leading-tight">
-              <span className="block font-display text-[15px] font-semibold tracking-tight text-text sm:text-[17px]">
-                St Stephen&rsquo;s, Kimaeti
+              <span className="block text-balance font-display text-[15px] font-semibold tracking-tight text-text sm:text-[17px]">
+                {school.name}
               </span>
               <span className="block text-[10px] font-semibold uppercase tracking-[0.16em] text-text-3">
                 {school.mottoLatin} · Pray and Work
@@ -148,7 +154,7 @@ export function SiteHeader() {
           <span className="flex items-center gap-3">
             <Crest mark className="h-9 w-9" />
             <span className="font-display text-[15px] font-semibold text-text">
-              St Stephen&rsquo;s
+              {school.wordmark}
             </span>
           </span>
           <button

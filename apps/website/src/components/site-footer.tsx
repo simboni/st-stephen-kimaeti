@@ -16,7 +16,7 @@ export function SiteFooter() {
               <Crest mark className="h-14 w-14 shrink-0" />
               <div>
                 <p className="font-display text-xl text-band-text">
-                  St Stephen&rsquo;s, Kimaeti
+                  {school.name}
                 </p>
                 <p className="font-display text-sm italic text-band-accent">
                   {school.mottoLatin} — {school.motto}
