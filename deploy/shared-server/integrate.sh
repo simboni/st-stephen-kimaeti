@@ -147,10 +147,20 @@ warn "This backs up the PROXY CONFIG only. Back up the other application's own
 say "Step 3 — building the school's containers (the other app keeps running)"
 
 say "Building the website's static files in a throwaway container"
+# Defaults to the preview build, which asks search engines not to index the
+# site and says so on the page. That is the right default here: until the
+# school has signed off its fee figures and term dates, and agreed to the
+# photographs of identifiable children, this should not be turning up in a
+# search for the school's name. Set SITE_PREVIEW=0 for the real launch.
+SITE_PREVIEW="${SITE_PREVIEW:-1}"
 docker run --rm \
   -v "$REPO_ROOT/apps/website":/app -w /app \
   -e NEXT_PUBLIC_EMS_URL="https://$EMS_DOMAIN" \
+  -e NEXT_PUBLIC_SITE_PREVIEW="$SITE_PREVIEW" \
   node:22-alpine sh -c "npm ci --no-audit --no-fund && npm run build"
+[[ "$SITE_PREVIEW" == "1" ]] \
+  && warn "Built as a PREVIEW: asks not to be indexed. SITE_PREVIEW=0 to launch." \
+  || warn "Built for LAUNCH: search engines may index it."
 [[ -d "$REPO_ROOT/apps/website/out" ]] || die "The website build produced no out/ directory."
 ok "Website built"
 
@@ -201,8 +211,8 @@ PY
 cat >> "$PROXY_CADDYFILE" <<EOF
 
 $MARK_START
-# St Stephen Junior & Infant Schools. Added alongside the existing sites; the
-# blocks above were not modified. Remove this whole block (or run
+# St Stephen's, Kimaeti. Added alongside the existing sites; the blocks above
+# were not modified. Remove this whole block (or run
 # deploy/shared-server/rollback.sh) to undo.
 $WEBSITE_DOMAIN {
 	reverse_proxy ststephen-web:80
