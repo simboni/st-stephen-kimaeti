@@ -1,0 +1,108 @@
+# St Stephen's, Kimaeti — the website and the EMS on a SHARED server.
+#
+# This box (Contabo vmi3487264) already runs around twenty containers for
+# other people's work: edge-caddy, smpcredits prod and staging, riziki-pos,
+# fitgen, cosdep, stackup, 64theatre, the portfolio. Nothing here can disturb
+# any of them:
+#
+#   · `name: ststephen` pins our own Compose project, so `docker compose` in
+#     this directory can never adopt, stop or delete another stack's
+#     containers, networks or volumes.
+#   · No host port is published. Not 80, not 443, not 5432. The only route in
+#     is edge-caddy, which owns 80/443 and terminates TLS for every site.
+#   · `edge` is declared external — we join it, we never modify it.
+#   · PostgreSQL sits on a private network of ours and is NOT on `edge`, so no
+#     other container on the shared network can reach the school's database.
+#   · Every service has a `mem_limit`. This machine has no swap, so a runaway
+#     here would otherwise have the kernel reclaim memory from a live POS.
+#
+#   docker compose up -d --build     start
+#   docker compose down              stop (the volume, and the data, survive)
+#   docker compose down -v           destroy the school's records
+name: ststephen
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: ststephen-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ststephen
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+      POSTGRES_DB: ststephen
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      # Deliberately NOT on `edge`. Reachable only by our own EMS.
+      - internal
+    mem_limit: 256m
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ststephen -d ststephen"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  ems:
+    build:
+      context: ../../apps/ems
+      args:
+        # Must stay stable across rebuilds, or a form submitted mid-deploy
+        # fails with "Failed to find Server Action".
+        NEXT_SERVER_ACTIONS_ENCRYPTION_KEY: ${NEXT_SERVER_ACTIONS_ENCRYPTION_KEY:?set it in .env}
+    image: ststephen-ems:local
+    container_name: ststephen-ems
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://ststephen:${DB_PASSWORD}@db:5432/ststephen
+      AUTH_SECRET: ${AUTH_SECRET:?set AUTH_SECRET in .env}
+      NEXT_SERVER_ACTIONS_ENCRYPTION_KEY: ${NEXT_SERVER_ACTIONS_ENCRYPTION_KEY}
+      # The first superadmin, created only while the User table is empty.
+      # Sign in, change it under Users, then blank this line and `up -d`.
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?set ADMIN_PASSWORD in .env}
+      # Never the demo pupils or the password published in the README.
+      SEED_DEMO: "false"
+      NODE_ENV: production
+      PORT: "3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - "3000"
+    networks:
+      - internal
+      - edge
+    mem_limit: 512m
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+
+  # The public website: plain files from `apps/website/out`, served by the
+  # same Caddy image edge-caddy already runs, so this pulls nothing new.
+  #
+  # Build the files first — they are not in git:
+  #   bash build-website.sh
+  web:
+    image: caddy:2-alpine
+    container_name: ststephen-web
+    restart: unless-stopped
+    volumes:
+      - ./website.Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../../apps/website/out:/srv/website:ro
+    expose:
+      - "80"
+    networks:
+      - edge
+    mem_limit: 64m
+
+volumes:
+  # Belongs to the `ststephen` project alone.
+  db-data:
+
+networks:
+  internal:
+  # Owned by the `edge` project in /srv/edge. We only join it.
+  edge:
+    external: true

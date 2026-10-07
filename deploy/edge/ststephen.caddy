@@ -1,0 +1,64 @@
+# St Stephen's, Kimaeti — the two public names, served through edge-caddy.
+#
+# Installed by publish.sh as a NEW file at /srv/edge/sites/ststephen.caddy,
+# never by editing another site's file. /srv/edge/Caddyfile only `import`s,
+# so adding a file here cannot affect anything already being served.
+#
+# NO DOMAIN YET. These use sslip.io, which resolves any name of the form
+# <anything>.169-58-127-122.sslip.io to 169.58.127.122 — this server. It is
+# real public DNS, so Caddy obtains a genuine Let's Encrypt certificate and
+# the EMS is reached over HTTPS rather than plain HTTP. Nothing is bought and
+# nothing is registered.
+#
+# When ststephenkimaeti.ac.ke exists: point two A records at this server,
+# change the two hostnames below, then `bash publish.sh` again. Caddy fetches
+# fresh certificates and nothing else moves.
+
+school.169-58-127-122.sslip.io {
+	reverse_proxy ststephen-web:80
+
+	# The site is built with NEXT_PUBLIC_SITE_PREVIEW=1 while the school has
+	# not signed off its fee figures and term dates, or agreed to photographs
+	# of identifiable children. The pages say so and ask not to be indexed;
+	# this says it again at the edge, where a crawler reads it first.
+	header {
+		X-Robots-Tag "noindex, nofollow"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	encode zstd gzip
+}
+
+ems.169-58-127-122.sslip.io {
+	# Next.js streams HTML as Suspense boundaries resolve. Without this Caddy
+	# buffers the response and the dashboard appears to hang, then paints all
+	# at once.
+	reverse_proxy ststephen-ems:3000 {
+		flush_interval -1
+	}
+
+	# An administrative system holding children's records has no business in a
+	# search index, now or after launch.
+	header {
+		X-Robots-Tag "noindex, nofollow, noarchive"
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "same-origin"
+		-Server
+	}
+
+	# The school logo and report photographs are uploaded through forms.
+	# Nothing legitimate here is larger.
+	request_body {
+		max_size 10MB
+	}
+
+	encode zstd gzip
+
+	# No `log { output file … }` on purpose: edge-caddy has no verified
+	# writable /var/log/caddy mount, and Caddy refuses to load a config whose
+	# log file it cannot create — which would take every other site down with
+	# it. Access logs go to `docker logs edge-caddy` with everything else.
+}

@@ -1,0 +1,30 @@
+# Inside the `web` container only. Plain files, no TLS, no public port —
+# edge-caddy terminates HTTPS and proxies here over the `edge` network.
+:80 {
+	root * /srv/website
+
+	# The site is a static export built with trailingSlash: true, so every
+	# page is a directory holding index.html. try_files makes /about work as
+	# well as /about/.
+	try_files {path} {path}/index.html {path}.html
+	file_server
+
+	handle_errors {
+		# The export writes 404.html at the root.
+		rewrite * /404.html
+		file_server
+	}
+
+	# Hashed build output can be cached hard; HTML must not be, or a parent
+	# keeps seeing last week's fee figures after we correct them.
+	@immutable path /_next/static/* /fonts/* /photos/*
+	header @immutable Cache-Control "public, max-age=31536000, immutable"
+	header Cache-Control "public, max-age=0, must-revalidate"
+
+	# The service worker must never be cached, or an installed copy can never
+	# be updated.
+	@sw path /sw.js
+	header @sw Cache-Control "no-cache"
+
+	encode zstd gzip
+}

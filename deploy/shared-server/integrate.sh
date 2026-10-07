@@ -2,6 +2,23 @@
 #
 # Add the school to a server that is already running something else.
 #
+# !! DO NOT USE THIS ON A SERVER WHOSE CADDYFILE USES `import`. Use
+# !! deploy/edge/publish.sh instead.
+# !!
+# !! This script builds its list of sites to protect by grepping hostnames out
+# !! of the proxy's MAIN Caddyfile (see EXISTING_SITES below). Where that file
+# !! contains only `import` lines — which is how the Contabo box vmi3487264 is
+# !! arranged, and it is a common pattern — the list comes back EMPTY. The
+# !! script warns once and carries on, and every "no existing site stopped
+# !! answering" check after that passes without testing a single thing. The
+# !! rollback guarantee, which is the entire reason to use this rather than
+# !! editing the config by hand, is silently void.
+# !!
+# !! deploy/edge/publish.sh asks Caddy to `adapt` its own configuration, which
+# !! has already followed every import, so the list is whatever Caddy is
+# !! really serving. It also adds one new file rather than appending to a
+# !! config other projects share.
+#
 # WHAT THIS DOES NOT DO — the safety properties, in order of how much they
 # matter if you are doing this at one in the morning before a shop opens:
 #
