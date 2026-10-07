@@ -67,6 +67,22 @@ The site file does not change, so `publish.sh` is not needed again. Re-running
 it is safe anyway: it notices its own file is already installed, verifies every
 site and exits without reloading.
 
+### If the website answers 404 for every page
+
+The files are on the host but the container cannot see them. A bind mount is
+resolved when the container is **created**: if `docker compose up` ever ran
+before `apps/website/out` existed, Docker created that path as an empty
+directory and mounted the empty one, and every later `up` reports the
+container as already *Running* and leaves it alone. Caddy serves an empty root
+and 404s everything, while `ls` on the host shows a perfectly good build.
+
+```bash
+docker exec ststephen-web ls /srv/website      # empty? that is this
+docker compose up -d --force-recreate web
+```
+
+`build-website.sh` now does that recreate itself, so this should not recur.
+
 ## Addresses
 
 No domain yet. These are sslip.io names, which resolve to this server's IP

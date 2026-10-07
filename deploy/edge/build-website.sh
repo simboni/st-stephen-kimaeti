@@ -45,4 +45,28 @@ if [ "$SITE_PREVIEW" = "1" ]; then
 else
   echo "    LAUNCH build: search engines may index it."
 fi
-echo "    Now:  docker compose up -d web"
+
+# Recreate the web container if it already exists, and do it here rather than
+# leaving it to the operator.
+#
+# A bind mount is resolved when the container is CREATED. If `docker compose
+# up` ran before this script had ever produced apps/website/out, Docker
+# created that path as an empty directory and mounted the empty one — and a
+# later `up` reports the container as already Running and leaves it alone.
+# Caddy then serves an empty root and answers 404 for every page, while the
+# files sit on the host looking perfectly correct. That is an expensive ten
+# minutes to debug, and it cost us exactly that on 7 Oct 2026.
+if docker ps --format '{{.Names}}' | grep -qx ststephen-web; then
+  printf '\n==> Recreating ststephen-web so it picks up this build\n'
+  docker compose --project-directory "$HERE" up -d --force-recreate web
+  sleep 2
+  if docker exec ststephen-web ls /srv/website/index.html >/dev/null 2>&1; then
+    echo "    ✓ the container can see index.html"
+  else
+    echo "    ! the container still cannot see /srv/website/index.html" >&2
+    echo "      check the mount:  docker inspect -f '{{json .Mounts}}' ststephen-web" >&2
+    exit 1
+  fi
+else
+  echo "    Now:  docker compose up -d --build"
+fi
