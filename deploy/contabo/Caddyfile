@@ -1,4 +1,4 @@
-# Holy Cross platform — Caddy configuration template.
+# St Stephen's platform — Caddy configuration template.
 #
 # setup.sh substitutes the {{...}} placeholders and writes the result to
 # /etc/caddy/Caddyfile. Caddy obtains and renews the HTTPS certificates by

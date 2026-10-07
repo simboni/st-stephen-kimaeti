@@ -10,8 +10,8 @@
 #
 # Run as root on the server:
 #
-#   WEBSITE_DOMAIN=ststephenbulimbo.com \
-#   EMS_DOMAIN=ems.ststephenbulimbo.com \
+#   WEBSITE_DOMAIN=ststephenkimaeti.ac.ke \
+#   EMS_DOMAIN=ems.ststephenkimaeti.ac.ke \
 #   LETSENCRYPT_EMAIL=you@example.com \
 #   bash setup.sh
 #
@@ -34,8 +34,8 @@ warn() { printf '\033[1;33m !  %s\033[0m\n' "$*"; }
 die() { printf '\033[1;31m !! %s\033[0m\n' "$*" >&2; exit 1; }
 
 [[ $EUID -eq 0 ]] || die "Run this as root (sudo bash setup.sh)."
-: "${WEBSITE_DOMAIN:?Set WEBSITE_DOMAIN, e.g. ststephenbulimbo.com}"
-: "${EMS_DOMAIN:?Set EMS_DOMAIN, e.g. ems.ststephenbulimbo.com}"
+: "${WEBSITE_DOMAIN:?Set WEBSITE_DOMAIN, e.g. ststephenkimaeti.ac.ke}"
+: "${EMS_DOMAIN:?Set EMS_DOMAIN, e.g. ems.ststephenkimaeti.ac.ke}"
 : "${LETSENCRYPT_EMAIL:?Set LETSENCRYPT_EMAIL for certificate expiry warnings}"
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

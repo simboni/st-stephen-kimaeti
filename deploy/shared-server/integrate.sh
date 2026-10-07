@@ -41,8 +41,8 @@ ok()   { printf '    \033[1;32m✓\033[0m %s\n' "$*"; }
 warn() { printf '    \033[1;33m!\033[0m %s\n' "$*"; }
 die()  { printf '\n\033[1;31m!! %s\033[0m\n' "$*" >&2; exit 1; }
 
-: "${WEBSITE_DOMAIN:?Set WEBSITE_DOMAIN, e.g. new.ststephenbulimbo.com}"
-: "${EMS_DOMAIN:?Set EMS_DOMAIN, e.g. ems.ststephenbulimbo.com}"
+: "${WEBSITE_DOMAIN:?Set WEBSITE_DOMAIN, e.g. new.ststephenkimaeti.ac.ke}"
+: "${EMS_DOMAIN:?Set EMS_DOMAIN, e.g. ems.ststephenkimaeti.ac.ke}"
 
 compose() { docker compose --project-directory "$HERE" -f "$HERE/docker-compose.yml" "$@"; }
 

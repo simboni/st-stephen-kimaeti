@@ -13,7 +13,7 @@ pupil records sit on a machine you control, not on someone else's service.
          │  Caddy — HTTPS, automatic  │
          └──────┬──────────────┬──────┘
                 │              │
-   ststephenbulimbo.com    ems.ststephenbulimbo.com
+  ststephenkimaeti.ac.ke   ems.ststephenkimaeti.ac.ke
                 │              │
        static website     ┌────▼─────────────────┐
        (plain files)      │  EMS (Node, systemd) │
@@ -64,18 +64,26 @@ At your DNS provider, create two records pointing at the server's IP address:
 
 | Type | Name | Value |
 |------|------|-------|
-| A | `@` (or `ststephenbulimbo.com`) | your server IP |
+| A | `@` (or `ststephenkimaeti.ac.ke`) | your server IP |
 | A | `ems` | your server IP |
 
 Do this **first**. Caddy proves it controls the domains in order to obtain the
 HTTPS certificates, which it cannot do until DNS resolves to this server.
 
-> **The school's existing system.** `ststephenbulimbo.com` currently serves the
-> Smart School install the school uses every day. Repointing it moves the whole
-> school onto the new site the moment DNS propagates. Until you are ready for
-> that cutover, use a spare name — put `new` and `ems` records in instead and
-> run `WEBSITE_DOMAIN=new.ststephenbulimbo.com`. Everything below works the
-> same, and nothing the school currently relies on moves.
+> **`ststephenkimaeti.ac.ke` is not registered yet.** Checked on 7 Oct 2026:
+> neither it nor `ems.` resolves. A `.ac.ke` is restricted — KENIC wants
+> evidence that the institution is registered, which is the school's paperwork
+> to produce and not something bought in an afternoon.
+>
+> Do not let that hold up the deployment. Any name you already control works:
+> use a subdomain of one you own and run
+> `WEBSITE_DOMAIN=ststephen.example.com EMS_DOMAIN=ems-ststephen.example.com`.
+> Moving to the school's own domain later is two DNS records and one re-run of
+> `setup.sh` — Caddy fetches fresh certificates and nothing else changes.
+>
+> What you cannot do is skip the domain. Let's Encrypt will not issue a
+> certificate for a bare IP address, so without a name there is no HTTPS, and
+> the EMS sends a session cookie and a typed password over that connection.
 
 ## Step 2 — run the setup script
 
@@ -86,8 +94,8 @@ apt-get update && apt-get install -y git
 git clone --depth 1 https://github.com/simboni/st-stephen-kimaeti /srv/ststephen
 cd /srv/ststephen/deploy/contabo
 
-WEBSITE_DOMAIN=ststephenbulimbo.com \
-EMS_DOMAIN=ems.ststephenbulimbo.com \
+WEBSITE_DOMAIN=ststephenkimaeti.ac.ke \
+EMS_DOMAIN=ems.ststephenkimaeti.ac.ke \
 LETSENCRYPT_EMAIL=you@example.com \
 bash setup.sh
 ```
@@ -109,7 +117,7 @@ At the end it prints the first login **once**:
    password   <generated>
 ```
 
-Sign in at `https://ems.ststephenbulimbo.com`, then change it under
+Sign in at `https://ems.ststephenkimaeti.ac.ke`, then change it under
 **Users & Logins**. This is the only account that exists, and no demo data is
 created — no sample pupils, staff, fees or payments.
 
