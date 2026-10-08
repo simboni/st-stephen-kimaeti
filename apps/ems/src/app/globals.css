@@ -114,6 +114,9 @@ body {
     font-weight: 700;
     transition: background-color 0.15s, color 0.15s, border-color 0.15s;
     cursor: pointer;
+    /* 0.6rem of padding around 14px text lands at 42px — just under the 44px
+       every touch-target guideline asks for, and close enough to miss. */
+    min-height: 2.75rem;
   }
   .btn-primary {
     background: var(--color-brand-500);
@@ -157,6 +160,60 @@ body {
   }
   .table-admin tr:last-child td { border-bottom: none; }
   .table-admin tbody tr:hover { background: var(--color-paper-100); }
+
+  /* Tables on a phone.
+     ------------------
+     A register is a grid and stays one. Turning each row into a stacked card
+     loses the column alignment that makes a register scannable, and these
+     tables are read far more often than they are tapped — so the table keeps
+     its shape and the card around it scrolls sideways.
+
+     Two things make that bearable rather than annoying. Cells stop wrapping,
+     so "Atieno, Neema" is one line instead of two and a row is one row high;
+     the old behaviour wrapped every cell and a fifteen-pupil list ran to three
+     screens. And the first column is pinned, so the admission number stays in
+     view while you scroll across to the fee balance — without it you are
+     reading numbers with no idea whose they are.
+
+     The scroll container is `.card.overflow-x-auto`, used in 39 places, so
+     this reaches every table in the system without touching a single page. */
+  @media (max-width: 1023px) {
+    .table-admin th,
+    .table-admin td {
+      white-space: nowrap;
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+    .table-admin th:first-child,
+    .table-admin td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      background: var(--color-paper-50);
+      /* A hairline, so the pinned column reads as pinned rather than as
+         content that happens to sit under the rest. */
+      box-shadow: 1px 0 0 0 var(--color-paper-200);
+    }
+    .table-admin tbody tr:hover td:first-child { background: var(--color-paper-100); }
+
+    /* overscroll-behavior-x stops a sideways flick on a table from triggering
+       the browser's back gesture — losing the page because you looked at a
+       column is a genuinely bad surprise. */
+    .card.overflow-x-auto {
+      overscroll-behavior-x: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* A pupil's name in a register is a link 17px tall — a thumb misses it.
+       The padding grows the hit area to the full height of the row and the
+       equal negative margin takes the layout change back out, so the table
+       looks identical and is twice as easy to hit. */
+    .table-admin td a {
+      display: inline-block;
+      padding-block: 0.78rem;
+      margin-block: -0.78rem;
+    }
+  }
 
   .chip {
     display: inline-flex;
