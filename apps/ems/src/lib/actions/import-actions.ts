@@ -56,6 +56,7 @@ export async function importStudents(
 
   const seenAdm = new Set<string>();
   const seenUpi = new Set<string>();
+  const seenName = new Set<string>();
 
   const views: ImportRowView[] = [];
   const ready: {
@@ -129,6 +130,40 @@ export async function importStudents(
         skip("Already admitted (UPI exists)");
         continue;
       }
+    }
+
+    /* Same name, same class, already on the roll.
+     *
+     * The admission-number and UPI checks above only help when the file
+     * carries those columns. A school typing its register in for the first
+     * time has neither, so an operator who re-ran the same file — which is
+     * exactly what someone does when they are not sure the first run worked —
+     * got every pupil a second time, with a second admission number. The roll
+     * doubles silently and nothing in the preview warns them.
+     *
+     * Matching on name within one class is a heuristic, and genuine namesakes
+     * in the same class do exist. Getting it wrong this way costs the office
+     * one pupil admitted by hand from the Students page, and the message says
+     * which existing record it matched. Getting it wrong the other way costs
+     * them a corrupted roll they may not notice for weeks. */
+    const nameKey = `${row.lastName}|${row.firstName}|${cls.id}`.toLowerCase();
+    if (seenName.has(nameKey)) {
+      skip("Appears twice in this file (same name and class)");
+      continue;
+    }
+    seenName.add(nameKey);
+    const twin = await db.student.findFirst({
+      where: {
+        archived: false,
+        firstName: { equals: row.firstName, mode: "insensitive" },
+        lastName: { equals: row.lastName, mode: "insensitive" },
+        enrollments: { some: { stream: { classId: cls.id } } },
+      },
+      select: { admissionNo: true },
+    });
+    if (twin) {
+      skip(`Already on the roll as ${twin.admissionNo} — same name, same class`);
+      continue;
     }
 
     view.status = "ready";

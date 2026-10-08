@@ -136,6 +136,10 @@ async function main() {
       email: "ststephenprimarykimaeti@gmail.com",
       phone: "0728 836 150",
       address: "P.O. Box 93 – 50200, Bungoma",
+      // Without this the row takes the schema default "ADM" and every pupil
+      // is admitted as ADM-26xxxx. The "SSK" in lib/school.ts never applies,
+      // because that upsert only creates the row if this one has not already.
+      admissionPrefix: "SSK",
     },
   });
 

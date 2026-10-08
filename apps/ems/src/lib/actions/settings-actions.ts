@@ -35,15 +35,29 @@ export async function updateSchoolSettings(
   const phone = String(formData.get("phone") ?? "").trim() || null;
   const address = String(formData.get("address") ?? "").trim() || null;
   const currency = String(formData.get("currency") ?? "KES").trim().toUpperCase();
+  // The school's initials, which begin every admission number. Editable here
+  // because it is the school's identity, not ours — a second school on this
+  // platform must not issue numbers starting with another school's letters.
+  // It used to be settable only in code, which meant any install that had
+  // already created its settings row was stuck on the schema default.
+  const admissionPrefix = String(formData.get("admissionPrefix") ?? "").trim().toUpperCase();
 
   if (!name) return { error: "The school name is required.", values: formValues(formData) };
   if (!shortName) return { error: "The short name is required.", values: formValues(formData) };
   if (!/^[A-Z]{3}$/.test(currency)) return { error: "Currency must be a 3-letter code, e.g. KES.", values: formValues(formData) };
+  if (!/^[A-Z][A-Z0-9]{1,5}$/.test(admissionPrefix))
+    return {
+      error: "The admission prefix must be 2 to 6 letters or digits starting with a letter — e.g. SSK.",
+      values: formValues(formData),
+    };
 
+  // Changing this never renumbers anyone. Numbers already issued are printed
+  // on report cards and receipts and are how a parent refers to their child;
+  // only pupils admitted from now on get the new prefix.
   await db.schoolSetting.upsert({
     where: { id: "school" },
-    update: { name, shortName, motto, email, phone, address, currency },
-    create: { id: "school", name, shortName, motto, email, phone, address, currency },
+    update: { name, shortName, motto, email, phone, address, currency, admissionPrefix },
+    create: { id: "school", name, shortName, motto, email, phone, address, currency, admissionPrefix },
   });
 
   await audit(actor, "settings", "school_settings_updated", name);

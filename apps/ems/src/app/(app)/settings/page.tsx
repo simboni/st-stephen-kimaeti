@@ -35,6 +35,7 @@ export default async function SettingsPage() {
           phone: settings.phone,
           address: settings.address,
           currency: settings.currency,
+          admissionPrefix: settings.admissionPrefix,
           timezone: settings.timezone,
         }}
         canEdit={mayEdit}

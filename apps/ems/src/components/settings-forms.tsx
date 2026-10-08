@@ -96,6 +96,7 @@ export function SchoolSettingsForm({
     phone: string | null;
     address: string | null;
     currency: string;
+    admissionPrefix: string;
     timezone: string;
   };
   canEdit: boolean;
@@ -155,6 +156,23 @@ export function SchoolSettingsForm({
         <div>
           <label className="mb-1.5 block text-sm font-bold text-ink-900">Timezone</label>
           <input value={settings.timezone} disabled className="field opacity-60" />
+        </div>
+        <div className="sm:col-span-2">
+          <label htmlFor="admissionPrefix" className="mb-1.5 block text-sm font-bold text-ink-900">
+            Admission number prefix *
+          </label>
+          <input
+            id="admissionPrefix"
+            name="admissionPrefix"
+            defaultValue={state.values?.admissionPrefix ?? settings.admissionPrefix}
+            className="field"
+            disabled={dis}
+          />
+          <p className="mt-1.5 text-xs text-ink-500">
+            The school&rsquo;s initials, which begin every admission number — e.g.{" "}
+            <b>SSK</b> gives SSK-260041. Changing it does not renumber anyone; only pupils
+            admitted from now on get the new prefix.
+          </p>
         </div>
       </div>
 
