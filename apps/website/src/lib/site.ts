@@ -210,7 +210,14 @@ export const lifeStrands = [
       "The school belongs to the Brothers of St Charles Lwanga, and the day opens and closes in prayer. Learners of every background are welcome and all take part in the values programme.",
       "Nothing about it is done behind closed doors — the altar table is carried out under the trees and the congregation is 525 learners deep.",
     ],
-    photos: ["mass-outdoors", "mass-lectern"],
+    photos: [
+      "communion-brother",
+      "communion-class",
+      "mass-altar-candles",
+      "altar-servers-cross",
+      "mass-outdoors",
+      "mass-lectern",
+    ],
   },
   {
     slug: "music",
@@ -273,12 +280,22 @@ export const terms = [
  *  it prays, it works, it plays. Order matters — the first is what a visitor
  *  sees before anything else has loaded, so it has to be the one that says
  *  "school" without a caption. */
+/* The photographs behind the headline. First one first: it is the single
+   warmest picture the school has sent — a Brother ringed by pupils on First
+   Communion day, half of them giving a thumbs up — and a parent deciding
+   between schools sees it before they read a word.
+
+   festival-troupe and football-team are 1040x780 and 1600x720, small enough
+   that a full-bleed hero on a large screen softens them. They have been moved
+   down the list so the sharp ones carry the first impression, and they still
+   appear at tile size in the gallery, where the resolution is ample. */
 export const heroSlides = [
+  "communion-brother",
   "learners-on-the-field",
-  "festival-troupe",
-  "mass-outdoors",
+  "procession-to-chapel",
+  "communion-class",
   "agriculture-lesson",
-  "football-team",
+  "mass-altar-candles",
 ];
 
 export const dayInTheLife = [

@@ -61,6 +61,11 @@ const PICKS = [
   { i: 85, slug: "tank-rings", cat: "campus", focus: "attention",
     alt: "Staff and learners easing a concrete ring into the ground during the water project",
     caption: "The water project, ring by ring" },
+  /* The sharpest photograph we have of the compound itself: the classroom
+     blocks, the clipped hedge and the flagpoles, with pupils in front of it. */
+  { i: 118, slug: "procession-to-chapel", cat: "campus", focus: "attention",
+    alt: "A line of pupils in grey jumpers and blue check uniform walking in single file across the lawn, the sky-blue classroom blocks and clipped hedges behind them",
+    caption: "Across the compound, in line" },
 
   // --- boarding and meals -------------------------------------------------
   { i: 60, slug: "dining-hall", cat: "boarding", focus: "attention",
@@ -77,6 +82,23 @@ const PICKS = [
   { i: 66, slug: "mass-lectern", cat: "faith", focus: "attention",
     alt: "Learners standing with hands joined in prayer around the lectern at an open-air Mass",
     caption: "The praying half of the motto" },
+
+  /* First Communion, October 2026 — the school's own photographs, every one
+     opened at full size before its caption was written. Nothing here names the
+     celebrant or says where the chapel is, because neither is documented. The
+     uniform, the rosaries and the rosettes are. */
+  { i: 114, slug: "communion-brother", cat: "faith", focus: "attention",
+    alt: "A Brother in a white habit surrounded by a dozen smiling pupils in grey jumpers and blue check uniform, many giving a thumbs up, among eucalyptus trees",
+    caption: "First Communion day" },
+  { i: 116, slug: "communion-class", cat: "faith", focus: "north",
+    alt: "The whole First Communion class — about thirty-five children wearing rosaries and pink rosettes — grouped with their teachers in front of a brick chapel under a tall wooden cross",
+    caption: "The whole class, one morning" },
+  { i: 115, slug: "mass-altar-candles", cat: "faith", focus: "attention",
+    alt: "An open-air Mass under the trees: a priest and two altar servers at a linen-covered table, children holding lit candles, parents standing behind",
+    caption: "Mass under the trees" },
+  { i: 117, slug: "altar-servers-cross", cat: "faith", focus: "north",
+    alt: "Four altar servers in pale blue albs standing together holding a tall wooden processional cross, the seated congregation behind them",
+    caption: "The servers and the cross" },
 
   // --- early years --------------------------------------------------------
   { i: 49, slug: "early-years-nutrition", cat: "earlyyears", focus: "attention",
@@ -140,6 +162,9 @@ const PICKS = [
   { i: 90, slug: "farm-plot", cat: "community", focus: "attention",
     alt: "Pupils in sky-blue t-shirts on the school farm plot, the seedlings just coming up",
     caption: "The school shamba" },
+  { i: 119, slug: "maize-shamba", cat: "community", focus: "attention",
+    alt: "Rows of young maize running away towards a line of eucalyptus, the ridged red soil still visible between the plants",
+    caption: "The maize, coming up" },
 
   // --- faces --------------------------------------------------------------
   { i: 86, slug: "learners-on-the-field", cat: "life", focus: "attention",
